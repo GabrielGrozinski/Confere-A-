@@ -9,6 +9,10 @@
     }
 }
 
-#curiosidade-texto {
+.animacao-entrada {
     animation: fadeUpCuriosidade 0.6s ease-out;
+}
+
+.animacao-entrada-2 {
+    animation: fadeUpCuriosidade 0.2s ease-out;
 }

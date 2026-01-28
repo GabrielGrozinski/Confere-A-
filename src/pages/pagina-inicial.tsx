@@ -2,6 +2,7 @@ import "../styles/pagina-inicial.css";
 import { useState, useEffect } from "react"
 import { allContext } from "../context/all-context";
 import fundo from '../assets/imagens/fundo.png';
+import BotaoTema from "../components/botao-tema";
 
 interface Clube {
     id: number;
@@ -13,10 +14,12 @@ interface Clube {
 
 interface Topico {
     id: string;
+    curiosidade: string;
     titulo: string;
     icone: string;
     imagemdeFundo: string;
     cor: string;
+    corBg: string;
     pergunta: string;
     clubes: Clube[];
 }
@@ -24,6 +27,7 @@ interface Topico {
 export default function PaginaInicial() {
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
     const [valorCuriosidade, setValorCuriosidade] = useState<number>(0);
+    const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const { largura } = allContext();
 
     const curiosidadesFinanceiras = [
@@ -49,10 +53,12 @@ export default function PaginaInicial() {
     const topicos: Topico[] = [
         {
             id: "faturamento",
+            curiosidade: "Tem clube faturando como empresa internacional… mas administrando como time de várzea. 👀",
             titulo: "Maiores faturamentos",
             icone: "fa-money-bill-trend-up",
             imagemdeFundo: "/faturamento.png",
             cor: "#56ce90",
+            corBg: "#F5FFF7",
             pergunta: "Quem fatura mais, leva mais títulos?",
             clubes: [
                 {
@@ -87,10 +93,12 @@ export default function PaginaInicial() {
         },
         {
             id: "dividas",
+            curiosidade: "Alguns clubes devem tanto que, se dívida desse título, já teriam levantado mais taças que o Real Madrid. 🏆😬",
             titulo: "Maiores dívidas",
             icone: "fa-money-bill-trend-down",
             imagemdeFundo: "/divida.png",
             cor: "#ef4444",
+            corBg: "#FFF5F5",
             pergunta: "Quem está mais endividado?",
             clubes: [
                 {
@@ -125,10 +133,12 @@ export default function PaginaInicial() {
         },
         {
             id: "folhas-salariais",
+            curiosidade: "Quando a folha salarial assusta mais que o adversário. 😬💰",
             titulo: "Maiores folhas salariais",
             icone: "fa-money-bill-wave",
             imagemdeFundo: "/salario.png",
             cor: "#3b82f6",
+            corBg: "#fffdf4",
             pergunta: "Quem gasta mais com salários?",
             clubes: [
                 {
@@ -163,10 +173,12 @@ export default function PaginaInicial() {
         },
         {
             id: "superavits",
+            curiosidade: "Tem clube que não ganha tudo em campo, mas ganha bonito no caixa. 🧮😎",
             titulo: "Maiores superávits",
             icone: "fa-chart-line",
             imagemdeFundo: "/lucro.png",
             cor: "#10b981",
+            corBg: "#F5FEFF",
             pergunta: "Quem tem os melhores números?",
             clubes: [
                 {
@@ -202,58 +214,141 @@ export default function PaginaInicial() {
     ];
 
     return (
-        <body style={{background: "linear-gradient(to bottom right, #f0f9ff, #f0fdfa)"}}>
-            <header className="relative flex flex-col border-b border-b-slate-400/10">
-                
-                {largura < 1024 && (
-                    <div className="flex justify-between border-b border-b-neutral-800/20 px-4 pt-4 pb-2">
-                        <h1 className="font-[MONELOS] text-3xl">Confere Aê</h1>
+        <body className="bg-white">
+            <header style={{background: "linear-gradient(to bottom right, #f0f9ff, #f0fdfa)"}} className="relative flex flex-col border-b border-b-slate-400/10">
+                     
+                <div style={{background: "linear-gradient(to bottom right, #f0f9ff, #f0fdfa)"}} 
+                className="fixed top-0 w-full left-0 z-1 flex justify-between border-b border-b-neutral-800/10 px-4 pt-4 pb-2">
+                    <h1 className="font-[MONELOS] text-3xl">Confere Aê</h1>
+                    {largura < 1024 ? (
                         <div>
-                            <button className="mr-4 cursor-pointer bg-blue-500 py-1 px-2 rounded-xl text-slate-100 shadow-[1px_1px_2px_#0000002a]">Baixar aplicativo</button>
+                            <button className="mr-4 cursor-pointer bg-blue-500 py-1 px-3 rounded-xl text-slate-100 shadow-[1px_1px_2px_#0000002a]">Baixar aplicativo</button>
+
                             <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl text-zinc-900`}></i>
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        <>
+                            <article className="flex items-center">
+                                <span className="border-r-2 border-r-black/30 py-2 pr-3"><BotaoTema/></span>
 
-                <div className="flex flex-col items-center mt-4 px-12 mb-10 text-center gap-2">
-                    <h1 className="text-4xl">O raio-X financeiro <br /> do futebol brasileiro</h1>
-                    <p className="text-neutral-500 text-center">Descubra quem ganha muito, quem gasta mal e quem tá devendo!</p>
-                    <p key={valorCuriosidade} id="curiosidade-texto">{curiosidadesFinanceiras[valorCuriosidade]}</p>
-                </div>
+                                <button className="mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer transition">Login</button>
+
+                                <button onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-blue-600 cursor-pointer">
+                                    <span className={`transition-all duration-200 ease-out absolute top-1/2 -translate-y-[54.7%] left-1/2 -translate-x-1/2 ${mostrarIcone ? 'left-[40%]' : ''}`}>Começar</span>
+                                    <span>
+                                        <i className={`fa-solid fa-crosshairs ml-1 text-slate-50 text-shadow-[1px_1px_1px_#0000002a] transition-all duration-200 ease-out absolute top-1/2 -translate-y-[44%] ${mostrarIcone ? 'opacity-100 right-[15%]' : 'opacity-0 right-0'}`}></i>
+                                    </span>
+
+                                </button>
+                            </article>
+                        </>
+                    )}
+                </div>   
+
+                {!menuAberto ? (
+                    <>
+                        <div className="flex flex-col items-center mt-[5%] px-12 mb-10 text-center gap-2">
+                            <h1 className="text-4xl">O raio-X financeiro <br /> do futebol brasileiro</h1>
+                            <p className="text-neutral-500 text-center">Descubra quem ganha muito, quem gasta mal e quem tá devendo!</p>
+                            <p key={valorCuriosidade} className="animacao-entrada">{curiosidadesFinanceiras[valorCuriosidade]}</p>
+                        </div>
+                        <i className="fa-solid fa-chevron-down self-center text-slate-500 text-lg mb-4"></i>
+                    </>
+                ) : (
+                    <main className="bg-white flex flex-col pt-6 gap-4">
+                        <article className="flex justify-between px-10">
+                            <h1 className="text-zinc-800">Comparar receitas dos clubes brasileiros</h1>
+                            <i className="fa-solid fa-angle-right"></i>
+                        </article>
+
+                        <article className="flex justify-between px-10">
+                            <h1 className="text-zinc-800">Comparar dívidas dos clubes brasileiros</h1>
+                            <i className="fa-solid fa-angle-right"></i>
+                        </article>
+
+                        <article className="flex justify-between px-10">
+                            <h1 className="text-zinc-800">Analisar o custo das contratações</h1>
+                            <i className="fa-solid fa-angle-right"></i>
+                        </article>
+
+                        <article className="flex justify-between px-10">
+                            <h1 className="text-zinc-800">Comparar a média de gols por folha salarial</h1>
+                            <i className="fa-solid fa-angle-right"></i>
+                        </article>
+
+                        <article className="flex justify-between px-10">
+                            <h1 className="text-zinc-800">Comparar os maiores superávits</h1>
+                            <i className="fa-solid fa-angle-right"></i>
+                        </article>
+
+                        <article className="flex justify-between py-2 border-y border-y-black/10">
+                            <h1 className="text-zinc-800 ml-10">Tema</h1>
+                            <span className="mr-10 translate-x-1/2">
+                                <BotaoTema />
+                            </span>
+                        </article>
+
+                        <article className="fixed bottom-0 -translate-y-1/2 py-2 border-t border-t-black/20 w-full flex justify-start gap-4">
+                            <button className="ml-10 p-2 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer">Login</button>
+
+                            <button className="p-2 min-w-30 rounded-2xl text-white bg-blue-600 cursor-pointer">Começar</button>
+                        </article>
+                    </main>
+                )}
             </header>
 
-            <main className="bg-white pt-4">
-                {!menuAberto ? (
-                    <section id="container-topicos" className="">
-                        {topicos.map((topico) => (
-                            <div key={topico.id} className="flex flex-wrap mb-20 justify-center">
-                                <div className="relative z-1 shadow-[1px_0px_1px_#0000004a] mb-4 col-span-full">
-                                    <img className="rounded-md h-full w-full" src={topico.imagemdeFundo} alt={topico.titulo} />
+            <main className="bg-white opacity-0 pt-4">
+                {!menuAberto && (
+                    <>
+                        <div className="grid grid-cols-2 items-center mt-10">
+                            <p className="text-center font-extralight text-xl">Confira os clubes que mais <br /> transformaram <strong>futebol em dinheiro.</strong></p>
+                            <img className="max-h-80 max-w-80 rounded-xl" src="/maior-faturamento.png" alt="" />
+                        </div>
+                        <img className="mt-10 mx-4 max-w-1/2" src="/quebra.png" alt="" />
 
-                                </div>
+                        <div className="grid grid-cols-2 items-center mt-10">
+                            <p className="text-center font-extralight text-xl">Confira a maior <br /> <strong>contratação da temporada.</strong></p>
+                            <img className="max-h-80 max-w-80 rounded-xl" src="/maior-contratacao.png" alt="" />
+                        </div>
+                        <img className="mt-10 mx-4 max-w-1/2" src="/quebra.png" alt="" />
 
-                                {topico.clubes.map((clube) => (
-                                    <article key={clube.id} className="flex flex-col mb-6 mx-6 max-w-[40%] p-2 col-2 gap-1 cursor-pointer rounded-xl items-center border border-slate-900/40 transition-colors duration-300 hover:bg-amber-50">
-                                        <img className="max-h-18 max-w-18" src={clube.imagem} alt={clube.nome} />
-                                        <div className="p-2 px-6 rounded-md flex flex-col justify-center items-center">
-                                            <h2 className=""><strong>{clube.nome}</strong> - SP</h2>
-                                            <h1 className="">{clube.valor}</h1>
-                                            <h2 className="">{clube.variacao}</h2>
-                                        </div>
+                        <div className="grid grid-cols-2 items-center mt-10">
+                            <p className="text-center font-extralight text-xl">Compare a <br /> <strong>dívida de clubes.</strong></p>
+                            <img className="max-h-80 max-w-80 rounded-xl" src="/comparativo-divida.png" alt="" />
+                        </div>
+                        <img className="mt-10 mx-4 max-w-1/2" src="/quebra.png" alt="" />
 
-                                        <div className="absolute opacity-0 flex flex-col mr-1 justify-between items-end">
-                                            <i className="fa-solid fa-angle-right cursor-pointer"></i>
-                                            
-                                        </div>
-                                    </article>
-                                ))}
-                            </div>
-                        ))}
-                    </section>
-                ) : (
-                    <section>
-                        <article></article>
-                    </section>
+                        <section id="container-topicos" className="mt-10">
+                            {topicos.map((topico) => (
+                                <>
+                                    <div className="bg-sky-200 mt-40 shadow-[1px_1px_2px_#0000003a] mx-[20%] rounded-xl p-4 mb-10 text-center">
+                                        <h1 className="text-xl font-medium">💡 Você sabia?</h1>
+                                        <p className="text-lg text-slate-900">{topico.curiosidade}</p>
+                                    </div>
+                                    <h1 className="text-center text-2xl mb-4 text-blue-950">{topico.titulo}</h1>
+                                    <div 
+                                    style={{background: `linear-gradient(to bottom, ${topico.corBg}, white)`}}
+                                    className='flex flex-wrap justify-evenly pt-6'>
+                                    {topico.clubes.map((clube) => (
+                                        <article key={clube.id} className="flex bg-white flex-col mb-6 mx-6 max-w-[35%] p-2 col-2 gap-1 cursor-pointer rounded-xl items-center border border-slate-900/40 transition-colors duration-300 hover:bg-purple-100">
+                                            <img className="max-h-18 max-w-18" src={clube.imagem} alt={clube.nome} />
+                                            <div className="p-2 px-6 rounded-md flex flex-col justify-center items-center">
+                                                <h2 className=""><strong>{clube.nome}</strong> - SP</h2>
+                                                <h1 className="">{clube.valor}</h1>
+                                                <h2 className="">{clube.variacao}</h2>
+                                            </div>
+
+                                            <div className="absolute opacity-0 flex flex-col mr-1 justify-between items-end">
+                                                <i className="fa-solid fa-angle-right cursor-pointer"></i>
+                                                
+                                            </div>
+                                        </article>
+                                    ))}
+                                    </div>
+                                </>
+                            ))}
+                        </section>
+                    </>
                 )}
             </main>
         </body>
