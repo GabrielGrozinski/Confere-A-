@@ -29,6 +29,7 @@ export default function PaginaInicial() {
     const [valorCuriosidade, setValorCuriosidade] = useState<number>(0);
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
+    const [busca, setBusca] = useState<string>('');
     const { largura } = allContext();
 
     const curiosidadesFinanceiras = [
@@ -215,11 +216,12 @@ export default function PaginaInicial() {
     ];
 
     return (
-        <body className="bg-white">
+        <div>
             <header style={{background: "linear-gradient(to bottom right, #f0f9ff, #fdfeff)"}} className="relative flex flex-col border-b border-b-slate-400/10 min-h-screen">
                      
                 <div style={{background: "linear-gradient(to right, #f0f9ff 40%, #f3f9ff)"}} 
                 className="fixed top-0 w-full left-0 z-1 flex border-b border-b-neutral-800/10 px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16">
+
                     <h1 className="font-[MONELOS] text-3xl whitespace-nowrap">Confere Aê</h1>
                     {largura < 1024 ? (
                         <div className="w-full flex items-center justify-end">
@@ -228,7 +230,7 @@ export default function PaginaInicial() {
                             <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl text-zinc-900`}></i>
                         </div>
                     ) : (
-                        <section className="flex w-fulljustify-between">
+                        <section className="flex w-full justify-between">
                             <div className="flex ml-10 items-center gap-12">
                                 
                                 <article onClick={() => setTopicoAtivo('Explorar Dados')} className={`
@@ -287,7 +289,7 @@ export default function PaginaInicial() {
 
                             </div>
 
-                            <article className="flex items-center">
+                            <article className="flex gap-1 items-center">
                                 <span className="border-r-2 border-r-black/30 py-2 pr-3"><BotaoTema/></span>
 
                                 <button className="mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer transition">Login</button>
@@ -302,6 +304,7 @@ export default function PaginaInicial() {
                             </article>
                         </section>
                     )}
+
                 </div>
 
                 {!menuAberto ? (
@@ -315,15 +318,19 @@ export default function PaginaInicial() {
                         <div className="relative max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full">
                             <input 
                             className="
-                            w-full py-2 pr-4 pl-8 border border-slate-800/20 rounded-full
+                            w-full py-2 pr-4 pl-9 border border-slate-800/20 rounded-full
                             placeholder:text-neutral-500
                             " 
-                            placeholder="Buscar clube ou produto" 
-                            type="search" 
+                            placeholder="Buscar clube" 
+                            type="search"
+                            value={busca}
+                            onChange={(e) => setBusca(e.currentTarget.value)}
                             name="buscar-topico" 
                             id="buscar-topico" />
 
                             <i className="fa-solid fa-magnifying-glass absolute left-0 top-1/2 -translate-y-[40.4%] translate-x-1/2 text-neutral-600"></i>
+
+                            <i onClick={() => setBusca('')} className={`fa-regular fa-circle-xmark absolute top-1/2 -translate-y-[45%] right-0 -translate-x-[66%] cursor-pointer text-lg text-sky-950 ${!busca && 'opacity-0'}`}></i>
                         </div>
 
                         <h2 className="max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 text-slate-700 font-medium flex items-center mb-8 mt-1 text-[14px]">
@@ -369,59 +376,11 @@ export default function PaginaInicial() {
             </header>
 
             <main className="bg-white pt-4">
-                {!menuAberto && (
-                    <>
-                        <div className="grid grid-cols-2 items-center mt-10">
-                            <p className="text-center font-extralight text-xl">Confira os clubes que mais <br /> transformaram <strong>futebol em dinheiro.</strong></p>
-                            <img className="max-h-80 max-w-80 rounded-xl" src="/maior-faturamento.png" alt="" />
-                        </div>
-                        <img className="mt-10 mx-4 max-w-1/2" src="/quebra.png" alt="" />
 
-                        <div className="grid grid-cols-2 items-center mt-10">
-                            <p className="text-center font-extralight text-xl">Confira a maior <br /> <strong>contratação da temporada.</strong></p>
-                            <img className="max-h-80 max-w-80 rounded-xl" src="/maior-contratacao.png" alt="" />
-                        </div>
-                        <img className="mt-10 mx-4 max-w-1/2" src="/quebra.png" alt="" />
 
-                        <div className="grid grid-cols-2 items-center mt-10">
-                            <p className="text-center font-extralight text-xl">Compare a <br /> <strong>dívida de clubes.</strong></p>
-                            <img className="max-h-80 max-w-80 rounded-xl" src="/comparativo-divida.png" alt="" />
-                        </div>
-                        <img className="mt-10 mx-4 max-w-1/2" src="/quebra.png" alt="" />
 
-                        <section id="container-topicos" className="mt-10">
-                            {topicos.map((topico) => (
-                                <>
-                                    <div className="bg-sky-200 mt-40 shadow-[1px_1px_2px_#0000003a] mx-[20%] rounded-xl p-4 mb-10 text-center">
-                                        <h1 className="text-xl font-medium">💡 Você sabia?</h1>
-                                        <p className="text-lg text-slate-900">{topico.curiosidade}</p>
-                                    </div>
-                                    <h1 className="text-center text-2xl mb-4 text-blue-950">{topico.titulo}</h1>
-                                    <div 
-                                    style={{background: `linear-gradient(to bottom, ${topico.corBg}, white)`}}
-                                    className='flex flex-wrap justify-evenly pt-6'>
-                                    {topico.clubes.map((clube) => (
-                                        <article key={clube.id} className="flex bg-white flex-col mb-6 mx-6 max-w-[35%] p-2 col-2 gap-1 cursor-pointer rounded-xl items-center border border-slate-900/40 transition-colors duration-300 hover:bg-purple-100">
-                                            <img className="max-h-18 max-w-18" src={clube.imagem} alt={clube.nome} />
-                                            <div className="p-2 px-6 rounded-md flex flex-col justify-center items-center">
-                                                <h2 className=""><strong>{clube.nome}</strong> - SP</h2>
-                                                <h1 className="">{clube.valor}</h1>
-                                                <h2 className="">{clube.variacao}</h2>
-                                            </div>
-
-                                            <div className="absolute opacity-0 flex flex-col mr-1 justify-between items-end">
-                                                <i className="fa-solid fa-angle-right cursor-pointer"></i>
-                                                
-                                            </div>
-                                        </article>
-                                    ))}
-                                    </div>
-                                </>
-                            ))}
-                        </section>
-                    </>
-                )}
             </main>
-        </body>
+
+        </div>
     )
 }
