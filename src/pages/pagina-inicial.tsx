@@ -28,6 +28,7 @@ export default function PaginaInicial() {
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
     const [valorCuriosidade, setValorCuriosidade] = useState<number>(0);
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
+    const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const { largura } = allContext();
 
     const curiosidadesFinanceiras = [
@@ -215,19 +216,77 @@ export default function PaginaInicial() {
 
     return (
         <body className="bg-white">
-            <header style={{background: "linear-gradient(to bottom right, #f0f9ff, #f0fdfa)"}} className="relative flex flex-col border-b border-b-slate-400/10">
+            <header style={{background: "linear-gradient(to bottom right, #f0f9ff, #fdfeff)"}} className="relative flex flex-col border-b border-b-slate-400/10 min-h-screen">
                      
-                <div style={{background: "linear-gradient(to bottom right, #f0f9ff, #f0fdfa)"}} 
-                className="fixed top-0 w-full left-0 z-1 flex justify-between border-b border-b-neutral-800/10 px-4 pt-4 pb-2">
-                    <h1 className="font-[MONELOS] text-3xl">Confere Aê</h1>
+                <div style={{background: "linear-gradient(to right, #f0f9ff 40%, #f3f9ff)"}} 
+                className="fixed top-0 w-full left-0 z-1 flex border-b border-b-neutral-800/10 px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16">
+                    <h1 className="font-[MONELOS] text-3xl whitespace-nowrap">Confere Aê</h1>
                     {largura < 1024 ? (
-                        <div>
+                        <div className="w-full flex items-center justify-end">
                             <button className="mr-4 cursor-pointer bg-blue-500 py-1 px-3 rounded-xl text-slate-100 shadow-[1px_1px_2px_#0000002a]">Baixar aplicativo</button>
 
                             <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl text-zinc-900`}></i>
                         </div>
                     ) : (
-                        <>
+                        <section className="flex w-fulljustify-between">
+                            <div className="flex ml-10 items-center gap-12">
+                                
+                                <article onClick={() => setTopicoAtivo('Explorar Dados')} className={`
+                                    cursor-pointer relative transition-all 
+                                    duration-200 ease-out tracking-wider
+                                    hover:font-semibold 
+                                    after:content-[""] 
+                                    after:absolute 
+                                    after:h-[1.5px] 
+                                    after:left-0
+                                    after:-bottom-1
+                                    after:bg-blue-600
+                                    after:transition-all 
+                                    after:duration-300 
+                                    after:ease
+                                    after:w-0
+                                    ${topicoAtivo === 'Explorar Dados' && 'after:w-full font-semibold text-blue-600'}`}>
+                                    Explorar Dados
+                                </article>
+                                
+                                <article onClick={() => setTopicoAtivo('Produto')} className={`
+                                    cursor-pointer relative transition-all 
+                                    duration-200 ease-out tracking-wider
+                                    hover:font-semibold 
+                                    after:content-[""] 
+                                    after:absolute 
+                                    after:h-[1.5px] 
+                                    after:left-0
+                                    after:-bottom-1
+                                    after:bg-blue-600
+                                    after:transition-all 
+                                    after:duration-300 
+                                    after:ease
+                                    after:w-0
+                                    ${topicoAtivo === 'Produto' && 'after:w-full font-semibold text-blue-600'}`}>
+                                    Produtos
+                                </article>
+
+                                <article onClick={() => setTopicoAtivo('Preço')} className={`
+                                    cursor-pointer relative transition-all 
+                                    duration-200 ease-out tracking-wider
+                                    hover:font-semibold 
+                                    after:content-[""] 
+                                    after:absolute 
+                                    after:h-[1.5px] 
+                                    after:left-0
+                                    after:-bottom-1
+                                    after:bg-blue-600 
+                                    after:transition-all 
+                                    after:duration-300 
+                                    after:ease 
+                                    after:w-0
+                                    ${topicoAtivo === 'Preço' && 'after:w-full font-semibold text-blue-600'}`}>
+                                    Preço
+                                </article>
+
+                            </div>
+
                             <article className="flex items-center">
                                 <span className="border-r-2 border-r-black/30 py-2 pr-3"><BotaoTema/></span>
 
@@ -241,43 +300,55 @@ export default function PaginaInicial() {
 
                                 </button>
                             </article>
-                        </>
+                        </section>
                     )}
-                </div>   
+                </div>
 
                 {!menuAberto ? (
                     <>
-                        <div className="flex flex-col items-center mt-[5%] px-12 mb-10 text-center gap-2">
+                        <div className='flex flex-col items-center px-12 mb-10 mt-20 text-center gap-2'>
                             <h1 className="text-4xl">O raio-X financeiro <br /> do futebol brasileiro</h1>
                             <p className="text-neutral-500 text-center">Descubra quem ganha muito, quem gasta mal e quem tá devendo!</p>
                             <p key={valorCuriosidade} className="animacao-entrada">{curiosidadesFinanceiras[valorCuriosidade]}</p>
                         </div>
+
+                        <div className="relative max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full">
+                            <input 
+                            className="
+                            w-full py-2 pr-4 pl-8 border border-slate-800/20 rounded-full
+                            placeholder:text-neutral-500
+                            " 
+                            placeholder="Buscar clube ou produto" 
+                            type="search" 
+                            name="buscar-topico" 
+                            id="buscar-topico" />
+
+                            <i className="fa-solid fa-magnifying-glass absolute left-0 top-1/2 -translate-y-[40.4%] translate-x-1/2 text-neutral-600"></i>
+                        </div>
+
+                        <h2 className="max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 text-slate-700 font-medium flex items-center mb-8 mt-1 text-[14px]">
+                        <i className="fa-solid fa-circle text-green-500 text-shadow-[1px_1px_1px_#0000001a] text-[8.5px] mr-2 translate-y-[15%]"></i>
+                        Dados atualizados 
+                        <i className="fa-solid fa-circle text-slate-600 text-[3px] mx-1.5 translate-y-[50%]"></i>
+                        <span className="font-normal">Temporada 2026</span>
+                        </h2>
+
                         <i className="fa-solid fa-chevron-down self-center text-slate-500 text-lg mb-4"></i>
                     </>
                 ) : (
-                    <main className="bg-white flex flex-col pt-6 gap-4">
-                        <article className="flex justify-between px-10">
-                            <h1 className="text-zinc-800">Comparar receitas dos clubes brasileiros</h1>
+                    <main className="bg-white flex flex-col mt-16 pt-4 gap-4">
+                        <article className="flex justify-between px-10 cursor-pointer">
+                            <h1 className="text-zinc-800">Explorar Dados</h1>
                             <i className="fa-solid fa-angle-right"></i>
                         </article>
 
-                        <article className="flex justify-between px-10">
-                            <h1 className="text-zinc-800">Comparar dívidas dos clubes brasileiros</h1>
+                        <article className="flex justify-between px-10 cursor-pointer">
+                            <h1 className="text-zinc-800">Produtos</h1>
                             <i className="fa-solid fa-angle-right"></i>
                         </article>
 
-                        <article className="flex justify-between px-10">
-                            <h1 className="text-zinc-800">Analisar o custo das contratações</h1>
-                            <i className="fa-solid fa-angle-right"></i>
-                        </article>
-
-                        <article className="flex justify-between px-10">
-                            <h1 className="text-zinc-800">Comparar a média de gols por folha salarial</h1>
-                            <i className="fa-solid fa-angle-right"></i>
-                        </article>
-
-                        <article className="flex justify-between px-10">
-                            <h1 className="text-zinc-800">Comparar os maiores superávits</h1>
+                        <article className="flex justify-between px-10 cursor-pointer">
+                            <h1 className="text-zinc-800">Preço</h1>
                             <i className="fa-solid fa-angle-right"></i>
                         </article>
 
@@ -297,7 +368,7 @@ export default function PaginaInicial() {
                 )}
             </header>
 
-            <main className="bg-white opacity-0 pt-4">
+            <main className="bg-white pt-4">
                 {!menuAberto && (
                     <>
                         <div className="grid grid-cols-2 items-center mt-10">
