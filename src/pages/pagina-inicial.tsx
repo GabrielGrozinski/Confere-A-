@@ -3,25 +3,19 @@ import { useState, useEffect } from "react"
 import { allContext } from "../context/all-context";
 import fundo from '../assets/imagens/fundo.png';
 import BotaoTema from "../components/botao-tema";
+import { supabase } from "../auth/supabase-client";
 
 interface Clube {
-    id: number;
-    valor: string;
-    nome: string;
-    imagem: string;
-    variacao: string;
-}
-
-interface Topico {
     id: string;
-    curiosidade: string;
-    titulo: string;
-    icone: string;
-    imagemdeFundo: string;
-    cor: string;
-    corBg: string;
-    pergunta: string;
-    clubes: Clube[];
+    nome: string;
+    estado: string;
+    numero_torcedores: number;
+    faturamento: number;
+    lucro: number;
+    divida: number;
+    valor_contratacoes: number;
+    maior_contratacao: string;
+    folha_salarial: number;
 }
 
 export default function PaginaInicial() {
@@ -30,6 +24,7 @@ export default function PaginaInicial() {
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const [busca, setBusca] = useState<string>('');
+    const [clubes, setClubes] = useState<Clube[]>();
     const { largura } = allContext();
 
     const curiosidadesFinanceiras = [
@@ -52,7 +47,7 @@ export default function PaginaInicial() {
     }, []);
 
 
-    const topicos: Topico[] = [
+    const topicos: any[] = [
         {
             id: "faturamento",
             curiosidade: "Tem clube faturando como empresa internacional… mas administrando como time de várzea. 👀",
@@ -215,6 +210,55 @@ export default function PaginaInicial() {
         }
     ];
 
+    async function buscaClube(textoDigitado: string) {
+        const nome_dos_clubes = [
+            'Flamengo',
+            'São Paulo',
+            'Santos',
+            'Fortaleza',
+            'Palmeiras',
+            'Corinthians',
+            'Vasco da Gama',
+            'Fluminense',
+            'Botafogo',
+            'Grêmio',
+            'Internacional',
+            'Atlético Mineiro',
+            'Cruzeiro',
+            'Sport',
+            'Ceará',
+            'Bahia',
+            'Vitória',
+            'Mirassol',
+            'Bragantino',
+            'Juventude'
+        ]
+
+        const clubesFiltrados = nome_dos_clubes.filter((nome_clube) => formatarString(nome_clube).includes((formatarString(textoDigitado))));
+
+        const { data, error } = await supabase
+            .from('clubes_2025')
+            .select('*')
+            .in('nome', clubesFiltrados);
+
+        if (error) {
+            console.error('Houve um erro ao buscar os clubes', error);
+        }
+
+        console.log('data', data);
+
+        
+
+    }
+
+    function formatarString(texto: string) {
+        return texto
+        .toLocaleLowerCase()
+        .trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
     return (
         <div>
             <header style={{background: "linear-gradient(to bottom right, #f0f9ff, #fdfeff)"}} className="relative flex flex-col border-b border-b-slate-400/10 min-h-screen">
@@ -292,7 +336,9 @@ export default function PaginaInicial() {
                             <article className="flex gap-1 items-center">
                                 <span className="border-r-2 border-r-black/30 py-2 pr-3"><BotaoTema/></span>
 
-                                <button className="mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer transition">Login</button>
+                                <button className='mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer transition'>
+                                    Login
+                                </button>
 
                                 <button onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-blue-600 cursor-pointer">
                                     <span className={`transition-all duration-200 ease-out absolute top-1/2 -translate-y-[54.7%] left-1/2 -translate-x-1/2 ${mostrarIcone ? 'left-[40%]' : ''}`}>Começar</span>
@@ -324,7 +370,10 @@ export default function PaginaInicial() {
                             placeholder="Buscar clube" 
                             type="search"
                             value={busca}
-                            onChange={(e) => setBusca(e.currentTarget.value)}
+                            onChange={(e) => {
+                                setBusca(e.currentTarget.value);
+                                buscaClube(e.currentTarget.value);
+                            }}
                             name="buscar-topico" 
                             id="buscar-topico" />
 
