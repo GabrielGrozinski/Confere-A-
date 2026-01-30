@@ -1,30 +1,22 @@
 import "../styles/pagina-inicial.css";
 import { useState, useEffect } from "react"
 import { allContext } from "../context/all-context";
-import fundo from '../assets/imagens/fundo.png';
+import { ClipLoader } from "react-spinners";
 import BotaoTema from "../components/botao-tema";
 import { supabase } from "../auth/supabase-client";
+import { relacaoClubes, type Clube } from "../components/busca-clube";
+import { useNavigate } from "react-router-dom";
 
-interface Clube {
-    id: string;
-    nome: string;
-    estado: string;
-    numero_torcedores: number;
-    faturamento: number;
-    lucro: number;
-    divida: number;
-    valor_contratacoes: number;
-    maior_contratacao: string;
-    folha_salarial: number;
-}
 
 export default function PaginaInicial() {
+    const navigate = useNavigate();
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
     const [valorCuriosidade, setValorCuriosidade] = useState<number>(0);
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const [busca, setBusca] = useState<string>('');
-    const [clubes, setClubes] = useState<Clube[]>();
+    const [clubes, setClubes] = useState<Clube[] | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const { largura } = allContext();
 
     const curiosidadesFinanceiras = [
@@ -46,171 +38,14 @@ export default function PaginaInicial() {
         return () => clearInterval(intervalo);
     }, []);
 
-
-    const topicos: any[] = [
-        {
-            id: "faturamento",
-            curiosidade: "Tem clube faturando como empresa internacional… mas administrando como time de várzea. 👀",
-            titulo: "Maiores faturamentos",
-            icone: "fa-money-bill-trend-up",
-            imagemdeFundo: "/faturamento.png",
-            cor: "#56ce90",
-            corBg: "#F5FFF7",
-            pergunta: "Quem fatura mais, leva mais títulos?",
-            clubes: [
-                {
-                    id: 1,
-                    valor: "R$ 850 milhões",
-                    nome: "São Paulo",
-                    imagem: "/sp.png",
-                    variacao: "+25,4%"
-                },
-                {
-                    id: 2,
-                    valor: "R$ 650 milhões",
-                    nome: "Santos",
-                    imagem: "/santos.png",
-                    variacao: "+12,0%"
-                },
-                {
-                    id: 3,
-                    valor: "R$ 600 milhões",
-                    nome: "Grêmio",
-                    imagem: "/gremio.png",
-                    variacao: "+14,1%"
-                },
-                {
-                    id: 4,
-                    valor: "R$ 350 milhões",
-                    nome: "Palmeiras",
-                    imagem: "/palmeiras.png",
-                    variacao: "-4,2%"
-                }
-            ]
-        },
-        {
-            id: "dividas",
-            curiosidade: "Alguns clubes devem tanto que, se dívida desse título, já teriam levantado mais taças que o Real Madrid. 🏆😬",
-            titulo: "Maiores dívidas",
-            icone: "fa-money-bill-trend-down",
-            imagemdeFundo: "/divida.png",
-            cor: "#ef4444",
-            corBg: "#FFF5F5",
-            pergunta: "Quem está mais endividado?",
-            clubes: [
-                {
-                    id: 1,
-                    valor: "R$ 450 milhões",
-                    nome: "Flamengo",
-                    imagem: "/sp.png",
-                    variacao: "+8,3%"
-                },
-                {
-                    id: 2,
-                    valor: "R$ 380 milhões",
-                    nome: "Corinthians",
-                    imagem: "/santos.png",
-                    variacao: "+15,2%"
-                },
-                {
-                    id: 3,
-                    valor: "R$ 320 milhões",
-                    nome: "Vasco",
-                    imagem: "/gremio.png",
-                    variacao: "+5,8%"
-                },
-                {
-                    id: 4,
-                    valor: "R$ 280 milhões",
-                    nome: "Botafogo",
-                    imagem: "/palmeiras.png",
-                    variacao: "-2,1%"
-                }
-            ]
-        },
-        {
-            id: "folhas-salariais",
-            curiosidade: "Quando a folha salarial assusta mais que o adversário. 😬💰",
-            titulo: "Maiores folhas salariais",
-            icone: "fa-money-bill-wave",
-            imagemdeFundo: "/salario.png",
-            cor: "#3b82f6",
-            corBg: "#fffdf4",
-            pergunta: "Quem gasta mais com salários?",
-            clubes: [
-                {
-                    id: 1,
-                    valor: "R$ 250 milhões/ano",
-                    nome: "PSG",
-                    imagem: "/sp.png",
-                    variacao: "+18,5%"
-                },
-                {
-                    id: 2,
-                    valor: "R$ 220 milhões/ano",
-                    nome: "Manchester City",
-                    imagem: "/santos.png",
-                    variacao: "+12,3%"
-                },
-                {
-                    id: 3,
-                    valor: "R$ 200 milhões/ano",
-                    nome: "Barcelona",
-                    imagem: "/gremio.png",
-                    variacao: "+9,7%"
-                },
-                {
-                    id: 4,
-                    valor: "R$ 180 milhões/ano",
-                    nome: "Real Madrid",
-                    imagem: "/palmeiras.png",
-                    variacao: "+7,4%"
-                }
-            ]
-        },
-        {
-            id: "superavits",
-            curiosidade: "Tem clube que não ganha tudo em campo, mas ganha bonito no caixa. 🧮😎",
-            titulo: "Maiores superávits",
-            icone: "fa-chart-line",
-            imagemdeFundo: "/lucro.png",
-            cor: "#10b981",
-            corBg: "#F5FEFF",
-            pergunta: "Quem tem os melhores números?",
-            clubes: [
-                {
-                    id: 1,
-                    valor: "R$ 125 milhões",
-                    nome: "Atlético Mineiro",
-                    imagem: "/sp.png",
-                    variacao: "+22,1%"
-                },
-                {
-                    id: 2,
-                    valor: "R$ 98 milhões",
-                    nome: "Fortaleza",
-                    imagem: "/santos.png",
-                    variacao: "+19,4%"
-                },
-                {
-                    id: 3,
-                    valor: "R$ 85 milhões",
-                    nome: "Cebolinha",
-                    imagem: "/gremio.png",
-                    variacao: "+16,8%"
-                },
-                {
-                    id: 4,
-                    valor: "R$ 72 milhões",
-                    nome: "Internacional",
-                    imagem: "/palmeiras.png",
-                    variacao: "+13,2%"
-                }
-            ]
-        }
-    ];
-
     async function buscaClube(textoDigitado: string) {
+        setLoading(true);
+        if (textoDigitado === '') {
+            setLoading(false);
+            setBusca('')
+            setClubes(null);
+            return;
+        }
         const nome_dos_clubes = [
             'Flamengo',
             'São Paulo',
@@ -218,7 +53,7 @@ export default function PaginaInicial() {
             'Fortaleza',
             'Palmeiras',
             'Corinthians',
-            'Vasco da Gama',
+            'Vasco',
             'Fluminense',
             'Botafogo',
             'Grêmio',
@@ -244,10 +79,8 @@ export default function PaginaInicial() {
         if (error) {
             console.error('Houve um erro ao buscar os clubes', error);
         }
-
-        console.log('data', data);
-
-        
+        setLoading(false);
+        setClubes(data);
 
     }
 
@@ -257,6 +90,11 @@ export default function PaginaInicial() {
         .trim()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function navegar(nomeClube: string) {
+        const nomeRota = relacaoClubes(nomeClube);
+        navigate(`/${nomeRota}`);
     }
 
     return (
@@ -380,16 +218,40 @@ export default function PaginaInicial() {
                             <i className="fa-solid fa-magnifying-glass absolute left-0 top-1/2 -translate-y-[40.4%] translate-x-1/2 text-neutral-600"></i>
 
                             <i onClick={() => setBusca('')} className={`fa-regular fa-circle-xmark absolute top-1/2 -translate-y-[45%] right-0 -translate-x-[66%] cursor-pointer text-lg text-sky-950 ${!busca && 'opacity-0'}`}></i>
+
                         </div>
 
-                        <h2 className="max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 text-slate-700 font-medium flex items-center mb-8 mt-1 text-[14px]">
-                        <i className="fa-solid fa-circle text-green-500 text-shadow-[1px_1px_1px_#0000001a] text-[8.5px] mr-2 translate-y-[15%]"></i>
-                        Dados atualizados 
-                        <i className="fa-solid fa-circle text-slate-600 text-[3px] mx-1.5 translate-y-[50%]"></i>
-                        <span className="font-normal">Temporada 2026</span>
-                        </h2>
+                        {loading ? 
+                            <ClipLoader color="#000" size={34} className="self-center mt-4" />
+                        : 
+                            (clubes && clubes.length > 0) ? (
+                                <div 
+                                className='max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full min-h-20 mt-1 rounded-xl  p-4 pb-0 flex flex-wrap justify-center gap-2'>
+                                    {clubes.map((clube, index) => (
+                                        <article onClick={() => navegar(clube.nome)} className="max-w-[40%] min-w-[40%] p-2 cursor-pointer mb-2 flex flex-col items-center" key={index}>
+                                            <img className="max-h-20 max-w-20 sm:max-w-24 sm:max-h-24 lg:max-w-30 lg:max-h-30" src={clube.imagem} alt="" />
+                                            <div className="mt-1 text-stone-700 text-lg">
+                                                <h1 className="text-center">{clube.nome}<span className="mx-1">-</span>{clube.estado}</h1>
+                                            </div>
+                                        </article>
+                                    ))}
+                                </div>
+                            ) : !busca ? (
+                                <>
+                                    <h2 className="max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 text-slate-700 font-medium flex items-center mb-8 mt-1 text-[14px]">
+                                    <i className="fa-solid fa-circle text-green-500 text-shadow-[1px_1px_1px_#0000001a] text-[8.5px] mr-2 translate-y-[15%]"></i>
+                                    Dados atualizados 
+                                    <i className="fa-solid fa-circle text-slate-600 text-[3px] mx-1.5 translate-y-[50%]"></i>
+                                    <span className="font-normal">Temporada 2026</span>
+                                    </h2>
 
-                        <i className="fa-solid fa-chevron-down self-center text-slate-500 text-lg mb-4"></i>
+                                    <i className="fa-solid fa-chevron-down self-center text-slate-500 text-lg mb-4"></i>
+                                </>
+                            ) : (
+                                <h1 className="text-center text-xl text-slate-900 mt-4">Nenhum clube encontrado</h1>
+                            )
+                        }
+
                     </>
                 ) : (
                     <main className="bg-white flex flex-col mt-16 pt-4 gap-4">
@@ -423,13 +285,6 @@ export default function PaginaInicial() {
                     </main>
                 )}
             </header>
-
-            <main className="bg-white pt-4">
-
-
-
-            </main>
-
         </div>
     )
 }

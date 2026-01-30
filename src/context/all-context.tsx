@@ -174,7 +174,7 @@ export function AllContext({children}: Props) {
                 setLoadingAuth,
                 setSession,
                 setUser,
-                largura
+                largura,
             }}
         >
             {children}

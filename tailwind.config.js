@@ -7,6 +7,7 @@ export default {
       fontFamily: {
         minha: ['MONELOS', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        manrope: ['Manrope', 'sans-serif'],
       },
     },
   },
