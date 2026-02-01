@@ -1,6 +1,7 @@
 import type { Clube, rankings, Medias } from "./busca-clube";
 import { useEffect, useState } from "react";
 import { AreaChart, Area } from "recharts";
+import { allContext } from "../context/all-context";
 
 
 interface props {
@@ -17,6 +18,7 @@ interface InfoCardProps {
     sufixo?: string;
     icon?: string;
     mediaData: MediaCardData[];
+    largura: number;
 }
 
 interface MediaCardData {
@@ -25,79 +27,110 @@ interface MediaCardData {
 }
 
 const chartsData = {
-    up_25: [
-        { value: 8 },
-        { value: 11 },
-        { value: 7 },
-        { value: 18 },
-        { value: 26 },
-        { value: 32 },
-        { value: 45 },
-    ],
+    /* ----------------------------------------------------------- UP ----------------------------------------------------------- */
 
     up_10: [
+        { value: 0 },
+        { value: 1 },
+        { value: 3 },
+        { value: 2 },
+        { value: 4 },
+        { value: 6 },
+        { value: 5 },
+        { value: 7 },
+        { value: 6 },
+        { value: 9 },
         { value: 8 },
-        { value: 15 },
+        { value: 10 },
+    ],
+
+    up_25: [
+        { value: 0 },
+        { value: 4 },
+        { value: 8 },
+        { value: 6 },
         { value: 12 },
-        { value: 22 },
         { value: 18 },
-        { value: 30 },
-        { value: 42 },
+        { value: 15 },
+        { value: 22 },
+        { value: 22 },
     ],
 
     up_50: [
+        { value: 0 },
         { value: 8 },
-        { value: 16 },
         { value: 18 },
-        { value: 32 },
-        { value: 80 },
-        { value: 90 },
-        { value: 100 },
+        { value: 14 },
+        { value: 28 },
+        { value: 40 },
+        { value: 34 },
+        { value: 46 },
+        { value: 60 },
     ],
 
-    down_50: [
-        { value: 40 },
-        { value: 32 },
-        { value: 38 },
-        { value: 24 },
-        { value: 18 },
+    /* ----------------------------------------------------------- DOWN ----------------------------------------------------------- */
+
+    down_10: [
         { value: 10 },
+        { value: 9 },
+        { value: 8 },
+        { value: 7 },
+        { value: 6 },
+        { value: 5 },
+        { value: 4 },
+        { value: 3 },
+        { value: 2 },
         { value: 0 },
     ],
 
-    down_10: [
-        { value: 40 },
-        { value: 32 },
-        { value: 38 },
-        { value: 30 },
-        { value: 28 },
-        { value: 26 },
-        { value: 22 },
-    ],
-
     down_25: [
-        { value: 40 },
-        { value: 32 },
-        { value: 38 },
-        { value: 28 },
+        { value: 25 },
+        { value: 22 },
         { value: 24 },
         { value: 18 },
+        { value: 15 },
         { value: 12 },
+        { value: 8 },
+        { value: 4 },
+        { value: 0 },
     ],
 
-    middle_0: [
-        { value: 30 },
-        { value: 30 },
-        { value: 30 },
-        { value: 30 },
-        { value: 30 },
+    down_50: [
+        { value: 50 },
+        { value: 46 },
+        { value: 48 },
+        { value: 40 },
+        { value: 34 },
+        { value: 26 },
+        { value: 18 },
+        { value: 8 },
+        { value: 0 },
     ],
+
+    /* ----------------------------------------------------------- NEUTRO ----------------------------------------------------------- */
+
+    middle_0: [
+        { value: 15 },
+        { value: 16 },
+        { value: 14 },
+        { value: 15 },
+        { value: 17 },
+        { value: 15 },
+        { value: 14 },
+        { value: 16 },
+        { value: 15 },
+        { value: 16 },
+        { value: 14 },
+        { value: 15 },
+    ]
 };
 
 
-export function InfoCard({ titulo, valor, valorNumero, subtitulo, sufixo, icon, mediaData }: InfoCardProps) {
+
+
+export function InfoCard({ titulo, valor, valorNumero, subtitulo, sufixo, icon, mediaData, largura }: InfoCardProps) {
     return (
-        <div className='cursor-pointer relative bg-slate-50 shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 pb-2 gap-1 min-h-26 max-h-26 overflow-hidden'>
+        <div className='cursor-pointer relative bg-slate-50 shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 min-h-26 max-h-36 sm:min-h-32 sm:max-h-32 overflow-hidden'>
             <h2 className="text-slate-700 font-mono">
                 <i className={`${icon}`}></i>{" "}
                 <span>{titulo}</span>
@@ -111,26 +144,35 @@ export function InfoCard({ titulo, valor, valorNumero, subtitulo, sufixo, icon, 
                 {valor} {sufixo}
             </p>
 
-            <div className="absolute right-0 max-h-1/2 bottom-0 pointer-events-none max-w-1/3">
+            <div className="absolute -right-0.5 -bottom-2 pointer-events-none max-w-1/3">
                 <AreaChart
-                    width={200}
-                    height={80}
+                    width={largura < 568 ? 150 : 100}
+                    height={
+                        (() => {
+                        const media = mediaData.find(m => m.titulo === titulo);
+
+                        if (!media) return 100;
+
+                        if (media.valor > -10 && media.valor < 10) return 60;
+
+                        return 100;
+                    })()}
                     data={
                         (() => {
-                            const media = mediaData.find(m => m.titulo === titulo)
+                            const media = mediaData.find(m => m.titulo === titulo);
 
-                            if (!media) return chartsData.up_50
+                            if (!media) return chartsData.up_50;
 
-                            if (media.valor <= -50) return chartsData.down_50
-                            if (media.valor <= -25) return chartsData.down_25
-                            if (media.valor <= -10) return chartsData.down_10
-                            if (media.valor < 10)  return chartsData.middle_0
-                            if (media.valor < 25)  return chartsData.up_10
-                            if (media.valor < 50)  return chartsData.up_25
+                            if (media.valor <= -50) return chartsData.down_50;
+                            if (media.valor <= -25) return chartsData.down_25;
+                            if (media.valor <= -10) return chartsData.down_10;
+                            if (media.valor < 10)  return chartsData.middle_0;
+                            if (media.valor < 25)  return chartsData.up_10;
+                            if (media.valor < 50)  return chartsData.up_25;
 
-                            return chartsData.up_50
+                            return chartsData.up_50;
                         })()
-                    }
+                    } 
                 >
                     <defs>
                         <linearGradient id="greenWave" x1="0" y1="0" x2="0" y2="1">
@@ -138,25 +180,95 @@ export function InfoCard({ titulo, valor, valorNumero, subtitulo, sufixo, icon, 
                             <stop offset="100%" stopColor="#34D399" stopOpacity={0} />
                         </linearGradient>
                     </defs>
+
+
+                    
                     {/*
-            
             #FB923C, #60A5FA, #F87171
-
-
             */}
 
                     <Area
                         type="monotone"
                         dataKey="value"
-                        stroke="#34D399"
+                        stroke={`
+                            ${(() => {
+                                const media = mediaData.find(m => m.titulo === titulo);
+
+                                if (!media) return;
+
+                                if (media.titulo === 'Folha Salarial') return '#60A5FA';
+                                if (media.titulo === 'Dívida Bruta') return '#FB923C';
+                                if (media.titulo === 'Custo por Gol') return '#FB923C';
+                                if (media.titulo === 'Custo por Vitória') return '#60A5FA';
+                                if (media.titulo === 'Custo por Ponto') return '#60A5FA';
+                                if (media.titulo === 'Custo por Jogador') return '#FB923C';
+
+                                if (media.valor < 0) return '#F87171'
+
+                                return '#34D399'
+                            })()}
+                            `}
                         strokeWidth={2}
-                        fill="url(#greenWave)"
+                        fill={`
+                            ${(() => {
+                                const media = mediaData.find(m => m.titulo === titulo);
+
+                                if (!media) return;
+
+                                if (media.titulo === 'Folha Salarial') return '#60A5FA8a';
+                                if (media.titulo === 'Dívida Bruta') return '#FB923C8a';
+                                if (media.titulo === 'Custo por Gol') return '#FB923C8a';
+                                if (media.titulo === 'Custo por Vitória') return '#60A5FA8a';
+                                if (media.titulo === 'Custo por Ponto') return '#60A5FA8a';
+                                if (media.titulo === 'Custo por Jogador') return '#FB923C8a';
+
+                                if (media.valor < 0) return '#F871718a'
+
+                                return '#34D3998a'
+                            })()}
+                            `}
                         dot={false}
                         activeDot={false}
                     />
                 </AreaChart>
             </div>
 
+            <p className={
+                `
+                ${(() => {
+                    const media = mediaData.find(m => m.titulo === titulo);
+
+                    if (!media) return;
+
+                    if (media.valor < 0) return 'text-red-600'
+
+                    return 'text-green-600'
+                })()}
+                 text-[12px] font-semibold font-[manrope]
+                `
+            }>
+                {(() => {
+                    const media = mediaData.find(m => m.titulo === titulo);
+
+                    if (!media) return;
+
+                    if (media.valor < 0) return `-${Math.round(-media.valor)}% `
+
+                    return `+${Math.round(media.valor)}% `
+                })()}
+
+                <span className=" text-slate-900 font-normal">
+                    {(() => {
+                        const media = mediaData.find(m => m.titulo === titulo);
+
+                        if (!media) return;
+
+                        if (media.valor < 0) return 'abaixo da média'
+
+                        return 'acima da média'
+                    })()}
+                </span>
+            </p>
 
             {/* 
       <i className="fa-solid fa-angle-right absolute right-2 bottom-0 -translate-y-1/2"></i>
@@ -172,6 +284,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media }: prop
     const [ranking, setRanking] = useState<any>('');
     const [chanceQuitarDivida, setChanceQuitarDivida] = useState<number>();
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
+    const { largura } = allContext();
+
 
     useEffect(() => {
         if (clubeEscolhido) {
@@ -322,6 +436,10 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media }: prop
                 { valor: mediaClubeEscolhido.maiorContratacao, titulo: "Maior Contratação" },
                 { valor: mediaClubeEscolhido.fatDiv, titulo: "Faturamento/Dívida" },
                 { valor: mediaClubeEscolhido.lucFat, titulo: "Lucro/Faturamento" },
+                { valor: mediaClubeEscolhido.custoVitoria, titulo: "Custo por Vitória" },
+                { valor: mediaClubeEscolhido.custoGol, titulo: "Custo por Gol" },
+                { valor: mediaClubeEscolhido.custoPonto, titulo: "Custo por Ponto" },
+                { valor: mediaClubeEscolhido.custoJogador, titulo: "Custo por Jogador" }
             ];
 
             console.log('mediaCardData', mediaCardData);
@@ -486,7 +604,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media }: prop
                 </div>
             </article>
 
-            <section className="row-2 grid grid-cols-2 gap-6 px-5 pb-10">
+            <section className="row-2 flex flex-col sm:grid sm:grid-cols-2 gap-6 px-5 pb-10">
                 {cards.map((card, index) => (
                     <InfoCard
                         key={index}
@@ -497,6 +615,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media }: prop
                         valorNumero={card.valorNumero}
                         sufixo={card.sufixo}
                         mediaData={mediaData}
+                        largura={largura}
                     />
                 ))}
             </section>
