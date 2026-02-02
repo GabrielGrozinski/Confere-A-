@@ -302,7 +302,7 @@ export function InfoCard({ titulo, valor, valorNumero, subtitulo, sufixo, icon, 
 
 export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFundo }: props) {
     const [loading, setLoading] = useState<boolean>(true);
-    const [assinante, setAssinante] = useState<boolean>(false);
+    const [assinante, setAssinante] = useState<boolean>(true);
     const [ranking, setRanking] = useState<number>(0);
     const [chanceQuitarDivida, setChanceQuitarDivida] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
@@ -475,11 +475,11 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                 fatDiv: Math.round(
                     (
                         (
-                            (clubeEscolhido.faturamento / clubeEscolhido.divida) /
+                            (clubeEscolhido.faturamento*100 / clubeEscolhido.divida) /
                             media.fatDiv
-                        ) * 10 - 10
+                        )
                     ) * 100
-                ) / 100,
+                ),
 
                 faturamento: Math.round(
                     ((clubeEscolhido.faturamento / media.faturamento) * 100 - 100) * 100
@@ -595,14 +595,14 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             titulo: "Maior Contratação",
             icon: "fa-solid fa-crown text-zinc-900",
             subtitulo: clubeEscolhido.maior_contratacao.split(' - ')[0],
-            valor: `R$ ${Number(clubeEscolhido.maior_contratacao.split(' - ')[1].split(' ')[0]) * 6}`,
+            valor: `R$ ${(Number(clubeEscolhido.maior_contratacao.split(' - ')[1].split(' ')[0]) * 6).toFixed(1)}`,
             valorNumero: 12,
             sufixo: clubeEscolhido.valor_contratacoes < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Faturamento/Dívida",
             icon: "fa-solid fa-money-bill-transfer text-gray-700",
-            valor: (clubeEscolhido.faturamento / clubeEscolhido.divida).toFixed(1),
+            valor: (clubeEscolhido.faturamento*100 / clubeEscolhido.divida).toFixed(1),
             valorNumero: 0.9,
             sufixo: "",
         },
@@ -774,25 +774,25 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around mt-2 mb-10 p-4 rounded-lg border-2 border-slate-800/20">
                 <div>
                     <img className="max-h-40 max-w-40" src={clubeEscolhido.imagem} alt="" />
-                    <h1 className="text-4xl text-slate-50 text-shadow-[1px_1px_1px_#0000002a] font-[mono]">{clubeEscolhido.nome}</h1>
+                    <h1 className={`text-4xl text-center ${clubeEscolhido.nome === 'Santos' ? 'text-zinc-800 text-shadow-[1px_1px_1px_#FFF0002a]' : 'text-slate-50 text-shadow-[1px_1px_1px_#0000002a]'} font-[mono]`}>{clubeEscolhido.nome}</h1>
                 </div>
 
                 <div className="flex flex-col pl-2 min-h-full max-h-full justify-evenly gap-1">
 
                     <p
-                        style={{ background: 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }} className="font-manrope rounded-md p-2 border border-white text-start text-zinc-900 font-medium shadow-[2px_2px_2px_#0000006a]">
-                        <i className="fa-solid fa-sack-dollar text-sky-900 mr-1"></i> {rank_do_clube.faturamento}° em faturamento
+                        style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }} className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                        <i className={`fa-solid fa-sack-dollar ${clubeEscolhido.nome === 'Santos' ? 'text-sky-400' : 'text-sky-900'} mr-1`}></i> {rank_do_clube.faturamento}° em faturamento
                     </p>
 
                     <p
-                        style={{ background: 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
-                        className="font-manrope rounded-md p-2 border border-white text-start text-zinc-900 font-medium shadow-[2px_2px_2px_#0000006a]">
+                        style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
+                        className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
                         <i className="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> {rank_do_clube.divida}° em dívida
                     </p>
 
                     <p
-                        style={{ background: 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
-                        className="font-manrope rounded-md p-2 border border-white text-start text-zinc-900 font-medium shadow-[2px_2px_2px_#0000006a]">
+                        style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
+                        className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
                         <i className="fa-solid fa-users text-blue-600 mr-1"></i> {rank_do_clube.salario}° em folha salarial
                     </p>
 

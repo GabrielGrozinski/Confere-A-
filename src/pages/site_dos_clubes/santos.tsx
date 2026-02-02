@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Clube, rankings, Medias } from "../../components/busca-clube";
 
 
-export default function SaoPaulo() {
+export default function Santos() {
     const [clubeEscolhido, setClubeEscolhido] = useState<Clube | undefined>(undefined);
     const [rank_do_clube, setRank_do_clube] = useState<rankings>({
         faturamento: 0,
@@ -29,18 +29,18 @@ export default function SaoPaulo() {
         chanceQuitarDivida: 0
     });
 
-    const corFundo = 'linear-gradient(135deg, #c4161c, #ff2e2e)';
+    const corFundo = 'linear-gradient(135deg, #f3f4f6, #f5f5f5)';
 
     useEffect(() => {
-        buscaClube('São Paulo')
+        buscaClube('Santos')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('São Paulo')
+        buscarRankings('Santos')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia('São Paulo')
+        buscarMedia('Santos')
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
     }, []);

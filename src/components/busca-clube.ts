@@ -287,7 +287,7 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
             mediaContratacoes.push(clube.valor_contratacoes);
             mediaMaiorContratacao.push(Number((clube.maior_contratacao).split(' - ')[1].split(' ')[0]) * 6);
             mediaFolhaSalarial.push(clube.folha_salarial);
-            mediaFatDiv.push(clube.faturamento / clube.divida);
+            mediaFatDiv.push(clube.faturamento*100 / clube.divida);
             mediaLucFat.push((clube.lucro / clube.faturamento) * 100);
             custoVitoria.push((clube.folha_salarial * 13 + clube.valor_contratacoes) / clube.vitorias);
             custoGol.push((clube.folha_salarial * 13 + clube.valor_contratacoes) / clube.gols);
@@ -321,7 +321,6 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
                     0.3
                 );
             mediaChanceQuitarDivida.push(Number(chanceDivida.toFixed(1)));
-            console.log(clube.nome, 'chance', chanceDivida);
         });
 
         const scoreFaturamento = somarValores(mediaFaturamento);
