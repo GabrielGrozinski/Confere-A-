@@ -39,18 +39,21 @@ interface ReturnRanking {
 }
 
 export interface Medias {
-  faturamento: number;
-  divida: number;
-  lucro: number;
-  contratacoes: number;
-  folha_salarial: number;
-  maiorContratacao: number;
-  fatDiv: number;
-  lucFat: number;
-  custoVitoria: number;
-  custoGol: number;
-  custoPonto: number;
-  custoJogador: number;
+    faturamento: number;
+    divida: number;
+    lucro: number;
+    contratacoes: number;
+    folha_salarial: number;
+    maiorContratacao: number;
+    fatDiv: number;
+    lucFat: number;
+    custoVitoria: number;
+    custoGol: number;
+    custoPonto: number;
+    custoJogador: number;
+    notaClube: number;
+    mediaTorcedores: number;
+    chanceQuitarDivida: number;
 }
 
 interface ReturnMedia {
@@ -65,12 +68,12 @@ export async function buscaClube(nomeClube: string): Promise<Return> {
         .from('clubes_2025')
         .select('*')
         .eq('nome', nomeClube);
-    
-        if (error) {
-            console.error(`Houve um erro ao buscar o clube ${nomeClube}`, error);
-            return {success: false, error};
-        }
-        return {success: true, data: data[0]}
+
+    if (error) {
+        console.error(`Houve um erro ao buscar o clube ${nomeClube}`, error);
+        return { success: false, error };
+    }
+    return { success: true, data: data[0] }
 }
 
 export async function buscarRankings(nomeClube: string): Promise<ReturnRanking> {
@@ -78,65 +81,168 @@ export async function buscarRankings(nomeClube: string): Promise<ReturnRanking> 
         .from('clubes_2025')
         .select('*');
 
-        let rankings: rankings = 
-        {
-            faturamento: 0,
-            divida: 0,
-            salario: 0
-        }
+    let rankings: rankings =
+    {
+        faturamento: 0,
+        divida: 0,
+        salario: 0
+    }
 
-        if (data) {
-            console.log('data', data);
-            const clubes: Clube[] = data;
-            const clubesFaturamento = [...clubes].sort((a, b) => b.faturamento - a.faturamento);
-            const clubesDivida = [...clubes].sort((a, b) => b.divida - a.divida);
-            const clubesSalario = [...clubes].sort((a, b) => b.folha_salarial - a.folha_salarial);
+    if (data) {
+        const clubes: Clube[] = data;
+        const clubesFaturamento = [...clubes].sort((a, b) => b.faturamento - a.faturamento);
+        const clubesDivida = [...clubes].sort((a, b) => b.divida - a.divida);
+        const clubesSalario = [...clubes].sort((a, b) => b.folha_salarial - a.folha_salarial);
 
-            console.log('Faturamento', clubesFaturamento);
 
-            clubesFaturamento.forEach((clube, index) => {
-                if (clube.nome === nomeClube) {
-                    rankings.faturamento = index + 1
-                }
-            });
+        clubesFaturamento.forEach((clube, index) => {
+            if (clube.nome === nomeClube) {
+                rankings.faturamento = index + 1
+            }
+        });
 
-            clubesDivida.forEach((clube, index) => {
-                if (clube.nome === nomeClube) {
-                    rankings.divida = index + 1
-                }
-            });
+        clubesDivida.forEach((clube, index) => {
+            if (clube.nome === nomeClube) {
+                rankings.divida = index + 1
+            }
+        });
 
-            clubesSalario.forEach((clube, index) => {
-                if (clube.nome === nomeClube) {
-                    rankings.salario = index + 1
-                }
-            });
+        clubesSalario.forEach((clube, index) => {
+            if (clube.nome === nomeClube) {
+                rankings.salario = index + 1
+            }
+        });
 
-            return {success: true, rankings};
-        }
-    
-        if (error) {
-            console.error('Houve um erro ao buscar os clubes', error);
-            return {success: false, error, rankings};
-        }
+        return { success: true, rankings };
+    }
 
-        return {success: true, rankings};
+    if (error) {
+        console.error('Houve um erro ao buscar os clubes', error);
+        return { success: false, error, rankings };
+    }
+
+    return { success: true, rankings };
 
 }
 
 const calcularMedia = (arr: number[]) => {
-    const somaFinal = 
-    arr.length === 0 ? 0
-    : 
-    arr.reduce((acc, n) => acc + n, 0) / arr.length
+    const somaFinal =
+        arr.length === 0 ? 0
+            :
+            arr.reduce((acc, n) => acc + n, 0) / arr.length
 
     return Number(somaFinal.toFixed(2));
 }
 
+const somarValores = (arr: number[]) => {
+    const somaFinal =
+        arr.length === 0 ? 0
+            :
+            arr.reduce((acc, n) => acc + n, 0);
+
+    return Number(somaFinal.toFixed(1));
+}
+
+function ChanceQuitarDivida_15_anos(
+    torcedores: number,
+    faturamento: number,
+    divida: number,
+    lucro: number,
+    anos: number,
+    estimativa: number
+) {
+    if (divida <= 0) return 100;
+    if (anos <= 0) return 0;
+
+    let G0 =
+        estimativa *
+        (0.03 * Math.log(torcedores + 1) + 0.00018 * faturamento);
+
+    G0 = Math.min(Math.max(G0, 0.04), 0.14);
+
+    const rigidez = Math.min(Math.max(divida / faturamento, 0.5), 3);
+
+    let lucroTotal = 0;
+    let lucroAno = lucro;
+    let G = G0;
+
+    for (let i = 1; i <= anos; i++) {
+
+        const capacidade = faturamento / divida;
+        const margemLucro = lucroAno / faturamento;
+
+        let anoRuim = false;
+
+        // 🟡 clube frágil
+        if (lucroAno > 0 && margemLucro < 0.05 && capacidade <= 1.5) {
+            const volatilidade =
+                0.15 + (1.5 - capacidade) * 0.2;
+
+            lucroAno *= 1 + (Math.random() * 2 - 1) * volatilidade;
+        }
+
+        // 🔴 clube estruturalmente quebrado
+        if (divida / faturamento >= 2.2) {
+            let probAnoRuim =
+                0.45 +
+                (divida / faturamento - 2.2) * 0.2 +
+                (1 - estimativa) * 0.35;
+
+            probAnoRuim = Math.min(Math.max(probAnoRuim, 0.45), 0.9);
+
+            if (Math.random() < probAnoRuim) {
+                anoRuim = true;
+
+                // força prejuízo
+                const choque =
+                    0.3 + Math.random() * 0.4; // 30% a 70% do faturamento
+
+                lucroAno = -faturamento * choque;
+            }
+        }
+
+        // 🔁 dinâmica normal só se NÃO foi ano ruim estrutural
+        if (!anoRuim) {
+            if (lucroAno < 0) {
+                lucroAno *= 1 - G / rigidez;
+            } else {
+                lucroAno *= 1 + G;
+            }
+        }
+
+        lucroTotal += lucroAno;
+        G *= 0.92;
+    }
+
+    let R: number;
+
+    if (lucro < 0) {
+        const capacidade = faturamento / divida;
+        const pesoPrejuizo = Math.abs(lucro) / faturamento;
+
+        const scoreEstrutural = Math.log(1 + capacidade);
+        const penalizacao =
+            1 - Math.min((pesoPrejuizo * rigidez) / 0.35, 1);
+
+        R = scoreEstrutural * penalizacao;
+    } else {
+        R = (lucroTotal / divida) / rigidez;
+    }
+
+    const threshold = 0.9 * rigidez;
+    const slope = 2 / rigidez;
+
+    let Pbase = 1 / (1 + Math.exp(-slope * (R - threshold)));
+
+    Pbase = (divida/faturamento) > 2.5 ? Pbase/4 : (divida/faturamento) > 2 ? Pbase/2 : (divida/faturamento) > 1 ? Pbase/1.2 : (divida/faturamento) > 0.8 ? Pbase/1.2 : (lucro*100/divida) < 10 ? Pbase/1.2 : Pbase;
+
+    return Math.max(0.01, Number((Pbase * 100).toFixed(2)));
+}
+
 export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
     const { data, error } = await supabase
-    .from('clubes_2025')
-    .select('*');
+        .from('clubes_2025')
+        .select('*');
 
     let media: Medias = {
         faturamento: 0,
@@ -150,7 +256,10 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
         custoVitoria: 0,
         custoGol: 0,
         custoPonto: 0,
-        custoJogador: 0
+        custoJogador: 0,
+        notaClube: 0,
+        mediaTorcedores: 0,
+        chanceQuitarDivida: 0
     }
 
     if (data) {
@@ -166,6 +275,9 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
         const custoGol: number[] = [];
         const custoPonto: number[] = [];
         const custoJogador: number[] = [];
+        const mediaTorcedores: number[] = [];
+        let mediaNota: number[] = [];
+        const mediaChanceQuitarDivida: number[] = [];
 
         const clubes: Clube[] = data;
         clubes.forEach((clube) => {
@@ -173,15 +285,118 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
             mediaDivida.push(clube.divida);
             mediaLucro.push(clube.lucro);
             mediaContratacoes.push(clube.valor_contratacoes);
-            mediaMaiorContratacao.push(Number((clube.maior_contratacao).split(' - ')[1].split(' ')[0])*6);
+            mediaMaiorContratacao.push(Number((clube.maior_contratacao).split(' - ')[1].split(' ')[0]) * 6);
             mediaFolhaSalarial.push(clube.folha_salarial);
-            mediaFatDiv.push(clube.faturamento/clube.divida);
-            mediaLucFat.push(clube.lucro/clube.faturamento*100);
-            custoVitoria.push((clube.folha_salarial*13 + clube.valor_contratacoes)/clube.vitorias);
-            custoGol.push((clube.folha_salarial*13 + clube.valor_contratacoes)/clube.gols);
-            custoPonto.push((clube.folha_salarial*13 + clube.valor_contratacoes)/clube.pontos);
-            custoJogador.push(clube.folha_salarial/clube.quant_jogadores);
+            mediaFatDiv.push(clube.faturamento / clube.divida);
+            mediaLucFat.push((clube.lucro / clube.faturamento) * 100);
+            custoVitoria.push((clube.folha_salarial * 13 + clube.valor_contratacoes) / clube.vitorias);
+            custoGol.push((clube.folha_salarial * 13 + clube.valor_contratacoes) / clube.gols);
+            custoPonto.push((clube.folha_salarial * 13 + clube.valor_contratacoes) / clube.pontos);
+            custoJogador.push(clube.folha_salarial / clube.quant_jogadores);
+            mediaTorcedores.push(clube.numero_torcedores);
+
+            const rankingAtual =
+                (
+                    (clube.faturamento / clube.divida*2)
+                    +
+                    (
+                        clube.lucro > 0 ?
+                            (clube.lucro*2 / clube.faturamento) * 15
+                            :
+                            (-clube.lucro / clube.faturamento) * 5
+                    )
+
+                );
+
+            //console.log(clube.nome, 'valor', rankingAtual);
+            mediaNota.push(Number(rankingAtual.toFixed(1)));
+
+            const chanceDivida =
+                ChanceQuitarDivida_15_anos(
+                    clube.numero_torcedores,
+                    clube.faturamento,
+                    clube.divida,
+                    clube.lucro,
+                    15,
+                    0.3
+                );
+            mediaChanceQuitarDivida.push(Number(chanceDivida.toFixed(1)));
+            console.log(clube.nome, 'chance', chanceDivida);
         });
+
+        const scoreFaturamento = somarValores(mediaFaturamento);
+        const scoreTorcida = somarValores(mediaTorcedores);
+        const scoreDivida = somarValores(mediaDivida);
+        const scoreFinal = Number(((scoreFaturamento / scoreTorcida) - (scoreDivida / scoreTorcida)).toFixed(1));
+
+        clubes.forEach((clube, index) => {
+            const scoreClube = Number(((clube.faturamento / clube.numero_torcedores*2) - (clube.divida / clube.numero_torcedores)).toFixed(1));
+
+            const pontosAdicionais =
+                scoreFinal > 0 ?
+                    Number(((scoreClube - scoreFinal)).toFixed(1))
+                    :
+                    Number(((scoreClube + scoreFinal)).toFixed(1));
+
+            const pontosFiltrados =
+                (
+                pontosAdicionais > 100 ?
+                    2
+                    :
+                pontosAdicionais > 50 ?
+                    1
+                    :
+                pontosAdicionais > 0 ?
+                    0.5
+                    :
+                pontosAdicionais < 100 ?
+                    -2
+                    :
+                pontosAdicionais < 50 ?
+                    -1
+                    :
+                pontosAdicionais < 0 ?
+                    -0.5
+                    :
+                    0
+                );
+
+            const valorCompeticao =
+                (
+                    clube.competicao === 'libertadores' ?
+                        2
+                        :
+                        clube.competicao === 'pre-libertadores' ?
+                            1.5
+                            :
+                            clube.competicao === 'sul-americana' ?
+                                1.5
+                                :
+                                clube.competicao === 'brasileirao' ?
+                                    1
+                                    :
+                                    -3
+                );
+
+            mediaNota[index] = Number((mediaNota[index] + pontosFiltrados).toFixed(1));
+
+            if (mediaNota[index] > 10) {
+                mediaNota[index] = 10 + valorCompeticao > 10 ? 10 : 10 + valorCompeticao;
+            } else if (mediaNota[index] < 0) {
+                mediaNota[index] = 0 + valorCompeticao > 0 ? valorCompeticao : 0;
+            } else {
+                mediaNota[index] = 
+                    (mediaNota[index] + valorCompeticao) > 10 ? 
+                    10 
+                    : 
+                    (mediaNota[index] + valorCompeticao) < 0 ?
+                    0
+                    :
+                    mediaNota[index] + valorCompeticao;  
+            }
+
+            mediaNota[index] = Number(mediaNota[index].toFixed(1));
+        })
 
         media = {
             faturamento: calcularMedia(mediaFaturamento),
@@ -196,62 +411,65 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
             custoGol: calcularMedia(custoGol),
             custoPonto: calcularMedia(custoPonto),
             custoJogador: calcularMedia(custoJogador),
+            notaClube: calcularMedia(mediaNota),
+            mediaTorcedores: calcularMedia(mediaTorcedores),
+            chanceQuitarDivida: calcularMedia(mediaChanceQuitarDivida)
         }
 
-        return {media, success: true};
-        
-    }
-    
-    if (error) {
-        console.error('Houve um erro ao buscar os clubes', error);
-        return {success: false, error, media};
+        return { media, success: true };
+
     }
 
-    return {success: false, media};
+    if (error) {
+        console.error('Houve um erro ao buscar os clubes', error);
+        return { success: false, error, media };
+    }
+
+    return { success: false, media };
 
 }
 
 export function relacaoClubes(nome: string) {
     const nomeEscolhido = (
         nome === 'São Paulo' ? 'sao-paulo'
-        :
-        nome === 'Flamengo' ? 'flamengo'
-        :
-        nome === 'Palmeiras' ? 'palmeiras'
-        :
-        nome === 'Corinthians' ? 'corinthians'
-        :
-        nome === 'Santos' ? 'santos'
-        :
-        nome === 'Vasco' ? 'vasco'
-        :
-        nome === 'Mirassol' ? 'mirassol'
-        :
-        nome === 'Fluminense' ? 'fluminense'
-        :
-        nome === 'Bragantino' ? 'bragantino'
-        :
-        nome === 'Atlético Mineiro' ? 'atletico-mineiro'
-        :
-        nome === 'Cruzeiro' ? 'cruzeiro'
-        :
-        nome === 'Botafogo' ? 'botafogo' 
-        :
-        nome === 'Sport' ? 'sport'
-        :
-        nome === 'Ceará' ? 'ceara'
-        :
-        nome === 'Vitória' ? 'vitoria'
-        :
-        nome === 'Grêmio' ? 'gremio'
-        :
-        nome === 'Bahia' ? 'bahia'
-        :
-        nome === 'Fortaleza' ? 'fortaleza'
-        :
-        nome === 'Juventude' ? 'juventude'
-        :
-        'internacional'
+            :
+            nome === 'Flamengo' ? 'flamengo'
+                :
+                nome === 'Palmeiras' ? 'palmeiras'
+                    :
+                    nome === 'Corinthians' ? 'corinthians'
+                        :
+                        nome === 'Santos' ? 'santos'
+                            :
+                            nome === 'Vasco' ? 'vasco'
+                                :
+                                nome === 'Mirassol' ? 'mirassol'
+                                    :
+                                    nome === 'Fluminense' ? 'fluminense'
+                                        :
+                                        nome === 'Bragantino' ? 'bragantino'
+                                            :
+                                            nome === 'Atlético Mineiro' ? 'atletico-mineiro'
+                                                :
+                                                nome === 'Cruzeiro' ? 'cruzeiro'
+                                                    :
+                                                    nome === 'Botafogo' ? 'botafogo'
+                                                        :
+                                                        nome === 'Sport' ? 'sport'
+                                                            :
+                                                            nome === 'Ceará' ? 'ceara'
+                                                                :
+                                                                nome === 'Vitória' ? 'vitoria'
+                                                                    :
+                                                                    nome === 'Grêmio' ? 'gremio'
+                                                                        :
+                                                                        nome === 'Bahia' ? 'bahia'
+                                                                            :
+                                                                            nome === 'Fortaleza' ? 'fortaleza'
+                                                                                :
+                                                                                nome === 'Juventude' ? 'juventude'
+                                                                                    :
+                                                                                    'internacional'
     );
     return nomeEscolhido;
 }
