@@ -772,8 +772,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     return (
         <main className="min-h-screen bg-[#eee5f0] grid grid-rows-[auto_1fr]">
             <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around mt-2 mb-10 p-4 rounded-lg border-2 border-slate-800/20">
-                <div>
-                    <img className="max-h-40 max-w-40" src={clubeEscolhido.imagem} alt="" />
+                <div className="flex flex-col">
+                    <img className="max-h-40 max-w-40 self-center" src={clubeEscolhido.imagem} alt="" />
                     <h1 className={`text-4xl text-center ${clubeEscolhido.nome === 'Santos' ? 'text-zinc-800 text-shadow-[1px_1px_1px_#FFF0002a]' : 'text-slate-50 text-shadow-[1px_1px_1px_#0000002a]'} font-[mono]`}>{clubeEscolhido.nome}</h1>
                 </div>
 
