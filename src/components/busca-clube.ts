@@ -26,6 +26,12 @@ interface Return {
     success: boolean;
 }
 
+interface ReturnTodos {
+    data?: Clube[] | undefined;
+    error?: PostgrestError | null;
+    success: boolean;
+}
+
 export interface rankings {
     faturamento: number;
     divida: number;
@@ -62,6 +68,18 @@ interface ReturnMedia {
     error?: PostgrestError | null;
 }
 
+
+export async function buscaTodosClubes(): Promise<ReturnTodos> {
+    const { data, error } = await supabase
+        .from('clubes_2025')
+        .select('*');
+
+    if (error) {
+        console.error('Houve um erro ao buscar os clubes', error);
+        return { success: false, error };
+    }
+    return { success: true, data: data }
+}
 
 export async function buscaClube(nomeClube: string): Promise<Return> {
     const { data, error } = await supabase

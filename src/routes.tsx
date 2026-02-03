@@ -21,12 +21,14 @@ import Ceara from "./pages/site_dos_clubes/ceara";
 import Vitoria from "./pages/site_dos_clubes/vitoria";
 import Sport from "./pages/site_dos_clubes/sport";
 import Bahia from "./pages/site_dos_clubes/bahia";
+import CompararCoisas from "./pages/comparar-coisas";
 
 export default function Rotas() {
     return (
         <HashRouter>
             <Routes>
                 <Route path="" element={<PaginaInicial/>} />
+                <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />
                 <Route path="palmeiras" element={<Palmeiras/>} />
                 <Route path="santos" element={<Santos/>} />

@@ -2,22 +2,20 @@ import "../styles/pagina-inicial.css";
 import { useState, useEffect } from "react"
 import { allContext } from "../context/all-context";
 import { ClipLoader } from "react-spinners";
-import BotaoTema from "../components/botao-tema";
 import { supabase } from "../auth/supabase-client";
 import { relacaoClubes, type Clube } from "../components/busca-clube";
 import { useNavigate } from "react-router-dom";
+import HeaderFixo from "../components/header-fixo";
+import MenuAberto from "../components/menu-aberto";
 
 
 export default function PaginaInicial() {
     const navigate = useNavigate();
-    const [menuAberto, setMenuAberto] = useState<boolean>(false);
     const [valorCuriosidade, setValorCuriosidade] = useState<number>(0);
-    const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
-    const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const { largura } = allContext();
+    const { menuAberto, setTopicoAtivo } = allContext();
 
     const curiosidadesFinanceiras = [
     "Se você pagasse R$1 milhão da dívida do Corinthians por dia, levaria quase 3.000 dias para quitá-la!",
@@ -31,6 +29,8 @@ export default function PaginaInicial() {
     ];
 
     useEffect(() => {
+        setTopicoAtivo('Explorar Dados');
+
         const intervalo = setInterval(() => {
             setValorCuriosidade((prev) => (prev > 6 ? 0 : prev + 1));
         }, 5000);
@@ -101,95 +101,7 @@ export default function PaginaInicial() {
         <div>
             <header style={{background: "linear-gradient(to bottom right, #f0f9ff, #fdfeff)"}} className="relative flex flex-col border-b border-b-slate-400/10 min-h-screen">
                      
-                <div style={{background: "linear-gradient(to right, #f0f9ff 40%, #f3f9ff)"}} 
-                className="fixed top-0 w-full left-0 z-1 flex border-b border-b-neutral-800/10 px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16">
-
-                    <h1 className="font-[MONELOS] text-3xl whitespace-nowrap">Confere Aê</h1>
-                    {largura < 1024 ? (
-                        <div className="w-full flex items-center justify-end">
-                            <button className="mr-4 cursor-pointer bg-blue-500 py-1 px-3 rounded-xl text-slate-100 shadow-[1px_1px_2px_#0000002a]">Baixar aplicativo</button>
-
-                            <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl text-zinc-900`}></i>
-                        </div>
-                    ) : (
-                        <section className="flex w-full justify-between">
-                            <div className="flex ml-10 items-center gap-12">
-                                
-                                <article onClick={() => setTopicoAtivo('Explorar Dados')} className={`
-                                    cursor-pointer relative transition-all 
-                                    duration-200 ease-out tracking-wider
-                                    hover:font-semibold 
-                                    after:content-[""] 
-                                    after:absolute 
-                                    after:h-[1.5px] 
-                                    after:left-0
-                                    after:-bottom-1
-                                    after:bg-blue-600
-                                    after:transition-all 
-                                    after:duration-300 
-                                    after:ease
-                                    after:w-0
-                                    ${topicoAtivo === 'Explorar Dados' && 'after:w-full font-semibold text-blue-600'}`}>
-                                    Explorar Dados
-                                </article>
-                                
-                                <article onClick={() => setTopicoAtivo('Produto')} className={`
-                                    cursor-pointer relative transition-all 
-                                    duration-200 ease-out tracking-wider
-                                    hover:font-semibold 
-                                    after:content-[""] 
-                                    after:absolute 
-                                    after:h-[1.5px] 
-                                    after:left-0
-                                    after:-bottom-1
-                                    after:bg-blue-600
-                                    after:transition-all 
-                                    after:duration-300 
-                                    after:ease
-                                    after:w-0
-                                    ${topicoAtivo === 'Produto' && 'after:w-full font-semibold text-blue-600'}`}>
-                                    Produtos
-                                </article>
-
-                                <article onClick={() => setTopicoAtivo('Preço')} className={`
-                                    cursor-pointer relative transition-all 
-                                    duration-200 ease-out tracking-wider
-                                    hover:font-semibold 
-                                    after:content-[""] 
-                                    after:absolute 
-                                    after:h-[1.5px] 
-                                    after:left-0
-                                    after:-bottom-1
-                                    after:bg-blue-600 
-                                    after:transition-all 
-                                    after:duration-300 
-                                    after:ease 
-                                    after:w-0
-                                    ${topicoAtivo === 'Preço' && 'after:w-full font-semibold text-blue-600'}`}>
-                                    Preço
-                                </article>
-
-                            </div>
-
-                            <article className="flex gap-1 items-center">
-                                <span className="border-r-2 border-r-black/30 py-2 pr-3"><BotaoTema/></span>
-
-                                <button className='mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer transition'>
-                                    Login
-                                </button>
-
-                                <button onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-blue-600 cursor-pointer">
-                                    <span className={`transition-all duration-200 ease-out absolute top-1/2 -translate-y-[54.7%] left-1/2 -translate-x-1/2 ${mostrarIcone ? 'left-[40%]' : ''}`}>Começar</span>
-                                    <span>
-                                        <i className={`fa-solid fa-crosshairs ml-1 text-slate-50 text-shadow-[1px_1px_1px_#0000002a] transition-all duration-200 ease-out absolute top-1/2 -translate-y-[44%] ${mostrarIcone ? 'opacity-100 right-[15%]' : 'opacity-0 right-0'}`}></i>
-                                    </span>
-
-                                </button>
-                            </article>
-                        </section>
-                    )}
-
-                </div>
+                <HeaderFixo />
 
                 {!menuAberto ? (
                     <>
@@ -254,35 +166,7 @@ export default function PaginaInicial() {
 
                     </>
                 ) : (
-                    <main className="bg-white flex flex-col mt-16 pt-4 gap-4">
-                        <article className="flex justify-between px-10 cursor-pointer">
-                            <h1 className="text-zinc-800">Explorar Dados</h1>
-                            <i className="fa-solid fa-angle-right"></i>
-                        </article>
-
-                        <article className="flex justify-between px-10 cursor-pointer">
-                            <h1 className="text-zinc-800">Produtos</h1>
-                            <i className="fa-solid fa-angle-right"></i>
-                        </article>
-
-                        <article className="flex justify-between px-10 cursor-pointer">
-                            <h1 className="text-zinc-800">Preço</h1>
-                            <i className="fa-solid fa-angle-right"></i>
-                        </article>
-
-                        <article className="flex justify-between py-2 border-y border-y-black/10">
-                            <h1 className="text-zinc-800 ml-10">Tema</h1>
-                            <span className="mr-10 translate-x-1/2">
-                                <BotaoTema />
-                            </span>
-                        </article>
-
-                        <article className="fixed bottom-0 -translate-y-1/2 py-2 border-t border-t-black/20 w-full flex justify-start gap-4">
-                            <button className="ml-10 p-2 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer">Login</button>
-
-                            <button className="p-2 min-w-30 rounded-2xl text-white bg-blue-600 cursor-pointer">Começar</button>
-                        </article>
-                    </main>
+                    <MenuAberto />
                 )}
             </header>
         </div>

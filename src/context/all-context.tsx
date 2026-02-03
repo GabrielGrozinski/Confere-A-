@@ -23,9 +23,18 @@ interface promise_type {
     error?: AuthError | null;
 }
 
+type TopicoAtivoType = 'Explorar Dados' | 'Produto' | 'Preço';
+
+
 interface all_context_type {
+    mostrarCard: boolean;
+    setMostrarCard: (value: boolean) => void;
     dark: boolean;
     setDark: (value: boolean) => void;
+    topicoAtivo: TopicoAtivoType;
+    setTopicoAtivo: (value: TopicoAtivoType) => void;
+    menuAberto: boolean;
+    setMenuAberto: (value: boolean) => void;
     loadingAuth: boolean;
     setLoadingAuth: (value: boolean) => void;
     session: Session | undefined;
@@ -43,9 +52,12 @@ export const all_context = createContext<all_context_type>({} as all_context_typ
 
 export function AllContext({children}: Props) {
     const [dark, setDark] = useState<boolean>(() => localStorage.getItem("tema") === "escuro");
+    const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
+    const [menuAberto, setMenuAberto] = useState<boolean>(false);
     const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
     const [session, setSession] = useState<Session | undefined>(undefined)
     const [user, setUser] = useState<User | undefined>(undefined);
+    const [mostrarCard, setMostrarCard] = useState<boolean>(false);
     const [largura, setLargura] = useState(window.innerWidth);
 
 
@@ -175,6 +187,12 @@ export function AllContext({children}: Props) {
                 setSession,
                 setUser,
                 largura,
+                topicoAtivo,
+                setTopicoAtivo,
+                menuAberto,
+                setMenuAberto,
+                mostrarCard, 
+                setMostrarCard
             }}
         >
             {children}
