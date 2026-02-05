@@ -10,7 +10,7 @@ export default function HeaderFixo() {
 
     return (
                 <div style={{background: "linear-gradient(to right, #f0f9ff 40%, #f3f9ff)"}} 
-                className="fixed top-0 w-full left-0 z-1 flex border-b border-b-neutral-800/10 px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16">
+                className="fixed top-0 w-full left-0 z-999 flex border-b border-b-neutral-800/10 px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16">
 
                     <h1 className="font-[MONELOS] text-3xl whitespace-nowrap">Confere Aê</h1>
                     {largura < 1024 ? (
