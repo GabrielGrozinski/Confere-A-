@@ -20,6 +20,14 @@ export interface Clube {
     competicao: string;
 }
 
+export interface Coisas {
+    id: number;
+    nome: string;
+    imagem: string;
+    quantidade: number;
+    custo: number;
+}
+
 interface Return {
     data?: Clube | undefined;
     error?: PostgrestError | null;
@@ -28,6 +36,12 @@ interface Return {
 
 interface ReturnTodos {
     data?: Clube[] | undefined;
+    error?: PostgrestError | null;
+    success: boolean;
+}
+
+interface ReturnCoisas {
+    data?: Coisas[] | undefined;
     error?: PostgrestError | null;
     success: boolean;
 }
@@ -68,6 +82,18 @@ interface ReturnMedia {
     error?: PostgrestError | null;
 }
 
+
+export async function buscaCoisas(): Promise<ReturnCoisas> {
+    const { data, error } = await supabase
+        .from('coisas_do_mundo')
+        .select('*');
+
+    if (error) {
+        console.error('Houve um erro ao buscar os clubes', error);
+        return { success: false, error };
+    }
+    return { success: true, data: data }
+}
 
 export async function buscaTodosClubes(): Promise<ReturnTodos> {
     const { data, error } = await supabase

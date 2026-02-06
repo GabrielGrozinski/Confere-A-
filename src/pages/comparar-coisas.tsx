@@ -1,19 +1,14 @@
-import { buscaTodosClubes } from "../components/busca-clube";
+import { buscaTodosClubes, buscaCoisas } from "../components/busca-clube";
 import { useEffect, useState } from "react";
-import type { Clube } from "../components/busca-clube";
+import type { Clube, Coisas } from "../components/busca-clube";
 import '../styles/teste.css';
 import HeaderFixo from "../components/header-fixo";
+import { allContext } from "../context/all-context";
+import MenuAberto from "../components/menu-aberto";
 
 
 interface valorCoisas {
     valor: number;
-}
-
-interface Coisas {
-    nome: string;
-    imagem: string;
-    quantidade: number;
-    custo: number;
 }
 
 interface ClubeSelecionado {
@@ -29,135 +24,27 @@ interface Porcentagem {
 }
 
 export default function CompararCoisas() {
+    const {menuAberto, setTopicoAtivo} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [isClubeSelecionado, setIsClubeSelecionado] = useState<boolean>(false);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
-    const [coisas, setCoisas] = useState<Coisas[]>([
-        {
-            nome: 'Aeroporto',
-            imagem: '/aeroporto.png',
-            quantidade: 0,
-            custo: 15000000000
-        },
-        {
-            nome: 'McDonald`s',
-            imagem: '/mc.png',
-            quantidade: 0,
-            custo: 40000000
-        },
-        {
-            nome: 'Bitcoin',
-            imagem: '/bitcoin.png',
-            quantidade: 0,
-            custo: 350000
-        },
-        {
-            nome: 'Bomba Nuclear',
-            imagem: '/bomba.png',
-            quantidade: 0,
-            custo: 100000000000
-        },
-        {
-            nome: 'Carro',
-            imagem: '/carro.png',
-            quantidade: 0,
-            custo: 2000000
-        },
-        {
-            nome: 'Filme de Hollywood',
-            imagem: '/cinema.png',
-            quantidade: 0,
-            custo: 1000000000
-        },
-        {
-            nome: 'Coca',
-            imagem: '/coca.png',
-            quantidade: 0,
-            custo: 800000000000
-        },
-        {
-            nome: 'Parque da Disney',
-            imagem: '/disney.png',
-            quantidade: 0,
-            custo: 90000000000
-        },
-        {
-            nome: 'Hotel 5 estrelas',
-            imagem: '/hotel.png',
-            quantidade: 0,
-            custo: 600000000
-        },
-        {
-            nome: 'Iate',
-            imagem: '/iate.png',
-            quantidade: 0,
-            custo: 100000000
-        },
-        {
-            nome: 'Ilha',
-            imagem: '/ilha.png',
-            quantidade: 0,
-            custo: 250000000
-        },
-        {
-            nome: 'Jato',
-            imagem: '/jato.png',
-            quantidade: 0,
-            custo: 150000000
-        },
-        {
-            nome: 'Mansão',
-            imagem: '/mansao.png',
-            quantidade: 0,
-            custo: 30000000
-        },
-        {
-            nome: 'Viagem à Marte',
-            imagem: '/marte.png',
-            quantidade: 0,
-            custo: 250000000000
-        },
-        {
-            nome: 'Monalisa',
-            imagem: '/monalisa.png',
-            quantidade: 0,
-            custo: 5000000000
-        },
-        {
-            nome: 'Ouro',
-            imagem: '/ouro.png',
-            quantidade: 0,
-            custo: 3500000
-        },
-        {
-            nome: 'Playstation',
-            imagem: '/playstation.png',
-            quantidade: 0,
-            custo: 250000000000
-        },
-        {
-            nome: 'Tanque de Guerra',
-            imagem: '/tanque.png',
-            quantidade: 0,
-            custo: 50000000
-        },
-        {
-            nome: 'Real Madrid',
-            imagem: '/real.png',
-            quantidade: 0,
-            custo: 35000000000
-        },
-
-    ]);
+    const [coisas, setCoisas] = useState<Coisas[]>();
     const [valorClubes, setValorClubes] = useState<string>('0');
     const [valorCoisas, setValorCoisas] = useState<string>('0');
     const [porcentageCoisas, setPorcentagemCoisas] = useState<Porcentagem[]>();
     const [porcentagemClubes, setPorcentagemClubes] = useState<Porcentagem[]>();
 
     useEffect(() => {
+        setTopicoAtivo('Produto');
+
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))
+            .catch((error) => console.log('Houve um erro', error));
+        setLoading(false);
+
+        buscaCoisas()
+            .then((todasCoisas) => setCoisas(todasCoisas.data))
             .catch((error) => console.log('Houve um erro', error));
         setLoading(false);
     }, []);
@@ -178,6 +65,7 @@ export default function CompararCoisas() {
     }
 
     const atualizaQuantidade = (index: number, novaQuantidade: number) => {
+        if (!coisas) return;
         const novasCoisas = [...coisas];
         novasCoisas[index].quantidade = Math.max(0, novaQuantidade);
         setCoisas(novasCoisas);
@@ -197,6 +85,12 @@ export default function CompararCoisas() {
             setPorcentagemCoisas(coisasPorcentagem);
 
             const stringFormatada = 
+                somaCoisas >= 1000000000000000000 ?
+                `${somaCoisas/1000000000000000000 >= 2 ? `${(somaCoisas/1000000000000000000).toFixed(2)} quintilhões` : `${(somaCoisas/1000000000000000000).toFixed(2)} quintilhão`}`
+                :
+                somaCoisas >= 1000000000000000 ?
+                `${somaCoisas/1000000000000000 >= 2 ? `${(somaCoisas/1000000000000000).toFixed(2)} quadrilhões` : `${(somaCoisas/1000000000000000).toFixed(2)} quadrilhão`}`
+                :
                 somaCoisas >= 1000000000000 ?
                 `${somaCoisas/1000000000000 >= 2 ? `${(somaCoisas/1000000000000).toFixed(2)} trilhões` : `${(somaCoisas/1000000000000).toFixed(2)} trilhão`}`
                 :
@@ -232,7 +126,7 @@ export default function CompararCoisas() {
                 somaClubes > 1000 ?
                 `${somaClubes/1000 >= 2 ? `${(somaClubes/1000).toFixed(2)} bilhões` : `${(somaClubes/1000).toFixed(2)} bilhão`}`
                 :
-                `${somaClubes}`
+                `${somaClubes} milhões`
             
             setValorClubes(stringFormatada
             );
@@ -240,8 +134,11 @@ export default function CompararCoisas() {
     }, [clubesSelecionados]);
 
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="min-h-screen flex flex-col items-center pb-10">
+        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="">
             <HeaderFixo/>
+
+            {!menuAberto ?
+            <div className="min-h-screen flex flex-col items-center pb-10">
             <div className="mt-36 rounded-lg rounded-t-none w-[90%] min-h-100 grid grid-rows-[1fr_15%]">
 
                 <main id="main" className="row-1 grid grid-cols-[1fr_auto_1fr] bg-[#3e495e] relative mx-1 border border-slate-800/20 max-h-100">
@@ -285,19 +182,31 @@ export default function CompararCoisas() {
                     </div>
 
                     <div id="coisas" className="col-3 pt-4 flex flex-col lg:flex-row lg:flex-wrap lg:justify-between lg:items-start lg:px-4 lg:content-start items-center gap-4 justify-start p-2 relative overflow-y-auto pb-4">
-                        {coisas.map((coisa, index) => {
+                        {coisas?.map((coisa) => {
 
                             const coisaEscolhida = porcentageCoisas?.find((coisaPorcentagem) => coisa.nome === coisaPorcentagem.nome);
                             if (!coisaEscolhida) return;
                             const porcentagemEscolhida = Math.round(coisaEscolhida?.porcentagem) > 100 ? 100 : Math.round(coisaEscolhida?.porcentagem) <= 0 ? 1 : Math.round(coisaEscolhida?.porcentagem);
                             return (
                             coisa.quantidade > 0 &&
-                            <div key={index} className="flex max-h-18 items-center relative pt-2 pb-3 px-1 justify-evenly rounded-md bg-[#32394a] min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%]">
-                                <img className="max-h-10 max-w-10 sm:max-h-12 sm:max-w-12" src={coisa.imagem} alt={coisa.nome} />
+                            <div key={coisa.id} className="flex sm:flex-row max-h-30 pt-3 items-center relative pb-3 px-1 justify-between rounded-md bg-[#32394a] min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%]">
+                                <img className="max-h-14 max-w-[40%] pl-1 sm:pl-4" src={coisa.imagem} alt={coisa.nome} />
 
-                                <div className="flex flex-col gap-0.5 text-sm ml-2">
-                                    <h1 className="text-slate-100 font-medium">{coisa.nome}</h1>
-                                    <h1 className="text-sky-300 text-shadow-[1px_1px_1px_#0000002a]">R$20 milhões</h1>
+                                <div className="flex flex-col gap-0.5 ml-2 min-w-[40%] max-w-[40%] text-center">
+                                    <h1 className="text-slate-100 font-medium text-xs">{coisa.nome}</h1>
+                                    <h1 className="text-sky-300 text-shadow-[1px_1px_1px_#0000002a] text-xs">R$ 
+                                        {coisa.custo >= 1000000000000 ?
+                                        `${Math.round(coisa.custo/1000000000000)} tri`
+                                        :
+                                        coisa.custo >= 1000000000 ?
+                                        `${Math.round(coisa.custo/1000000000)} bi`
+                                        :
+                                        coisa.custo >= 1000000 ?
+                                        `${Math.round(coisa.custo/1000000)} mi`
+                                        :
+                                        `${Math.round(coisa.custo/1000)} mil`
+                                        }
+                                    </h1>
                                 </div>
 
                                 <span className="absolute bottom-0 left-0 bg-slate-800 min-w-[75%] max-h-2 min-h-1.5 rounded-xl">
@@ -329,29 +238,15 @@ export default function CompararCoisas() {
                     </div>
 
                 </main>
-
-                <article className="row-2 flex justify-between px-4 py-2 items-center">
-                    <div className="text-center">
-                        Valor dos clubes
-                        <br />
-                        R$ 1440
-                    </div>
-
-                    <div className="text-center">
-                        Valor das coisas
-                        <br />
-                        R$ 871
-                    </div>
-                </article>
             </div>
-
+ 
             <section className="max-w-full min-w-full mt-8 grid grid-cols-2 items-start relative">
                 <article className="col-1">
                     <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
 
-                    <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center px-4">
+                    <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center px-4">
                         {clubes?.map((clube) => (
-                            <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative">
+                            <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
 
                                 <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
                                     <i className="fa-solid fa-check text-[10px]"></i>
@@ -371,10 +266,10 @@ export default function CompararCoisas() {
                 <article id="article-coisas" className="col-2 overflow-hidden">
                     <h1 className="text-center font-medium text-lg text-slate-100">Coisas do Mundo</h1>
 
-                    <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center px-4">
+                    <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center px-4">
 
-                        {coisas.map((coisa, index) => (
-                            <div key={index} style={{ rowGap: '6px' }} className="max-h-34 min-h-34 overflow-hidden pt-2 grid grid-rows-[70%_1fr] bg-stone-50 rounded-md shadow-[0px_0px_2px_#0000004a] justify-items-center">
+                        {coisas?.map((coisa, index) => (
+                            <div key={index} style={{ rowGap: '6px' }} className="max-h-34 min-h-34 overflow-hidden pt-2 grid grid-rows-[70%_1fr] bg-stone-50 rounded-md shadow-[0px_0px_2px_#0000004a] justify-items-center scale-80">
 
                                 <div className="row-1 max-h-full flex flex-col items-center justify-center pb-1">
                                     <img className="max-h-[90%] max-w-[90%] rounded-lg" src={coisa.imagem} alt="" />
@@ -413,6 +308,10 @@ export default function CompararCoisas() {
                     </div>
                 </article>
             </section>
+            </div>
+            :
+            <MenuAberto />
+            }
         </div>
     )
 }

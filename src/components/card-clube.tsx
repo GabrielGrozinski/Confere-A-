@@ -171,7 +171,7 @@ export function InfoCard(
                     if (media.titulo === 'Lucro/Faturamento' || media.titulo === 'Faturamento/Dívida' || media.titulo === 'Chance de Quitar a Dívida') return `${valor}%`;
 
                     return valor;
-                })()} {sufixo} <i className="fa-solid fa-angle-right text-sm"></i>
+                })()} {sufixo} <i className="fa-solid fa-angle-right text-sm translate-y-[10%]"></i>
             </p>
 
             <div className={`absolute -right-1.5 -bottom-2 pointer-events-none max-w-1/3 ${!assinante && (titulo === 'Chance de Quitar a Dívida' || titulo === 'Nota do Clube') && 'blur-[6px]'}`}>

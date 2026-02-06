@@ -1,7 +1,9 @@
-import { allContext } from "../context/all-context"
+import { allContext } from "../context/all-context";
+import { useNavigate } from "react-router-dom";
 
 export default function CardProduto() {
     const { setMostrarCard } = allContext();
+    const navigate = useNavigate();
 
     return (
         <div className="absolute z-1 bg-white top-1/2 left-1/2 -translate-1/2 p-8 max-w-4/5 min-w-4/5 min-h-70 max-h-70 rounded-2xl sm:min-w-120 sm:max-w-120">
@@ -15,7 +17,7 @@ export default function CardProduto() {
                  <span className="">Comparar clubes da Série A</span>
                 </button>
 
-                <button className="bg-linear-to-br rounded-md text-[#222222] font-medium border border-zinc-800/30 cursor-pointer flex items-center justify-center text-xs py-1 max-h-11 min-h-11">
+                <button onClick={() => navigate('/comparador-de-coisas')} className="bg-linear-to-br rounded-md text-[#222222] font-medium border border-zinc-800/30 cursor-pointer flex items-center justify-center text-xs py-1 max-h-11 min-h-11">
                     <i className="fa-solid fa-computer mr-2 text-sm"></i>
                     <span className="text-start">
                         Comparar com outras coisas
