@@ -1,0 +1,9 @@
+.recharts-wrapper svg,
+.recharts-wrapper svg * {
+  outline: none;
+}
+
+.recharts-wrapper svg:focus,
+.recharts-wrapper svg:focus-visible {
+  outline: none;
+}

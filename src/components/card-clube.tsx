@@ -327,7 +327,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
     useEffect(() => {
         setTopicoAtivo('Produto');
-
     }, []);
 
     useEffect(() => {

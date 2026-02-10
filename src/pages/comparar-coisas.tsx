@@ -27,7 +27,6 @@ export default function CompararCoisas() {
     const {menuAberto, setTopicoAtivo} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
-    const [isClubeSelecionado, setIsClubeSelecionado] = useState<boolean>(false);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
     const [coisas, setCoisas] = useState<Coisas[]>();
     const [valorClubes, setValorClubes] = useState<string>('0');
@@ -143,7 +142,7 @@ export default function CompararCoisas() {
 
                 <main id="main" className="row-1 grid grid-cols-[1fr_auto_1fr] bg-[#3e495e] relative mx-1 border border-slate-800/20 max-h-100">
                     <div className="absolute min-h-14 top-0 -translate-y-full min-w-full flex justify-between gap-0">
-                        <div className="min-h-full min-w-1/2 bg-yellow-400 shadow-[4px_-4px_3px_#0000002a] border border-slate-800/20 rounded-t-xl rounded-br-none -translate-x-px flex items-center justify-center">
+                        <div className="min-h-full min-w-1/2 bg-yellow-500 shadow-[4px_-4px_3px_#0000002a] border border-slate-800/20 rounded-t-xl rounded-br-none -translate-x-px flex items-center justify-center">
                             <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">Clubes Brasileiros</h1>
                         </div>
 
@@ -189,7 +188,7 @@ export default function CompararCoisas() {
                             const porcentagemEscolhida = Math.round(coisaEscolhida?.porcentagem) > 100 ? 100 : Math.round(coisaEscolhida?.porcentagem) <= 0 ? 1 : Math.round(coisaEscolhida?.porcentagem);
                             return (
                             coisa.quantidade > 0 &&
-                            <div key={coisa.id} className="flex sm:flex-row max-h-30 pt-3 items-center relative pb-3 px-1 justify-between rounded-md bg-[#32394a] min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%]">
+                            <div key={coisa.id} className="flex sm:flex-row max-h-20 min-h-20 pt-3 items-center relative pb-3 px-1 justify-between rounded-md bg-[#32394a] min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%]">
                                 <img className="max-h-14 max-w-[40%] pl-1 sm:pl-4" src={coisa.imagem} alt={coisa.nome} />
 
                                 <div className="flex flex-col gap-0.5 ml-2 min-w-[40%] max-w-[40%] text-center">

@@ -59,6 +59,8 @@ interface ReturnRanking {
 }
 
 export interface Medias {
+    nome?: string;
+    imagem?: string;
     faturamento: number;
     divida: number;
     lucro: number;
@@ -80,6 +82,12 @@ interface ReturnMedia {
     media: Medias;
     success: boolean;
     error?: PostgrestError | null;
+}
+
+interface ReturnClubeMedia {
+    clube: Medias;
+    success: boolean;
+    error?: any | null;
 }
 
 
@@ -470,6 +478,211 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
 
     return { success: false, media };
 
+}
+
+export async function CaclularMediaClube(clubeEscolhido: Clube): Promise<ReturnClubeMedia> {
+
+    let mediaClubeEscolhido: Medias = {
+        nome: '',
+        imagem: '',
+        faturamento: 0,
+        divida: 0,
+        lucro: 0,
+        folha_salarial: 0,
+        contratacoes: 0,
+        maiorContratacao: 0,
+        fatDiv: 0,
+        lucFat: 0,
+        custoVitoria: 0,
+        custoGol: 0,
+        custoPonto: 0,
+        custoJogador: 0,
+        notaClube: 0,
+        mediaTorcedores: 0,
+        chanceQuitarDivida: 0
+    }
+
+    try {
+        const media = (await buscarMedia('')).media;
+
+
+        if (clubeEscolhido && media) {
+            const scoreFaturamento = media?.faturamento;
+            const scoreTorcida = media.mediaTorcedores;
+            const scoreDivida = media.divida;
+            const scoreFinal = Number(((scoreFaturamento / scoreTorcida) - (scoreDivida / scoreTorcida)).toFixed(1));
+
+            const scoreClube = Number(((clubeEscolhido.faturamento / clubeEscolhido.numero_torcedores*2) - (clubeEscolhido.divida / clubeEscolhido.numero_torcedores)).toFixed(1));
+
+            const pontosAdicionais =
+                scoreFinal > 0 ?
+                    Number(((scoreClube - scoreFinal)).toFixed(1))
+                    :
+                    Number(((scoreClube + scoreFinal)).toFixed(1));
+
+            const pontosFiltrados =
+                (
+                pontosAdicionais > 100 ?
+                    2
+                    :
+                pontosAdicionais > 50 ?
+                    1
+                    :
+                pontosAdicionais > 0 ?
+                    0.5
+                    :
+                pontosAdicionais < 100 ?
+                    -2
+                    :
+                pontosAdicionais < 50 ?
+                    -1
+                    :
+                pontosAdicionais < 0 ?
+                    -0.5
+                    :
+                    0
+                );
+
+            const valorCompeticao =
+                (
+                    clubeEscolhido.competicao === 'libertadores' ?
+                        2
+                        :
+                        clubeEscolhido.competicao === 'pre-libertadores' ?
+                            1.5
+                            :
+                            clubeEscolhido.competicao === 'sul-americana' ?
+                                1.5
+                                :
+                                clubeEscolhido.competicao === 'brasileirao' ?
+                                    1
+                                    :
+                                    -3
+                );
+
+            let rankingAtual =
+                Number (
+                    (
+                    (clubeEscolhido.faturamento / clubeEscolhido.divida*2)
+                    +
+                    (
+                        clubeEscolhido.lucro > 0 ?
+                            (clubeEscolhido.lucro*2 / clubeEscolhido.faturamento) * 15
+                            :
+                            (-clubeEscolhido.lucro / clubeEscolhido.faturamento) * 5
+                    )
+                    ).toFixed(1)
+                );
+
+            rankingAtual = Number((rankingAtual + pontosFiltrados).toFixed(1));
+
+            if (rankingAtual > 10) {
+                rankingAtual = 10 + valorCompeticao > 10 ? 10 : 10 + valorCompeticao;
+            } else if (rankingAtual < 0) {
+                rankingAtual = 0 + valorCompeticao > 0 ? valorCompeticao : 0;
+            } else {
+                rankingAtual = 
+                    (rankingAtual + valorCompeticao) > 10 ? 
+                    10 
+                    : 
+                    (rankingAtual + valorCompeticao) < 0 ?
+                    0
+                    :
+                    rankingAtual + valorCompeticao;  
+            }
+
+            rankingAtual = Number(rankingAtual.toFixed(1));
+
+            const chanceDivida = ChanceQuitarDivida_15_anos(
+                clubeEscolhido.numero_torcedores,
+                clubeEscolhido.faturamento,
+                clubeEscolhido.divida,
+                clubeEscolhido.lucro,
+                15,
+                0.3
+            );
+
+
+            mediaClubeEscolhido = {
+                nome: clubeEscolhido.nome,
+
+                imagem: clubeEscolhido.imagem,
+
+                contratacoes: Number(clubeEscolhido.valor_contratacoes.toFixed(2)),
+
+                custoGol: Number(
+                (
+                    (clubeEscolhido.folha_salarial * 13 + clubeEscolhido.valor_contratacoes) /
+                    clubeEscolhido.gols
+                ).toFixed(2)
+                ),
+
+                custoJogador: Number(
+                (
+                    clubeEscolhido.folha_salarial / clubeEscolhido.quant_jogadores
+                ).toFixed(2)
+                ),
+
+                custoPonto: Number(
+                (
+                    (clubeEscolhido.folha_salarial * 13 + clubeEscolhido.valor_contratacoes) /
+                    clubeEscolhido.pontos
+                ).toFixed(2)
+                ),
+
+                folha_salarial: Number(clubeEscolhido.folha_salarial.toFixed(2)),
+
+                custoVitoria: Number(
+                (
+                    (clubeEscolhido.folha_salarial * 13 + clubeEscolhido.valor_contratacoes) /
+                    clubeEscolhido.vitorias
+                ).toFixed(2)
+                ),
+
+                divida: Number(clubeEscolhido.divida.toFixed(2)),
+
+                fatDiv: Number(
+                (
+                    (clubeEscolhido.faturamento * 100) /
+                    clubeEscolhido.divida
+                ).toFixed(2)
+                ),
+
+                faturamento: Number(clubeEscolhido.faturamento.toFixed(2)),
+
+                lucFat: Number(
+                (
+                    (clubeEscolhido.lucro * 100) /
+                    clubeEscolhido.faturamento
+                ).toFixed(2)
+                ),
+
+                lucro: Number(clubeEscolhido.lucro.toFixed(2)),
+
+                maiorContratacao: Number(
+                (
+                    Number(
+                    clubeEscolhido.maior_contratacao.split(' - ')[1].split(' ')[0]
+                    ) * 6
+                ).toFixed(2)
+                ),
+
+                notaClube: Number(rankingAtual.toFixed(2)),
+
+                chanceQuitarDivida: Number(chanceDivida.toFixed(2)),
+
+                mediaTorcedores: Number(clubeEscolhido.numero_torcedores.toFixed(2)),
+            }
+
+            return {clube: mediaClubeEscolhido, success: true};
+
+        }
+
+        return {success: false, clube:mediaClubeEscolhido}
+
+    } catch (error) {
+        return {success: false, error: error, clube:mediaClubeEscolhido}   
+    }
 }
 
 export function relacaoClubes(nome: string) {
