@@ -49,7 +49,7 @@ export default function HeaderFixo() {
                                 <article 
                                     onClick={() => {
                                     setTopicoAtivo('Produto');
-                                    navigate('/')
+                                    navigate('/produtos')
                                     }}
                                     className={`
                                     cursor-pointer relative transition-all 

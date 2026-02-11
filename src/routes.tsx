@@ -23,6 +23,8 @@ import Sport from "./pages/site_dos_clubes/sport";
 import Bahia from "./pages/site_dos_clubes/bahia";
 import CompararCoisas from "./pages/comparar-coisas";
 import ComparadorDeClubes from "./pages/comparador-de-clubes";
+import Produtos from "./pages/produtos";
+
 
 export default function Rotas() {
     return (
@@ -31,6 +33,7 @@ export default function Rotas() {
                 <Route path="" element={<PaginaInicial/>} />
                 <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
                 <Route path="comparador-de-clubes" element={<ComparadorDeClubes/>} />
+                <Route path="produtos" element={<Produtos/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />
                 <Route path="palmeiras" element={<Palmeiras/>} />
                 <Route path="santos" element={<Santos/>} />

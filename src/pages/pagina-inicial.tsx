@@ -22,12 +22,24 @@ export default function PaginaInicial() {
     "Se você pagasse R$1 milhão da dívida do Corinthians por dia, levaria quase 3.000 dias para quitá-la!",
     "O Palmeiras arrecadou mais de R$700 milhões com venda de jogadores em um único ano.",
     "A dívida total do futebol brasileiro ultrapassa R$10 bilhões.",
-    "O Flamengo já fatura mais de R$1 bilhão por ano — mais que muitas empresas médias do Brasil.",
-    "O Santos já teve folha salarial menor que o valor de uma única venda do Palmeiras.",
+    "O Flamengo já fatura mais de R$2 bilhões por ano, mais que muitas empresas médias do Brasil.",
     "Mesmo campeão, muitos clubes gastam mais de 80% da receita só com salários.",
-    "Há clubes na Série A que gastam mais com juros de dívida do quanto com contratações.",
-    "Uma venda de jogador pode pagar a folha salarial de um clube médio por um ano inteiro."
+    "Há clubes na Série A que gastam mais com juros de dívida do que com contratações.",
+    "Uma venda de jogador pode pagar a folha salarial de um clube médio por um ano inteiro.",
+    "Alguns clubes brasileiros comprometem receitas de TV por anos para antecipar dinheiro no presente.",
+    "A diferença de faturamento entre o clube que mais arrecada e o que menos arrecada na Série A passa de R$1 bilhão.",
+    "Há clubes que já venderam mais em atletas da base do que arrecadam com bilheteria em várias temporadas somadas.",
+    "Um contrato de patrocínio master pode representar mais de 20% da receita anual de um clube médio.",
+    "Em muitos clubes, a folha salarial de um mês ultrapassa o orçamento anual de equipes da série B.",
+    "Premiações de competições continentais podem dobrar o lucro de um clube em uma única temporada.",
+    "Alguns estádios modernos custaram mais de R$1 bilhão para serem construídos.",
+    "Uma única negociação internacional pode equilibrar o caixa de um clube por vários anos.",
+    "Clubes rebaixados podem perder mais de 40% da receita no ano seguinte.",
+    "A venda de naming rights de um estádio pode render centenas de milhões ao longo do contrato.",
+    "Alguns clubes levam mais de uma década para quitar dívidas acumuladas em apenas três ou quatro temporadas.",
+    "Bônus por metas esportivas podem aumentar em milhões o custo real de uma contratação.",
     ];
+
 
     const topicosFinanceiros = [
     {
