@@ -5,11 +5,8 @@ import '../styles/teste.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import MenuAberto from "../components/menu-aberto";
+import TelaLoading from "../components/tela-loading";
 
-
-interface valorCoisas {
-    valor: number;
-}
 
 interface ClubeSelecionado {
     nome: string;
@@ -39,13 +36,13 @@ export default function CompararCoisas() {
 
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))
-            .catch((error) => console.log('Houve um erro', error));
-        setLoading(false);
+            .catch((error) => console.log('Houve um erro', error))
+            .finally(() => setLoading(false));
 
         buscaCoisas()
             .then((todasCoisas) => setCoisas(todasCoisas.data))
-            .catch((error) => console.log('Houve um erro', error));
-        setLoading(false);
+            .catch((error) => console.log('Houve um erro', error))
+            .finally(() => setLoading(false));
     }, []);
 
     const adicionaClube = (clubeEscolhido: Clube) => {
@@ -132,8 +129,10 @@ export default function CompararCoisas() {
         }
     }, [clubesSelecionados]);
 
+    if (loading) return (<TelaLoading/>);
+
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="">
+        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
             <HeaderFixo/>
 
             {!menuAberto ?

@@ -7,6 +7,7 @@ import { allContext } from "../context/all-context";
 import MenuAberto from "../components/menu-aberto";
 import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
+import TelaLoading from "../components/tela-loading";
 
 
 type TopicoComparacao = {
@@ -103,8 +104,8 @@ export default function ComparadorDeClubes() {
 
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))
-            .catch((error) => console.log('Houve um erro', error));
-        setLoading(false);
+            .catch((error) => console.log('Houve um erro', error))
+            .finally(() => setLoading(false));
     }, []);
 
     const adicionaClube = async (clubeEscolhido: Clube) => {
@@ -164,8 +165,10 @@ export default function ComparadorDeClubes() {
         return acc;
     }, {} as Record<string, TopicoComparacao[]>);
 
+    if (loading) return (<TelaLoading/>);
+
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="">
+        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
             <HeaderFixo/>
 
             {!menuAberto ?

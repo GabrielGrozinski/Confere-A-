@@ -40,7 +40,6 @@ export default function PaginaInicial() {
     "Bônus por metas esportivas podem aumentar em milhões o custo real de uma contratação.",
     ];
 
-
     const topicosFinanceiros = [
     {
         imagem: "/faturamento-topico.png",

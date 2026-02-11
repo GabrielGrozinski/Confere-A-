@@ -5,6 +5,7 @@ import { allContext } from "../context/all-context";
 import HeaderFixo from "./header-fixo";
 import MenuAberto from "./menu-aberto";
 import CardProduto from "./card-produtos";
+import TelaLoading from "./tela-loading";
 
 
 interface props {
@@ -429,12 +430,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             );
 
             setChanceQuitarDivida(chanceDivida >= 100 ? 100 : chanceDivida);
-        }
 
-    }, [clubeEscolhido, media]);
-
-    useEffect(() => {
-        if (clubeEscolhido && media && ranking && chanceQuitarDivida) {
+        if (clubeEscolhido && media && rankingAtual && chanceDivida) {
             const lucFat = clubeEscolhido.lucro*100 / clubeEscolhido.faturamento;
 
             const mediaClubeEscolhido: Medias = {
@@ -566,14 +563,17 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     { valor: mediaClubeEscolhido.chanceQuitarDivida, titulo: "Chance de Quitar a Dívida" }
                 ];
 
-                console.log('mediaCardData', mediaCardData);
-
                 setMediaData(mediaCardData);
             }
         }
-    }, [media, clubeEscolhido]);
+        setLoading(false);
 
-    if (!clubeEscolhido || !mediaData) return;
+        }
+
+    }, [clubeEscolhido, media]);
+
+
+    if (!clubeEscolhido || !mediaData || loading) return (<TelaLoading/>)
 
     const cards = [
         {

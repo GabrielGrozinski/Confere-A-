@@ -4,10 +4,13 @@ import { allContext } from "../context/all-context";
 import { useEffect, useState } from "react";
 import type { Clube } from "../components/busca-clube";
 import { buscaTodosClubes, relacaoClubes } from "../components/busca-clube";
+import TelaLoading from "../components/tela-loading";
+
 
 export default function Produtos() {
     const navigate = useNavigate();
     const {dark, setTopicoAtivo} = allContext();
+    const [loading, setLoading] = useState<boolean>(true);
     const [clubes, setClubes] = useState<Clube[]>();
 
 
@@ -15,9 +18,12 @@ export default function Produtos() {
         setTopicoAtivo('Produto');
         buscaTodosClubes()
             .then((data) => setClubes(data.data))
-            .catch((error) => console.error('Houve um erro', error));
+            .catch((error) => console.error('Houve um erro', error))
+            .finally(() => setLoading(false));
 
     }, []);
+
+    if (loading) return (<TelaLoading />)
 
     function navegar(nomeClube: string) {
         const nomeRota = relacaoClubes(nomeClube);
