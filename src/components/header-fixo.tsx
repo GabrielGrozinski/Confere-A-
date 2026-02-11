@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
-    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto } = allContext();
+    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark } = allContext();
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
 
     return (
-                <div style={{background: "linear-gradient(to right, #f0f9ff 40%, #f3f9ff)"}} 
-                className="fixed top-0 w-full left-0 z-999 flex border-b border-b-neutral-800/10 px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16">
+                <div style={{background: dark ? "linear-gradient(to right, #0b1f33 40%, #0e243d)" : "linear-gradient(to right, #f0f9ff 40%, #f3f9ff)"}} 
+                className={`fixed top-0 w-full left-0 z-999 flex border-b px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16 ${dark ? 'border-b-neutral-100/10' : 'border-b-neutral-800/10'}`}>
 
-                    <h1 className="font-[MONELOS] text-3xl whitespace-nowrap">Confere Aê</h1>
+                    <h1 className={`font-[MONELOS] text-3xl whitespace-nowrap ${dark && 'text-white'}`}>Confere Aê</h1>
                     {largura < 1024 ? (
                         <div className="w-full flex items-center justify-end">
                             <button className="mr-4 cursor-pointer bg-blue-500 py-1 px-3 rounded-xl text-slate-100 shadow-[1px_1px_2px_#0000002a]">Baixar aplicativo</button>
 
-                            <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl text-zinc-900`}></i>
+                            <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}></i>
                         </div>
                     ) : (
                         <section className="flex w-full justify-between">
@@ -37,12 +37,12 @@ export default function HeaderFixo() {
                                     after:h-[1.5px] 
                                     after:left-0
                                     after:-bottom-1
-                                    after:bg-blue-600
                                     after:transition-all 
                                     after:duration-300 
                                     after:ease
                                     after:w-0
-                                    ${topicoAtivo === 'Explorar Dados' && 'after:w-full font-semibold text-blue-600'}`}>
+                                    ${(dark && topicoAtivo === 'Explorar Dados') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Explorar Dados' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200 ' : ''}
+                                    `}>
                                     Explorar Dados
                                 </article>
                                 
@@ -60,12 +60,11 @@ export default function HeaderFixo() {
                                     after:h-[1.5px] 
                                     after:left-0
                                     after:-bottom-1
-                                    after:bg-blue-600
                                     after:transition-all 
                                     after:duration-300 
                                     after:ease
                                     after:w-0
-                                    ${topicoAtivo === 'Produto' && 'after:w-full font-semibold text-blue-600'}`}>
+                                    ${(dark && topicoAtivo === 'Produto') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Produto' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200' : ''}`}>
                                     Produtos
                                 </article>
 
@@ -83,21 +82,20 @@ export default function HeaderFixo() {
                                     after:h-[1.5px] 
                                     after:left-0
                                     after:-bottom-1
-                                    after:bg-blue-600 
                                     after:transition-all 
                                     after:duration-300 
                                     after:ease 
                                     after:w-0
-                                    ${topicoAtivo === 'Preço' && 'after:w-full font-semibold text-blue-600'}`}>
+                                    ${(dark && topicoAtivo === 'Preço') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Preço' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200' : ''}`}>
                                     Preço
                                 </article>
 
                             </div>
 
                             <article className="flex gap-1 items-center">
-                                <span className="border-r-2 border-r-black/30 py-2 pr-3"><BotaoTema/></span>
+                                <span className={`border-r-2 py-2 pr-3 ${dark ? 'border-r-white/30' : 'border-r-black/30'}`}><BotaoTema/></span>
 
-                                <button className='mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border border-zinc-900 cursor-pointer transition'>
+                                <button className={`mx-2 p-1 min-h-9 max-h-9 min-w-30 rounded-2xl border cursor-pointer transition ${dark ? 'border-zinc-500/90 bg-gray-500/10 text-white' : 'border-zinc-900'}`}>
                                     Login
                                 </button>
 
