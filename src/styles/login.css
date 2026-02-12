@@ -1,60 +1,49 @@
 @reference "tailwindcss";
 
 /* -----------------------------------------------------------
-   RESET GLOBAL
------------------------------------------------------------ */
-* {
-  @apply box-border m-0 p-0 font-['Oswald',sans-serif];
-}
-
-/* -----------------------------------------------------------
-   FONTES
------------------------------------------------------------ */
-@font-face {
-  font-family: "Majesty";
-  src: url(../assets/fonts/majesty.otf);
-}
-
-/* -----------------------------------------------------------
    LAYOUT GERAL DA TELA
 ----------------------------------------------------------- */
 main.cadastro-screen {
-  @apply h-screen bg-[url(https://cdn.pixabay.com/photo/2017/08/17/20/05/disney-2652684_1280.jpg)] relative bg-cover transition-[0.5s];
+  @apply h-screen relative bg-cover;
 }
 
 /* -----------------------------------------------------------
    CONTAINER DO FORMULÁRIO
 ----------------------------------------------------------- */
-main.cadastro-screen > .form-container.cadastro-screen {
-  @apply w-4/5 absolute -translate-x-2/4 left-2/4 top-[50%] px-[4%] py-[2%] -translate-y-2/4 pb-[6%] bg-white border shadow-[rgba(0,0,0,0.25)_1px_1px_1px] rounded-[15px] border-[rgba(0,0,0,0.701)] scale-[1];
+.form-container.cadastro-screen {
+  @apply rounded-xl bg-linear-to-b from-white to-[#f1f2fe] shadow-[0px_0px_3px_#0000002a] mt-4 z-1 pt-8 px-10 pb-8 flex flex-col items-center scale-[1] justify-center overflow-hidden;
 }
 
 /* -----------------------------------------------------------
    TÍTULO
 ----------------------------------------------------------- */
 .title.cadastro-screen {
-  @apply text-center text-[2.8em] font-['Majesty'] font-normal text-[#222222] mb-[4%];
+  @apply text-center text-4xl font-[monelos] absolute top-4 left-4 font-bold text-[#222222] mb-[4%];
+}
+
+.title-form.cadastro-screen {
+  @apply text-center text-4xl font-[mono] font-bold text-shadow-[1px_1px_1px_#FFf0002a] text-[#34407c] mb-[4%];
 }
 
 /* -----------------------------------------------------------
    FORMULÁRIO
 ----------------------------------------------------------- */
 .form.cadastro-screen {
-  @apply w-full flex flex-col gap-[18px] mb-[1%];
+  @apply w-full flex flex-col gap-[18px] items-center lg:scale-105;
 }
 
 /* -----------------------------------------------------------
    INPUTS
 ----------------------------------------------------------- */
 .input.cadastro-screen {
-  @apply border outline-0 p-[5%] rounded-[10px] border-[#c0c0c0];
+  @apply border outline-0 p-3 rounded-[10px] border-[#c0c0c0] max-w-110 min-w-full sm:min-w-80 bg-white;
 }
 
 /* -----------------------------------------------------------
    LINK "ESQUECEU A SENHA"
 ----------------------------------------------------------- */
 .page-link-label.cadastro-screen {
-  @apply text-[rgb(0,94,255)] text-shadow-black text-end text-[0.9em] font-normal cursor-pointer w-fit m-0;
+  @apply text-[rgb(0,94,255)] text-shadow-black text-[0.9em] font-normal cursor-pointer w-fit m-0 -mt-2 min-w-full sm:min-w-80 text-start;
 }
 
 .page-link-label.cadastro-screen:hover,
@@ -66,18 +55,18 @@ main.cadastro-screen > .form-container.cadastro-screen {
    BOTÃO PRINCIPAL
 ----------------------------------------------------------- */
 .form-btn.cadastro-screen {
-  @apply text-[1.5em] text-[white] cursor-pointer shadow-[rgba(0,0,0,0.24)_0px_3px_8px] transition-all duration-200 text-shadow-black bg-blue-600 outline-0 pt-0.5 pb-1 px-0 rounded-[20px] border-0 active:shadow-none active:scale-[0.96];
+  @apply text-xl text-[white] cursor-pointer shadow-[rgba(0,0,0,0.24)_0px_3px_8px] transition-all duration-200 text-shadow-black bg-blue-600 outline-0 pt-1.5 pb-2 px-0 rounded-lg  border-0 active:shadow-none active:scale-[0.99] max-w-110 min-w-full sm:min-w-80;
 }
 
 /* -----------------------------------------------------------
    TEXTO DE CADASTRO
 ----------------------------------------------------------- */
 .sign-up-label.cadastro-screen {
-  @apply text-[1em] text-[#504f4f] mt-2.5 m-0;
+  @apply text-[1em] text-[#504f4f] mt-4.5 m-0;
 }
 
 .sign-up-link.cadastro-screen {
-  @apply text-[0.9em] text-[rgb(0,94,255)] cursor-pointer font-medium ml-1.5;
+  @apply text-[1em] text-[rgb(0,94,255)] cursor-pointer font-medium ml-1.5;
 }
 
 .sign-up-link.cadastro-screen:hover,
@@ -89,20 +78,14 @@ main.cadastro-screen > .form-container.cadastro-screen {
    CONTAINER DE BOTÕES SOCIAIS
 ----------------------------------------------------------- */
 .buttons-container.cadastro-screen {
-  @apply w-full flex flex-col justify-start gap-[15px] mt-5;
+  @apply max-w-110 min-w-full sm:min-w-80 flex flex-col items-center gap-4 lg:scale-105;
 }
 
 /* -----------------------------------------------------------
    BOTÕES DE LOGIN SOCIAL
 ----------------------------------------------------------- */
-.apple-login-button.cadastro-screen,
-.google-login-button.cadastro-screen {
-  @apply shadow-[rgba(0,0,0,0.16)_0px_10px_36px_0px,rgba(0,0,0,0.06)_0px_0px_0px_1px] cursor-pointer flex justify-center items-center gap-[5px] text-[1.2em] transition-all duration-200 pt-[1.5%] pb-[2.5%] px-[3.5%] rounded-[20px];
-}
-
-.apple-login-button.cadastro-screen:active,
-.google-login-button.cadastro-screen:active {
-  @apply scale-[0.96];
+.buttons-container.cadastro-screen > button {
+  @apply min-w-full rounded-lg;
 }
 
 /* -----------------------------------------------------------
@@ -143,7 +126,7 @@ main.cadastro-screen > .form-container.cadastro-screen {
   -webkit-appearance: none;
   background-color: WHITE;
   background-image: none;
-  border: 1px solid #747775;
+  border: 1px solid #1e293b4a;
   -webkit-border-radius: 20px;
   border-radius: 20px;
   -webkit-box-sizing: border-box;
@@ -236,7 +219,7 @@ main.cadastro-screen > .form-container.cadastro-screen {
 }
 
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
-  background-color: #303030;
+  background-color: #ffffff;
   opacity: 8%;
 }
 
@@ -249,25 +232,4 @@ main.cadastro-screen > .form-container.cadastro-screen {
   @apply text-lg mb-px;
 }
 
-/* -----------------------------------------------------------
-   RESPONSIVO — ALTURA REDUZIDA
------------------------------------------------------------ */
-@media screen and (max-height: 656px) {
 
-  div.form-container.cadastro-screen {
-    @apply px-[6%] scale-[0.9];
-  }
-}
-
-/* -----------------------------------------------------------
-   RESPONSIVO — TELAS MAIORES
------------------------------------------------------------ */
-@media screen and (min-width: 524px) {
-  main#imagem.cadastro-screen {
-    @apply h-screen flex flex-col items-start justify-start;
-  }
-
-  main#imagem > div.form-container.cadastro-screen {
-    @apply relative w-[400px] px-[20px] py-[10px] pb-[30px];
-  }
-}

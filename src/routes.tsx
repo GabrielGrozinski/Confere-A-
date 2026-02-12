@@ -36,10 +36,12 @@ export default function Rotas() {
                 <Route path="" element={<PaginaInicial/>} />
                 <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
                 <Route path="comparador-de-clubes" element={<ComparadorDeClubes/>} />
+                
                 <Route path="/login" element={<LoginLayout/>}>
-                    <Route path="/" element={<TelaLogin/>} />
-                    <Route path="/cadastro" element={<TelaCadastro/>} />
+                    <Route index element={<TelaLogin/>} />
+                    <Route path="cadastro" element={<TelaCadastro/>} />
                 </Route>
+
                 <Route path="produtos" element={<Produtos/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />
                 <Route path="palmeiras" element={<Palmeiras/>} />

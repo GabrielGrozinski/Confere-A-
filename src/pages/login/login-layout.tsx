@@ -15,7 +15,7 @@ export default function LoginLayout() {
   }, [session]);
 
     return (
-        <main className='cadastro-screen' id="imagem">
+        <main style={{background: "radial-gradient(circle at center, #cfd9ff 0%, #9fb3ff 40%, #6f8df5 100%)"}} className='cadastro-screen' id="imagem">
             <Outlet/>
         </main>
     );
