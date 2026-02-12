@@ -22,7 +22,7 @@ export default function MenuAberto() {
 
                 <article 
                 onClick={() => {
-                    navigate('/');
+                    navigate('/produtos');
                     setTopicoAtivo('Produto');
                     setMenuAberto(false);
                 }}
@@ -50,9 +50,9 @@ export default function MenuAberto() {
                 </article>
 
                 <article className="absolute bottom-0 -translate-y-1/4 py-2 border-t border-t-black/20 w-full flex justify-start gap-4">
-                    <button className={`ml-10 p-2 min-w-30 rounded-2xl cursor-pointer border ${dark ? 'bg-gray-500/10 text-white border-slate-300/40' : 'border-slate-800/30'}`}>Login</button>
+                    <button onClick={() => navigate('/login')} className={`ml-10 p-2 min-w-30 rounded-2xl cursor-pointer border ${dark ? 'bg-gray-500/10 text-white border-slate-300/40' : 'border-slate-800/30'}`}>Login</button>
 
-                    <button className="p-2 min-w-30 rounded-2xl text-white bg-blue-600 cursor-pointer">Começar</button>
+                    <button onClick={() => navigate('/cadastro')} className="p-2 min-w-30 rounded-2xl text-white bg-blue-600 cursor-pointer">Começar</button>
                 </article>
         </main>
     )

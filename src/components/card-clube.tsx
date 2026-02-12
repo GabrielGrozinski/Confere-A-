@@ -5,7 +5,7 @@ import { allContext } from "../context/all-context";
 import HeaderFixo from "./header-fixo";
 import MenuAberto from "./menu-aberto";
 import CardProduto from "./card-produtos";
-import TelaLoading from "./tela-loading";
+import { ClipLoader } from "react-spinners";
 
 
 interface props {
@@ -573,7 +573,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     }, [clubeEscolhido, media]);
 
 
-    if (!clubeEscolhido || !mediaData || loading) return (<TelaLoading/>)
+    if (!clubeEscolhido || !mediaData) return;
 
     const cards = [
         {
@@ -818,7 +818,12 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     </article>
                     
                     <section className={`row-2 ${largura > 768 ? 'grid grid-cols-2' : 'flex flex-col'} gap-6 px-5 pb-10`}>
-                        {cards.map((card, index) => (
+                                                                                {loading ? 
+                        <div className="flex-1 flex items-center justify-center">
+                            <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
+                        </div>
+                        :
+                        cards.map((card, index) => (
                             <InfoCard
                                 key={index}
                                 titulo={card.titulo}

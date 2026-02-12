@@ -4,7 +4,7 @@ import { allContext } from "../context/all-context";
 import { useEffect, useState } from "react";
 import type { Clube } from "../components/busca-clube";
 import { buscaTodosClubes, relacaoClubes } from "../components/busca-clube";
-import TelaLoading from "../components/tela-loading";
+import { ClipLoader } from "react-spinners";
 
 
 export default function Produtos() {
@@ -23,7 +23,6 @@ export default function Produtos() {
 
     }, []);
 
-    if (loading) return (<TelaLoading />)
 
     function navegar(nomeClube: string) {
         const nomeRota = relacaoClubes(nomeClube);
@@ -81,13 +80,18 @@ export default function Produtos() {
                             <p className={`text-center mx-4 sm:text-lg lg:text-[16px] ${dark ? 'text-stone-300' : 'text-slate-800'}`}>Veja todos os dados financeiros detalhados de um clube: faturamento, lucro, dívida e a probabilidade de quitar seus débitos.</p>
 
                             <article style={{rowGap: '4px'}} className="w-full flex flex-wrap flex-1 p-4">
-                                    {clubes &&
+                                {loading ? 
+                                <div className="flex-1 flex items-center justify-center">
+                                    <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
+                                </div>
+                                :
+                                    clubes &&
                                         clubes.map((clube, index) => (
                                             <article onClick={() => navegar(clube.nome)} className="min-w-[20%] max-w-[20%] h-[14vw] lg:min-w-[10%] lg:max-w-[10%] lg:h-[6vw] max-h-24 p-2 cursor-pointer mb-2 flex flex-col items-center" key={index}>
                                                 <img className="max-h-full max-w-full" src={clube.imagem} alt="" />
                                             </article>
                                         ))
-                                    }
+                                }
                             </article>
                         </div>
                     </div>

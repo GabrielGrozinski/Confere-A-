@@ -7,7 +7,7 @@ import { allContext } from "../context/all-context";
 import MenuAberto from "../components/menu-aberto";
 import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
-import TelaLoading from "../components/tela-loading";
+import { ClipLoader } from "react-spinners";
 
 
 type TopicoComparacao = {
@@ -165,7 +165,6 @@ export default function ComparadorDeClubes() {
         return acc;
     }, {} as Record<string, TopicoComparacao[]>);
 
-    if (loading) return (<TelaLoading/>);
 
     return (
         <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
@@ -251,7 +250,12 @@ export default function ComparadorDeClubes() {
                     <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
 
                     <div className="w-full h-full mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center px-4">
-                        {clubes?.map((clube) => (
+                       {loading ? 
+                        <div className="flex-1 flex items-center justify-center">
+                            <ClipLoader size={30} color='#fff'/>
+                        </div>
+                        :
+                        clubes?.map((clube) => (
                             <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
 
                                 <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>

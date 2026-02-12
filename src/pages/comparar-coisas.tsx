@@ -5,7 +5,7 @@ import '../styles/teste.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import MenuAberto from "../components/menu-aberto";
-import TelaLoading from "../components/tela-loading";
+import { ClipLoader } from "react-spinners";
 
 
 interface ClubeSelecionado {
@@ -129,8 +129,6 @@ export default function CompararCoisas() {
         }
     }, [clubesSelecionados]);
 
-    if (loading) return (<TelaLoading/>);
-
     return (
         <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
             <HeaderFixo/>
@@ -163,7 +161,7 @@ export default function CompararCoisas() {
 
                                 <div className="flex flex-col gap-0.5 text-sm ml-2">
                                     <h1 className="text-slate-100 font-medium">{clube.nome}</h1>
-                                    <h1 className="text-yellow-300 text-shadow-[1px_1px_1px_#0000002a]">R${clube.faturamento} {clube.faturamento > 2000 ? 'bilhões' : clube.faturamento > 1000 ? 'bilhão' : 'milhões'}</h1>
+                                    <h1 className="text-yellow-300 text-shadow-[1px_1px_1px_#0000002a]">R$ {clube.faturamento >= 2000 ? `${clube.faturamento/1000} bilhões` : clube.faturamento > 1000 ? `${clube.faturamento/1000} bilhão` : `${clube.faturamento} milhões`}</h1>
                                 </div>
 
                                 <span className="absolute bottom-0 left-0 bg-slate-800 min-w-full max-h-2 min-h-1.5 rounded-xl">
@@ -243,7 +241,12 @@ export default function CompararCoisas() {
                     <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
 
                     <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center px-4">
-                        {clubes?.map((clube) => (
+                       {loading ? 
+                        <div className="flex-1 flex items-center justify-center">
+                            <ClipLoader size={30}color='#fff'/>
+                        </div>
+                        :
+                        clubes?.map((clube) => (
                             <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
 
                                 <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
@@ -265,8 +268,12 @@ export default function CompararCoisas() {
                     <h1 className="text-center font-medium text-lg text-slate-100">Coisas do Mundo</h1>
 
                     <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center px-4">
-
-                        {coisas?.map((coisa, index) => (
+                       {loading ? 
+                        <div className="flex-1 flex items-center justify-center">
+                            <ClipLoader size={30} color='#fff'/>
+                        </div>
+                        :
+                        coisas?.map((coisa, index) => (
                             <div key={index} style={{ rowGap: '6px' }} className="max-h-34 min-h-34 overflow-hidden pt-2 grid grid-rows-[70%_1fr] bg-stone-50 rounded-md shadow-[0px_0px_2px_#0000004a] justify-items-center scale-80">
 
                                 <div className="row-1 max-h-full flex flex-col items-center justify-center pb-1">

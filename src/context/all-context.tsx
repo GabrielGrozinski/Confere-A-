@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "../auth/supabase-client";
-import type { AuthError, User, Session } from "@supabase/supabase-js";
+import type { User, Session } from "@supabase/supabase-js";
 
 
 interface Props {
@@ -20,7 +20,7 @@ interface dataGoogle {
 interface promise_type {
     success: boolean;
     data: data | dataGoogle;
-    error?: AuthError | null;
+    error?: any;
 }
 
 type TopicoAtivoType = 'Explorar Dados' | 'Produto' | 'Preço';

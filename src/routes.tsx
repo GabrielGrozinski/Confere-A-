@@ -24,6 +24,9 @@ import Bahia from "./pages/site_dos_clubes/bahia";
 import CompararCoisas from "./pages/comparar-coisas";
 import ComparadorDeClubes from "./pages/comparador-de-clubes";
 import Produtos from "./pages/produtos";
+import LoginLayout from "./pages/login/login-layout";
+import TelaLogin from "./pages/login/login";
+import TelaCadastro from "./pages/login/cadastro";
 
 
 export default function Rotas() {
@@ -33,6 +36,10 @@ export default function Rotas() {
                 <Route path="" element={<PaginaInicial/>} />
                 <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
                 <Route path="comparador-de-clubes" element={<ComparadorDeClubes/>} />
+                <Route path="/login" element={<LoginLayout/>}>
+                    <Route path="/" element={<TelaLogin/>} />
+                    <Route path="/cadastro" element={<TelaCadastro/>} />
+                </Route>
                 <Route path="produtos" element={<Produtos/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />
                 <Route path="palmeiras" element={<Palmeiras/>} />

@@ -185,78 +185,81 @@ export default function PaginaInicial() {
     }, [ativado]);
 
     return (
-        <div style={{background: dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f0f9ff, #fdfeff)"}}>
+        <div style={{background: dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
+            {menuAberto ? 
+            <div>
+                <HeaderFixo/>
+                <MenuAberto />
+            </div>
+            :
+            <>
             <header id="header" className="relative flex flex-col min-h-screen">
                      
                 <HeaderFixo />
 
-                {!menuAberto ? (
-                    <>
-                        <div className='flex flex-col items-center px-12 mb-10 mt-20 text-center gap-2'>
-                            <h1 className={`text-4xl font-mono ${dark && 'text-slate-200'}`}>O raio-X financeiro <br /> do futebol brasileiro</h1>
-                            <p className={`text-center ${dark ? 'text-neutral-400' : 'text-neutral-500'}`}>Descubra quem ganha muito, quem gasta mal e quem tá devendo!</p>
-                            <p key={valorCuriosidade} className={`animacao-entrada ${dark && 'text-slate-200'}`}>{curiosidadesFinanceiras[valorCuriosidade]}</p>
+
+                <div className='flex flex-col items-center px-12 mb-10 mt-20 text-center gap-2'>
+                    <h1 className={`text-4xl font-mono ${dark && 'text-slate-200'}`}>O raio-X financeiro <br /> do futebol brasileiro</h1>
+                    <p className={`text-center ${dark ? 'text-neutral-400' : 'text-neutral-500'}`}>Descubra quem ganha muito, quem gasta mal e quem tá devendo!</p>
+                    <p key={valorCuriosidade} className={`animacao-entrada ${dark && 'text-slate-200'}`}>{curiosidadesFinanceiras[valorCuriosidade]}</p>
+                </div>
+
+                <div className="relative max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full">
+                    <input 
+                    className={`
+                    w-full py-2 pr-4 pl-9 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/20'}`} 
+                    placeholder="Buscar clube" 
+                    type="search"
+                    value={busca}
+                    onChange={(e) => {
+                        setBusca(e.currentTarget.value);
+                        buscaClube(e.currentTarget.value);
+                    }}
+                    name="buscar-topico" 
+                    id="buscar-topico" />
+
+                    <i className={`fa-solid fa-magnifying-glass absolute left-0 top-1/2 -translate-y-[40.4%] translate-x-1/2 ${dark ? 'text-neutral-300' : 'text-neutral-600'}`}></i>
+
+                    <i onClick={() => {
+                        setBusca('');
+                        buscaClube('')
+                        }} 
+                        className={`fa-regular fa-circle-xmark absolute top-1/2 -translate-y-[45%] right-0 -translate-x-[66%] cursor-pointer text-lg ${!busca && 'opacity-0'} ${dark ? 'text-sky-100' : 'text-sky-950'}`}></i>
+
+                </div>
+
+                {loading ? 
+                    <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
+                : 
+                    (clubes && clubes.length > 0) ? (
+                        <div 
+                        className='max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full min-h-20 mt-1 rounded-xl p-4 pb-0 flex flex-wrap justify-center gap-2'>
+                            {clubes.map((clube, index) => (
+                                <article onClick={() => navegar(clube.nome)} className="max-w-[40%] min-w-[40%] p-2 cursor-pointer mb-2 flex flex-col items-center" key={index}>
+                                    <img className="max-h-20 max-w-20 sm:max-w-24 sm:max-h-24 lg:max-w-30 lg:max-h-30" src={clube.imagem} alt="" />
+                                    <div className={`mt-1 text-lg ${dark ? 'text-stone-200' : 'text-stone-700'}`}>
+                                        <h1 className="text-center">{clube.nome}<span className="mx-1">-</span>{clube.estado}</h1>
+                                    </div>
+                                </article>
+                            ))}
                         </div>
+                    ) : !busca ? (
+                        <>
+                            <h2 className={`max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 font-medium flex items-center mb-8 mt-1 text-[14px] ${dark ? 'text-slate-300' : 'text-slate-700'}`}>
+                            <i className="fa-solid fa-circle text-green-500 text-shadow-[1px_1px_1px_#0000001a] text-[8.5px] mr-2 translate-y-[15%]"></i>
+                            Dados atualizados 
+                            <i className="fa-solid fa-circle text-slate-600 text-[3px] mx-1.5 translate-y-[50%]"></i>
+                            <span className="font-normal">Temporada 2026</span>
+                            </h2>
 
-                        <div className="relative max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full">
-                            <input 
-                            className={`
-                            w-full py-2 pr-4 pl-9 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/20'}`} 
-                            placeholder="Buscar clube" 
-                            type="search"
-                            value={busca}
-                            onChange={(e) => {
-                                setBusca(e.currentTarget.value);
-                                buscaClube(e.currentTarget.value);
-                            }}
-                            name="buscar-topico" 
-                            id="buscar-topico" />
+                            <i className="fa-solid fa-chevron-down absolute bottom-16 left-1/2 -translate-x-1/2  text-slate-500 text-lg"></i>
+                        </>
+                    ) : (
+                        <h1 className="text-center text-xl text-slate-900 mt-4">Nenhum clube encontrado</h1>
+                    )
+                }
 
-                            <i className={`fa-solid fa-magnifying-glass absolute left-0 top-1/2 -translate-y-[40.4%] translate-x-1/2 ${dark ? 'text-neutral-300' : 'text-neutral-600'}`}></i>
 
-                            <i onClick={() => {
-                                setBusca('');
-                                buscaClube('')
-                                }} 
-                                className={`fa-regular fa-circle-xmark absolute top-1/2 -translate-y-[45%] right-0 -translate-x-[66%] cursor-pointer text-lg ${!busca && 'opacity-0'} ${dark ? 'text-sky-100' : 'text-sky-950'}`}></i>
-
-                        </div>
-
-                        {loading ? 
-                            <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
-                        : 
-                            (clubes && clubes.length > 0) ? (
-                                <div 
-                                className='max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full min-h-20 mt-1 rounded-xl p-4 pb-0 flex flex-wrap justify-center gap-2'>
-                                    {clubes.map((clube, index) => (
-                                        <article onClick={() => navegar(clube.nome)} className="max-w-[40%] min-w-[40%] p-2 cursor-pointer mb-2 flex flex-col items-center" key={index}>
-                                            <img className="max-h-20 max-w-20 sm:max-w-24 sm:max-h-24 lg:max-w-30 lg:max-h-30" src={clube.imagem} alt="" />
-                                            <div className={`mt-1 text-lg ${dark ? 'text-stone-200' : 'text-stone-700'}`}>
-                                                <h1 className="text-center">{clube.nome}<span className="mx-1">-</span>{clube.estado}</h1>
-                                            </div>
-                                        </article>
-                                    ))}
-                                </div>
-                            ) : !busca ? (
-                                <>
-                                    <h2 className={`max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 font-medium flex items-center mb-8 mt-1 text-[14px] ${dark ? 'text-slate-300' : 'text-slate-700'}`}>
-                                    <i className="fa-solid fa-circle text-green-500 text-shadow-[1px_1px_1px_#0000001a] text-[8.5px] mr-2 translate-y-[15%]"></i>
-                                    Dados atualizados 
-                                    <i className="fa-solid fa-circle text-slate-600 text-[3px] mx-1.5 translate-y-[50%]"></i>
-                                    <span className="font-normal">Temporada 2026</span>
-                                    </h2>
-
-                                    <i className="fa-solid fa-chevron-down absolute bottom-16 left-1/2 translate-x-1/2  text-slate-500 text-lg"></i>
-                                </>
-                            ) : (
-                                <h1 className="text-center text-xl text-slate-900 mt-4">Nenhum clube encontrado</h1>
-                            )
-                        }
-
-                    </>
-                ) : (
-                    <MenuAberto />
-                )}
             </header>
 
             <section id="topicos" className="flex flex-col scroll-mt-14">
@@ -264,18 +267,18 @@ export default function PaginaInicial() {
                 <article
                 key={index}
                 id={`article-${index}`}
-                style={{background: index % 2 !== 0 ? dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f0f9ff, #fdfeff)" : dark ? '#0b1f33' : 'white'}}
-                className={`flex py-14 items-center px-[15%] justify-between min-h-70 max-h-98 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                style={{background: index % 2 !== 0 ? dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)" : dark ? '#0b1f33' : 'white'}}
+                className={`flex flex-col py-14 items-center px-[15%] md:px-[5%] lg:px-[10%] xl:px-[15%] justify-between min-h-70 md:max-h-98 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
                 <img
-                    className="max-h-70 max-w-70"
+                    className="max-h-70 md:max-w-70 max-w-full"
                     src={topico.imagem}
                     alt={topico.titulo}
                 />
 
-                <div className="flex flex-col justify-center gap-3 max-w-1/2 min-w-1/2">
+                <div className="flex flex-col justify-center gap-3 md:max-w-1/2 md:min-w-1/2">
                     <h1
-                    className={`text-3xl font-semibold ${
+                    className={`text-3xl text-center md:text-start font-semibold ${
                         dark ? "text-white" : "text-[#222222]"
                     }`}
                     >
@@ -305,6 +308,8 @@ export default function PaginaInicial() {
                 </article>
             ))}
             </section>
+            </>
+            }
         </div>
     )
 }
