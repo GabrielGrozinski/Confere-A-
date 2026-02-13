@@ -46,6 +46,8 @@ interface all_context_type {
     loginGoogle: () => Promise<promise_type>;
     deslogarUser: () => void;
     largura: number;
+    abaEntretenimento: boolean;
+    setAbaEntretenimento: (value: boolean) => void;
 }
 
 export const all_context = createContext<all_context_type>({} as all_context_type);
@@ -53,6 +55,7 @@ export const all_context = createContext<all_context_type>({} as all_context_typ
 export function AllContext({children}: Props) {
     const [dark, setDark] = useState<boolean>(() => localStorage.getItem("tema") === "escuro");
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
+    const [abaEntretenimento, setAbaEntretenimento] = useState<boolean>(false);
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
     const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
     const [session, setSession] = useState<Session | undefined>(undefined)
@@ -192,7 +195,9 @@ export function AllContext({children}: Props) {
                 menuAberto,
                 setMenuAberto,
                 mostrarCard, 
-                setMostrarCard
+                setMostrarCard,
+                abaEntretenimento,
+                setAbaEntretenimento
             }}
         >
             {children}

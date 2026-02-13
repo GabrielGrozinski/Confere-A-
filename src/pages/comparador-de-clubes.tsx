@@ -52,7 +52,7 @@ export type DadosClube = {
 
 
 export default function ComparadorDeClubes() {
-    const {menuAberto, setTopicoAtivo} = allContext();
+    const {menuAberto, setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubesSelecionados, setClubesSelecionados] = useState<Medias[]>([]);
@@ -101,6 +101,7 @@ export default function ComparadorDeClubes() {
 
     useEffect(() => {
         setTopicoAtivo('Produto');
+        setAbaEntretenimento(true);
 
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))

@@ -21,7 +21,7 @@ interface Porcentagem {
 }
 
 export default function CompararCoisas() {
-    const {menuAberto, setTopicoAtivo} = allContext();
+    const {menuAberto, setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
@@ -33,6 +33,7 @@ export default function CompararCoisas() {
 
     useEffect(() => {
         setTopicoAtivo('Produto');
+        setAbaEntretenimento(true);
 
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))

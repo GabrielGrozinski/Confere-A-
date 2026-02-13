@@ -15,7 +15,7 @@ export default function PaginaInicial() {
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const { menuAberto, setTopicoAtivo, dark } = allContext();
+    const { menuAberto, setTopicoAtivo, dark, setAbaEntretenimento } = allContext();
     const [ativado, setAtivado] = useState<boolean>(false);
 
     const curiosidadesFinanceiras = [
@@ -93,6 +93,7 @@ export default function PaginaInicial() {
 
     useEffect(() => {
         setTopicoAtivo('Explorar Dados');
+        setAbaEntretenimento(false);
 
         const intervalo = setInterval(() => {
             setValorCuriosidade((prev) => (prev > 6 ? 0 : prev + 1));

@@ -9,13 +9,14 @@ import { ClipLoader } from "react-spinners";
 
 export default function Produtos() {
     const navigate = useNavigate();
-    const {dark, setTopicoAtivo} = allContext();
+    const {dark, setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubes, setClubes] = useState<Clube[]>();
 
 
     useEffect(() => {
         setTopicoAtivo('Produto');
+        setAbaEntretenimento(false);
         buscaTodosClubes()
             .then((data) => setClubes(data.data))
             .catch((error) => console.error('Houve um erro', error))

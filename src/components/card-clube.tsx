@@ -323,11 +323,12 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     const [ranking, setRanking] = useState<number>(0);
     const [chanceQuitarDivida, setChanceQuitarDivida] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
-    const { largura, menuAberto, setTopicoAtivo, dark, setMostrarCard, mostrarCard } = allContext();
+    const { largura, menuAberto, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
 
 
     useEffect(() => {
         setTopicoAtivo('Produto');
+        setAbaEntretenimento(true);
     }, []);
 
     useEffect(() => {
