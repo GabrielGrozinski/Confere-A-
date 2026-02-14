@@ -27,6 +27,7 @@ import Produtos from "./pages/produtos";
 import LoginLayout from "./pages/login/login-layout";
 import TelaLogin from "./pages/login/login";
 import TelaCadastro from "./pages/login/cadastro";
+import Preco from "./pages/preco";
 
 
 export default function Rotas() {
@@ -36,6 +37,11 @@ export default function Rotas() {
                 <Route path="" element={<PaginaInicial/>} />
                 <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
                 <Route path="comparador-de-clubes" element={<ComparadorDeClubes/>} />
+
+                <Route
+                path="preco"
+                element={<Preco />}
+                />
                 
                 <Route path="/login" element={<LoginLayout/>}>
                     <Route index element={<TelaLogin/>} />

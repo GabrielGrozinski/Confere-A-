@@ -295,7 +295,7 @@ export default function PaginaInicial() {
                     {topico.itens.map((item, i) => (
                         <li
                         key={i}
-                        className={`before:content-['•'] before:mr-1 ${
+                        className={`before:content-['•'] text-lg before:text-lg before:mr-2 ${
                             dark
                             ? "text-slate-100 before:text-stone-300"
                             : "before:text-stone-600 text-slate-900"

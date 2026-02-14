@@ -18,6 +18,8 @@ interface props {
 interface InfoCardProps {
     titulo: string;
     subtitulo?: string;
+    imagemSubtitulo?: string;
+    imagemAlt?: string;
     valor: string | number;
     valorNumero: number;
     sufixo?: string | React.ReactNode;
@@ -138,7 +140,9 @@ export function InfoCard(
         titulo, 
         valor, 
         valorNumero, 
-        subtitulo, 
+        subtitulo,
+        imagemSubtitulo,
+        imagemAlt,
         sufixo, 
         icon, 
         mediaData, 
@@ -156,10 +160,15 @@ export function InfoCard(
                 <i className={`${icon}`}></i>{" "}
                 <span>{titulo}</span>
             </h2>
-
-            <p className={`font-medium ${dark ? 'text-zinc-100' : 'text-zinc-800'} inline`}>
-                    {subtitulo}
+            {subtitulo &&
+            <p className={`font-medium ${dark ? 'text-zinc-100' : 'text-zinc-800'} flex items-center`}>
+                <img
+                className="rounded-sm mr-2 w-8.5 h-6"
+                src={imagemSubtitulo}
+                alt={imagemAlt}/>   
+                {subtitulo}
             </p>
+            }
 
             <p className={`text-xl font-[manrope] font-semibold ${dark ? 'text-stone-50' : 'text-[#222222]'} flex items-center 
                 ${!assinante && (titulo === 'Chance de Quitar a Dívida' || titulo === 'Nota do Clube') && 'blur-[6px]'}
@@ -616,6 +625,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             titulo: "Maior Contratação",
             icon: `fa-solid fa-crown ${dark ? "text-zinc-300" : "text-zinc-900"}`,
             subtitulo: clubeEscolhido.maior_contratacao.split(' - ')[0],
+            imagemSubtitulo: clubeEscolhido.maior_contratacao.split(' - ')[2],
+            imagemAlt: clubeEscolhido.maior_contratacao.split(' - ')[3],
             valor: `R$ ${(Number(clubeEscolhido.maior_contratacao.split(' - ')[1].split(' ')[0]) * 6).toFixed(1)}`,
             valorNumero: 12,
             sufixo: clubeEscolhido.valor_contratacoes < 1000 ? "mi" : "bi",
@@ -693,6 +704,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                 <> <span className="inline">- <span className="font-medium">Quase Impossível</span></span> </>
         },
     ];
+
 
     function ChanceQuitarDivida_15_anos(
         torcedores: number,
@@ -829,6 +841,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                 key={index}
                                 titulo={card.titulo}
                                 subtitulo={card.subtitulo}
+                                imagemSubtitulo={card.imagemSubtitulo}
+                                imagemAlt={card.imagemAlt}
                                 icon={card.icon}
                                 valor={card.valor}
                                 valorNumero={card.valorNumero}

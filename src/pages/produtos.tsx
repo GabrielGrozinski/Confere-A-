@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import type { Clube } from "../components/busca-clube";
 import { buscaTodosClubes, relacaoClubes } from "../components/busca-clube";
 import { ClipLoader } from "react-spinners";
+import MenuAberto from "../components/menu-aberto";
 
 
 export default function Produtos() {
     const navigate = useNavigate();
-    const {dark, setTopicoAtivo, setAbaEntretenimento} = allContext();
+    const {dark, setTopicoAtivo, setAbaEntretenimento, menuAberto} = allContext();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubes, setClubes] = useState<Clube[]>();
 
@@ -35,6 +36,9 @@ export default function Produtos() {
         <div>
             <HeaderFixo />
 
+            {menuAberto ?
+            <MenuAberto />
+            :
             <main style={{background: dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f0f9ff, #fdfeff)"}} className="pt-22 lg:pt-4 min-h-screen pb-4">
                 <section className="flex flex-col gap-12 lg:flex-row lg:gap-8 items-center min-h-100 min-w-full px-4">
                     <article className={`flex flex-col gap-4 h-1/2 min-w-[90%] lg:min-w-[40%] p-4 rounded-md ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_2px_#ffffff4a]' : 'bg-[#fdfeff] shadow-[0px_0px_2px_#0000004a]'}`}>
@@ -54,7 +58,7 @@ export default function Produtos() {
 
                     <article className={`flex flex-col gap-4 h-1/2 min-w-[90%] lg:min-w-[40%] p-4 rounded-md ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_2px_#ffffff4a]' : 'bg-[#fdfeff] shadow-[0px_0px_2px_#0000004a]'}`}>
                         <div className="flex lg:flex-row flex-col justify-between">
-                            <img className="max-w-55 max-h-55 self-center" src="/comparacao-topico.png" alt="" />
+                            <img className="max-w-55 max-h-55 self-center" src="/coisa.png" alt="" />
                             <div className="flex flex-col items-center justify-center">
                                 <h1 className={`mb-2 font-medium font-mono text-2xl sm:text-3xl lg:text-2xl ${dark && 'text-slate-50'}`}>Futebol vs Mundo Real</h1>
                                 <p className={`text-center mx-4 sm:text-lg lg:text-[16px] ${dark ? 'text-stone-300' : 'text-slate-800'}`}>Descubra o que o faturamento de um clube pode comprar. Um iate? Uma ilha? Uma rede de fast food? Compare com qualquer coisa.</p>
@@ -75,7 +79,7 @@ export default function Produtos() {
 
                 <article className={`flex flex-col mt-12 lg:mt-0 gap-4 h-1/2 min-w-[90%] mx-[2%] lg:mx-0 lg:translate-x-[5%] lg:max-w-[90%] max-w-full p-4 rounded-md ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_2px_#ffffff4a]' : 'bg-[#fdfeff] shadow-[0px_0px_2px_#0000004a]'}`}>
                     <div className="flex lg:flex-row flex-col justify-between">
-                        <img className="max-w-55 max-h-55 self-center" src="/comparacao-topico.png" alt="" />
+                        <img className="max-w-55 max-h-55 self-center" src="/faturamento-topico.png" alt="" />
                         <div className="flex flex-col items-center justify-start">
                             <h1 className={`mb-2 font-medium font-mono text-center text-2xl sm:text-3xl lg:text-2xl ${dark && 'text-slate-50'}`}>Como está o seu clube?</h1>
                             <p className={`text-center mx-4 sm:text-lg lg:text-[16px] ${dark ? 'text-stone-300' : 'text-slate-800'}`}>Veja todos os dados financeiros detalhados de um clube: faturamento, lucro, dívida e a probabilidade de quitar seus débitos.</p>
@@ -99,6 +103,7 @@ export default function Produtos() {
 
                 </article>
             </main>
+            }
         </div>
     )
 }

@@ -81,7 +81,42 @@ export default function HeaderFixo() {
                     <h1 className={`font-[MONELOS] text-3xl whitespace-nowrap ${dark && 'text-white'}`}>Confere Aê</h1>
                     {largura < 1024 ? (
                         <div className="w-full flex items-center justify-end">
-                            <button className="mr-4 cursor-pointer bg-blue-500 py-1 px-3 rounded-xl text-slate-100 shadow-[1px_1px_2px_#0000002a]">Baixar aplicativo</button>
+                                {abaEntretenimento &&
+                                    <div className="relative flex-1">
+                                    <input 
+                                    className={`
+                                    -translate-y-[2.5%] min-w-[70%] sm:min-w-50 flex-1 mx-4 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 bg-slate-900 text-slate-100' : 'placeholder:text-neutral-500 bg-white border-slate-800/30'}`} 
+                                    placeholder="Buscar clube" 
+                                    type="search"
+                                    value={busca}
+                                    onChange={(e) => {
+                                        setBusca(e.currentTarget.value);
+                                        buscaClube(e.currentTarget.value);
+                                    }}
+                                    name="buscar-topico" 
+                                    id="buscar-topico" />
+
+                                    {busca &&
+                                    <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-82 max-h-120 overflow-y-auto pb-2 min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
+                                        {clubes && clubes.length > 0 ?
+                                        <div className="flex flex-col gap-4 justify-center py-2">
+                                            {clubes.map((clube, index) => (
+                                                <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
+                                                    <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
+                                                    <div>
+                                                        <h1 className={`${dark ? 'text-slate-50 font-medium' : 'text-[#222222] font-medium'}`}>{clube.nome}</h1>
+                                                        <h2 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>Série A</h2>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        :
+                                        <div></div>
+                                        }
+                                    </section>
+                                    }
+                                    </div>
+                                }
 
                             <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}></i>
                         </div>
@@ -92,20 +127,20 @@ export default function HeaderFixo() {
                                 <article 
                                     onClick={() => {
                                     setTopicoAtivo('Explorar Dados');
-                                    navigate('/')
+                                    setTimeout(() => {
+                                        navigate('/');
+                                    }, 200);
                                     }}
                                     className={`
                                     cursor-pointer relative transition-all 
                                     duration-200 ease-out tracking-wider
-                                    hover:font-semibold 
+                                    hover:font-semibold
                                     after:content-[""] 
                                     after:absolute 
                                     after:h-[1.5px] 
                                     after:left-0
                                     after:-bottom-1
-                                    after:transition-all 
-                                    after:duration-300 
-                                    after:ease
+                                    after:transition-all after:duration-400 after:ease-out 
                                     after:w-0
                                     ${(dark && topicoAtivo === 'Explorar Dados') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Explorar Dados' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200 ' : ''}
                                     `}>
@@ -115,7 +150,9 @@ export default function HeaderFixo() {
                                 <article 
                                     onClick={() => {
                                     setTopicoAtivo('Produto');
-                                    navigate('/produtos')
+                                    setTimeout(() => {
+                                        navigate('/produtos');
+                                    }, 200);
                                     }}
                                     className={`
                                     cursor-pointer relative transition-all 
@@ -126,9 +163,7 @@ export default function HeaderFixo() {
                                     after:h-[1.5px] 
                                     after:left-0
                                     after:-bottom-1
-                                    after:transition-all 
-                                    after:duration-300 
-                                    after:ease
+                                    after:transition-all after:duration-200 after:ease-out 
                                     after:w-0
                                     ${(dark && topicoAtivo === 'Produto') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Produto' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200' : ''}`}>
                                     Produtos
@@ -136,8 +171,10 @@ export default function HeaderFixo() {
 
                                 <article 
                                     onClick={() => {
-                                    setTopicoAtivo('Produto');
-                                    navigate('/')
+                                    setTopicoAtivo('Preço');
+                                    setTimeout(() => {
+                                        navigate('/preco');
+                                    }, 200);
                                     }}
                                     className={`
                                     cursor-pointer relative transition-all 
@@ -148,9 +185,7 @@ export default function HeaderFixo() {
                                     after:h-[1.5px] 
                                     after:left-0
                                     after:-bottom-1
-                                    after:transition-all 
-                                    after:duration-300 
-                                    after:ease 
+                                    after:transition-all after:duration-200 after:ease-out 
                                     after:w-0
                                     ${(dark && topicoAtivo === 'Preço') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Preço' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200' : ''}`}>
                                     Preço
@@ -201,7 +236,11 @@ export default function HeaderFixo() {
                                 {session ? 
                                 user &&
                                 <div className="ml-2 relative">
-                                    <img onClick={() => setMostrarMenuUser(!mostrarMenuUser)} src={user.user_metadata.avatar_url} className="min-h-11 max-h-11 min-w-11 max-w-11 rounded-full cursor-pointer" alt="" />
+                                    {user.user_metadata.avatar_url ? 
+                                        <img onClick={() => setMostrarMenuUser(!mostrarMenuUser)} src={user.user_metadata.avatar_url} className="min-h-11 max-h-11 min-w-11 max-w-11 rounded-full cursor-pointer shadow-[0px_0px_2px_#0000002a]" alt="" />
+                                    :
+                                        <i onClick={() => setMostrarMenuUser(!mostrarMenuUser)} className={`fa-solid fa-circle-user text-4xl cursor-pointer ${dark ? 'text-neutral-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-neutral-700 text-shadow-[1px_1px_1px_#0000002a]'}`}></i>
+                                    }
 
                                     {mostrarMenuUser &&
                                         <div className={`absolute bottom-0 translate-y-[101%] min-w-[500%] -translate-x-[calc(100%-44px)] min-h-80 rounded-xl flex flex-col justify-between ${dark ? 'bg-slate-950' : 'bg-white shadow-[0px_0px_2px_#0000005a]'}`}>
