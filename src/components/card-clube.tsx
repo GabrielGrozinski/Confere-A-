@@ -1,4 +1,4 @@
-import type { Clube, rankings, Medias } from "./busca-clube";
+import type { Clube, rankings, Medias, Faturamento } from "./busca-clube";
 import { useEffect, useState } from "react";
 import { AreaChart, Area } from "recharts";
 import { allContext } from "../context/all-context";
@@ -6,6 +6,7 @@ import HeaderFixo from "./header-fixo";
 import MenuAberto from "./menu-aberto";
 import CardProduto from "./card-produtos";
 import { ClipLoader } from "react-spinners";
+import { calcularChanceTitulo, projetarFaturamento } from "./busca-clube";
 
 
 interface props {
@@ -20,6 +21,7 @@ interface InfoCardProps {
     subtitulo?: string;
     imagemSubtitulo?: string;
     imagemAlt?: string;
+    anoEscolhido: number;
     valor: string | number;
     valorNumero: number;
     sufixo?: string | React.ReactNode;
@@ -139,7 +141,8 @@ export function InfoCard(
     { 
         titulo, 
         valor, 
-        valorNumero, 
+        valorNumero,
+        anoEscolhido,
         subtitulo,
         imagemSubtitulo,
         imagemAlt,
@@ -178,7 +181,7 @@ export function InfoCard(
 
                     if (!media) return valor;
 
-                    if (media.titulo === 'Lucro/Faturamento' || media.titulo === 'Faturamento/Dívida' || media.titulo === 'Chance de Quitar a Dívida') return `${valor}%`;
+                    if (media.titulo === 'Lucro/Faturamento' || media.titulo === 'Faturamento/Dívida' || media.titulo === 'Chance de Quitar a Dívida' || media.titulo === 'Chance de Título (2026)') return `${valor}%`;
 
                     return valor;
                 })()} {sufixo} <i className="fa-solid fa-angle-right text-sm translate-y-[10%]"></i>
@@ -241,6 +244,9 @@ export function InfoCard(
                                 if (media.titulo === 'Custo por Vitória') return '#60A5FA';
                                 if (media.titulo === 'Custo por Ponto') return '#60A5FA';
                                 if (media.titulo === 'Custo por Jogador') return '#FB923C';
+                                if (media.titulo === 'Chance de Título (2026)') return '#fb923c';
+
+                                if (media.titulo === 'Dívida (2024)') return media.valor < 0 ? '#34D399' : '#F87171';
 
                                 if (media.valor < 0) return '#F87171'
 
@@ -253,7 +259,6 @@ export function InfoCard(
                                 const media = mediaData.find(m => m.titulo === titulo);
 
                                 if (!media) return;
-
                                 
                                 if (media.titulo === 'Nota do Clube') return '#fbbf248a';
 
@@ -265,6 +270,9 @@ export function InfoCard(
                                 if (media.titulo === 'Custo por Vitória') return '#60A5FA8a';
                                 if (media.titulo === 'Custo por Ponto') return '#60A5FA8a';
                                 if (media.titulo === 'Custo por Jogador') return '#FB923C8a';
+                                if (media.titulo === 'Chance de Título (2026)') return '#fb923c9a';
+
+                                if (media.titulo === 'Dívida (2024)') return media.valor < 0 ? '#34D3998a' : '#F871718a';
 
                                 if (media.valor < 0) return '#F871718a'
 
@@ -284,7 +292,7 @@ export function InfoCard(
 
                     if (!media) return;
 
-                    if (media.titulo === 'Dívida Bruta' || media.titulo === 'Folha Salarial' || media.titulo === 'Custo por Vitória' || media.titulo === 'Custo por Gol' || media.titulo === 'Custo por Ponto' || media.titulo === 'Custo por Jogador') {
+                    if (media.titulo === 'Dívida Bruta' || media.titulo === 'Folha Salarial' || media.titulo === 'Custo por Vitória' || media.titulo === 'Custo por Gol' || media.titulo === 'Custo por Ponto' || media.titulo === 'Custo por Jogador' || media.titulo === 'Dívida (2024)') {
                         if (media.valor < 0) return dark ? 'text-green-400' : 'text-green-600';
                         return dark ? 'text-red-400' : 'text-red-600';
                     }
@@ -315,6 +323,8 @@ export function InfoCard(
 
                         if (!media) return;
 
+                        if (media.titulo === 'Dívida (2024)' || media.titulo === 'Faturamento (2024)' || media.titulo === `Faturamento (${2025 + anoEscolhido})`) return media.valor < 0 ? 'de queda' : 'de aumento'
+
                         if (media.valor < 0) return 'abaixo da média';
 
                         return 'acima da média';
@@ -331,6 +341,9 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     const [assinante, setAssinante] = useState<boolean>(true);
     const [ranking, setRanking] = useState<number>(0);
     const [chanceQuitarDivida, setChanceQuitarDivida] = useState<number>(0);
+    const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
+    const [chanceTitulo, setChanceTitulo] = useState<number>(0);
+    const [proximoFaturamento, setProximoFaturamento] = useState<Faturamento>();
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
     const { largura, menuAberto, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
 
@@ -339,6 +352,16 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         setTopicoAtivo('Produto');
         setAbaEntretenimento(true);
     }, []);
+
+    useEffect(() => {
+        if (!media || !clubeEscolhido || !ranking) return;
+
+        const chance = calcularChanceTitulo(clubeEscolhido.folha_salarial, clubeEscolhido.valor_contratacoes, clubeEscolhido.pontos, clubeEscolhido.vitorias);
+
+        const novaChance = Number((chance * ranking/10).toFixed(2));
+        setChanceTitulo(novaChance);
+
+    }, [media, clubeEscolhido]);
 
     useEffect(() => {
         if (clubeEscolhido && media) {
@@ -441,7 +464,11 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
             setChanceQuitarDivida(chanceDivida >= 100 ? 100 : chanceDivida);
 
-        if (clubeEscolhido && media && rankingAtual && chanceDivida) {
+            const faturamentoFuturo: Faturamento = projetarFaturamento((clubeEscolhido.faturamento/clubeEscolhido.faturamento_2023)*100, (clubeEscolhido.faturamento/clubeEscolhido.faturamento_2024)*100, rankingAtual, anoEscolhido, clubeEscolhido.faturamento);
+
+            setProximoFaturamento(faturamentoFuturo);
+
+        if (clubeEscolhido && media && rankingAtual && chanceDivida && chanceTitulo) {
             const lucFat = clubeEscolhido.lucro*100 / clubeEscolhido.faturamento;
 
             const mediaClubeEscolhido: Medias = {
@@ -551,11 +578,24 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
                 mediaTorcedores: Math.round(
                     ((clubeEscolhido.numero_torcedores / media.mediaTorcedores) * 100 - 100) * 100
-                ) / 100
+                ) / 100,
+
+                mediaChanceTitulo: Math.round(
+                    chanceTitulo - (50 * media.notaClube/10)
+                ),
+
+                divida_2024: Number((clubeEscolhido.divida / clubeEscolhido.divida_2024
+                ).toFixed(2)) * 100 - 100,
+
+                faturamento_2024: Number((clubeEscolhido.faturamento / clubeEscolhido.faturamento_2024
+                ).toFixed(2)) * 100 - 100,
+
+                faturamento_futuro: Math.round(
+                    proximoFaturamento?.crescimentoPercentual ?? 0),
             }
 
-            if (mediaClubeEscolhido.notaClube && mediaClubeEscolhido.chanceQuitarDivida) {
 
+            if (mediaClubeEscolhido.notaClube && mediaClubeEscolhido.chanceQuitarDivida) {
                 const mediaCardData: MediaCardData[] = [
                     { valor: mediaClubeEscolhido.faturamento, titulo: "Faturamento (2025)" },
                     { valor: mediaClubeEscolhido.lucro, titulo: "Balanço (2025)" },
@@ -570,7 +610,13 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     { valor: mediaClubeEscolhido.custoPonto, titulo: "Custo por Ponto" },
                     { valor: mediaClubeEscolhido.custoJogador, titulo: "Custo por Jogador" },
                     { valor: mediaClubeEscolhido.notaClube, titulo: "Nota do Clube" },
-                    { valor: mediaClubeEscolhido.chanceQuitarDivida, titulo: "Chance de Quitar a Dívida" }
+                    { valor: mediaClubeEscolhido.chanceQuitarDivida, titulo: "Chance de Quitar a Dívida" },
+                    { valor: mediaClubeEscolhido.notaClube, titulo: "Nota do Clube" },
+                    { valor: mediaClubeEscolhido.mediaChanceTitulo ?? 0, titulo: "Chance de Título (2026)" },
+                    { valor: mediaClubeEscolhido.divida_2024 ?? 0, titulo: "Dívida (2024)" },
+                    { valor: mediaClubeEscolhido.faturamento_2024 ?? 0, titulo: "Faturamento (2024)" },
+                    { valor: mediaClubeEscolhido.faturamento_futuro ?? 0, titulo: `Faturamento (${2025 + anoEscolhido})` },
+                    
                 ];
 
                 setMediaData(mediaCardData);
@@ -580,7 +626,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
         }
 
-    }, [clubeEscolhido, media]);
+    }, [clubeEscolhido, media, chanceTitulo]);
 
 
     if (!clubeEscolhido || !mediaData) return;
@@ -702,6 +748,43 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                 chanceQuitarDivida > 15 ? <> <span className="inline">- <span className="font-medium">Baixa</span></span> </>
                 :
                 <> <span className="inline">- <span className="font-medium">Quase Impossível</span></span> </>
+        },
+        {
+            titulo: "Chance de Título (2026)",
+            icon: `fa-solid fa-trophy ${dark ? "text-orange-400" : "text-orange-500"}`,
+            valor: chanceTitulo,
+            valorNumero: chanceTitulo,
+            sufixo: chanceTitulo > 75 ?
+                <> <span className="inline">- <span className="font-medium">Muito Alta</span></span> </>
+                :
+                chanceTitulo > 60 ? <> <span className="inline">- <span className="font-medium">Alta</span></span> </>
+                :
+                chanceTitulo > 30 ? <> <span className="inline">- <span className="font-medium">Moderada</span></span> </>
+                :
+                chanceTitulo > 15 ? <> <span className="inline">- <span className="font-medium">Baixa</span></span> </>
+                :
+                <> <span className="inline">- <span className="font-medium">Quase Impossível</span></span> </>
+        },
+        {
+            titulo: "Faturamento (2024)",
+            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
+            valor: `R$ ${clubeEscolhido.faturamento_2024}`,
+            valorNumero: 860,
+            sufixo: clubeEscolhido.faturamento_2024 < 1000 ? "mi" : "bi",
+        },
+        {
+            titulo: "Dívida (2024)",
+            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
+            valor: `R$ ${clubeEscolhido.divida_2024}`,
+            valorNumero: 860,
+            sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
+        },
+        {
+            titulo: `Faturamento (${2025 + anoEscolhido})`,
+            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
+            valor: `R$ ${proximoFaturamento?.faturamentoProjetado}`,
+            valorNumero: 860,
+            sufixo: proximoFaturamento?.faturamentoProjetado ?? 0 < 1000 ? "mi" : "bi",
         },
     ];
 
@@ -851,6 +934,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                 largura={largura}
                                 assinante={assinante}
                                 dark={dark}
+                                anoEscolhido={anoEscolhido}
                             />
                         ))}
                     </section>

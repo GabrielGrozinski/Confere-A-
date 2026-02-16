@@ -18,6 +18,9 @@ export interface Clube {
     pontos: number;
     quant_jogadores: number;
     competicao: string;
+    faturamento_2024: number;
+    divida_2024: number;
+    faturamento_2023: number;
 }
 
 export interface Coisas {
@@ -76,6 +79,11 @@ export interface Medias {
     notaClube: number;
     mediaTorcedores: number;
     chanceQuitarDivida: number;
+    mediaChanceTitulo?: number;
+    divida_2024?: number;
+    divida_2023?: number;
+    faturamento_2024?: number;
+    faturamento_futuro?: number;
 }
 
 interface ReturnMedia {
@@ -88,6 +96,53 @@ interface ReturnClubeMedia {
     clube: Medias;
     success: boolean;
     error?: any | null;
+}
+
+export interface Faturamento {
+    crescimentoPercentual: number;
+    faturamentoProjetado: number;
+}
+
+export function projetarFaturamento(
+  crescimentoAno1: number,
+  crescimentoAno2: number,
+  notaClube: number,
+  anos: number,
+  faturamentoAtual: number
+): Faturamento {
+
+  if (anos < 1 || anos > 15) {
+    throw new Error("O número de anos deve estar entre 1 e 15.");
+  }
+
+  const g1 = crescimentoAno1 / 100;
+  const g2 = crescimentoAno2 / 100;
+
+  // 1️⃣ Base mais punitiva
+  const G_base = (0.3 * g1 + 0.7 * g2) * 0.6;
+
+  // 2️⃣ Tendência amplificada
+  let T = 1 + 1.5 * (g2 - g1);
+  T = Math.max(0.75, Math.min(1.25, T));
+
+  let G_calculado = G_base * T;
+
+  // 3️⃣ 🔥 Multiplicador final pela nota
+  G_calculado = G_calculado * (notaClube / 10);
+
+  // 4️⃣ Limite anual entre 1% e 20%
+  const G_final = Math.max(0.01, Math.min(0.20, G_calculado));
+
+  // 5️⃣ Crescimento linear acumulado
+  const crescimentoTotal = G_final * anos;
+
+  const faturamentoNovo =
+    faturamentoAtual * (1 + crescimentoTotal);
+
+  return {
+    crescimentoPercentual: Number((crescimentoTotal * 100).toFixed(2)),
+    faturamentoProjetado: Number((faturamentoNovo).toFixed(2))
+  };
 }
 
 
@@ -291,6 +346,48 @@ function ChanceQuitarDivida_15_anos(
     return Math.max(0.01, Number((Pbase * 100).toFixed(2)));
 }
 
+export function calcularChanceTitulo(
+  folhaSalarial: number,
+  gastoContratacoes: number,
+  pontos: number,
+  vitorias: number
+): number {
+
+  // Médias base
+  const MEDIA_FOLHA = 18.9
+  const MEDIA_CONTRATACOES = 166
+  const MEDIA_PONTOS = 52
+  const MEDIA_VITORIAS = 28
+
+  // Normalização relativa à média
+  const indiceFolha = folhaSalarial / MEDIA_FOLHA
+  const indiceContratacoes = gastoContratacoes / MEDIA_CONTRATACOES
+  const indicePontos = pontos / MEDIA_PONTOS
+  const indiceVitorias = vitorias / MEDIA_VITORIAS
+
+  // Pesos (desempenho pesa mais que investimento)
+  const pesoFolha = 0.2
+  const pesoContratacoes = 0.2
+  const pesoPontos = 0.35
+  const pesoVitorias = 0.25
+
+  // Score centralizado (subtraindo 1 para média virar 0)
+  const score =
+    (indiceFolha - 1) * pesoFolha +
+    (indiceContratacoes - 1) * pesoContratacoes +
+    (indicePontos - 1) * pesoPontos +
+    (indiceVitorias - 1) * pesoVitorias
+
+  // Função logística (controla crescimento)
+  const probabilidade = 1 / (1 + Math.exp(-5 * score))
+
+  // Converter para porcentagem
+  const porcentagem = probabilidade * 99.9
+
+  // Garantir limites
+  return Math.max(0, Math.min(99.9, Number(porcentagem.toFixed(1))))
+}
+
 export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
     const { data, error } = await supabase
         .from('clubes_2025')
@@ -330,6 +427,8 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
         const mediaTorcedores: number[] = [];
         let mediaNota: number[] = [];
         const mediaChanceQuitarDivida: number[] = [];
+        const mediaPontos: number[] = [];
+        const mediaVitórias: number[] = [];
 
         const clubes: Clube[] = data;
         clubes.forEach((clube) => {
@@ -346,6 +445,8 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
             custoPonto.push((clube.folha_salarial * 13 + clube.valor_contratacoes) / clube.pontos);
             custoJogador.push(clube.folha_salarial / clube.quant_jogadores);
             mediaTorcedores.push(clube.numero_torcedores);
+            mediaPontos.push(clube.pontos);
+            mediaVitórias.push(clube.vitorias);
 
             const rankingAtual =
                 (
@@ -360,7 +461,6 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
 
                 );
 
-            //console.log(clube.nome, 'valor', rankingAtual);
             mediaNota.push(Number(rankingAtual.toFixed(1)));
 
             const chanceDivida =
