@@ -29,6 +29,8 @@ type TopicoAtivoType = 'Explorar Dados' | 'Produto' | 'Preço';
 interface all_context_type {
     mostrarCard: boolean;
     setMostrarCard: (value: boolean) => void;
+    anoEscolhido: number;
+    setAnoEscolhido: (value: number) => void;
     dark: boolean;
     setDark: (value: boolean) => void;
     topicoAtivo: TopicoAtivoType;
@@ -54,6 +56,7 @@ export const all_context = createContext<all_context_type>({} as all_context_typ
 
 export function AllContext({children}: Props) {
     const [dark, setDark] = useState<boolean>(() => localStorage.getItem("tema") === "escuro");
+    const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const [abaEntretenimento, setAbaEntretenimento] = useState<boolean>(false);
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
@@ -197,7 +200,9 @@ export function AllContext({children}: Props) {
                 mostrarCard, 
                 setMostrarCard,
                 abaEntretenimento,
-                setAbaEntretenimento
+                setAbaEntretenimento,
+                anoEscolhido,
+                setAnoEscolhido
             }}
         >
             {children}

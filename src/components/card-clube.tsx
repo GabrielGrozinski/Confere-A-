@@ -21,7 +21,6 @@ interface InfoCardProps {
     subtitulo?: string;
     imagemSubtitulo?: string;
     imagemAlt?: string;
-    anoEscolhido: number;
     valor: string | number;
     valorNumero: number;
     sufixo?: string | React.ReactNode;
@@ -142,7 +141,6 @@ export function InfoCard(
         titulo, 
         valor, 
         valorNumero,
-        anoEscolhido,
         subtitulo,
         imagemSubtitulo,
         imagemAlt,
@@ -158,7 +156,7 @@ export function InfoCard(
     return (
         <div
         onClick={() => setMostrarCard(true)} 
-        className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-slate-50'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} overflow-hidden`}>
+        className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-slate-50'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} lg: min-w-[calc(50%-24px)] overflow-hidden`}>
             <h2 className={`${dark ? 'text-slate-200' : 'text-slate-700'} font-mono`}>
                 <i className={`${icon}`}></i>{" "}
                 <span>{titulo}</span>
@@ -323,7 +321,7 @@ export function InfoCard(
 
                         if (!media) return;
 
-                        if (media.titulo === 'Dívida (2024)' || media.titulo === 'Faturamento (2024)' || media.titulo === `Faturamento (${2025 + anoEscolhido})`) return media.valor < 0 ? 'de queda' : 'de aumento'
+                        if (media.titulo === 'Dívida (2024)' || media.titulo === 'Faturamento (2024)') return media.valor < 0 ? 'de queda' : 'de aumento'
 
                         if (media.valor < 0) return 'abaixo da média';
 
@@ -341,9 +339,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     const [assinante, setAssinante] = useState<boolean>(true);
     const [ranking, setRanking] = useState<number>(0);
     const [chanceQuitarDivida, setChanceQuitarDivida] = useState<number>(0);
-    const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
-    const [proximoFaturamento, setProximoFaturamento] = useState<Faturamento>();
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
     const { largura, menuAberto, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
 
@@ -463,10 +459,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             );
 
             setChanceQuitarDivida(chanceDivida >= 100 ? 100 : chanceDivida);
-
-            const faturamentoFuturo: Faturamento = projetarFaturamento((clubeEscolhido.faturamento/clubeEscolhido.faturamento_2023)*100, (clubeEscolhido.faturamento/clubeEscolhido.faturamento_2024)*100, rankingAtual, anoEscolhido, clubeEscolhido.faturamento);
-
-            setProximoFaturamento(faturamentoFuturo);
 
         if (clubeEscolhido && media && rankingAtual && chanceDivida && chanceTitulo) {
             const lucFat = clubeEscolhido.lucro*100 / clubeEscolhido.faturamento;
@@ -589,9 +581,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
                 faturamento_2024: Number((clubeEscolhido.faturamento / clubeEscolhido.faturamento_2024
                 ).toFixed(2)) * 100 - 100,
-
-                faturamento_futuro: Math.round(
-                    proximoFaturamento?.crescimentoPercentual ?? 0),
             }
 
 
@@ -615,8 +604,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     { valor: mediaClubeEscolhido.mediaChanceTitulo ?? 0, titulo: "Chance de Título (2026)" },
                     { valor: mediaClubeEscolhido.divida_2024 ?? 0, titulo: "Dívida (2024)" },
                     { valor: mediaClubeEscolhido.faturamento_2024 ?? 0, titulo: "Faturamento (2024)" },
-                    { valor: mediaClubeEscolhido.faturamento_futuro ?? 0, titulo: `Faturamento (${2025 + anoEscolhido})` },
-                    
+
                 ];
 
                 setMediaData(mediaCardData);
@@ -779,13 +767,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             valorNumero: 860,
             sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
         },
-        {
-            titulo: `Faturamento (${2025 + anoEscolhido})`,
-            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
-            valor: `R$ ${proximoFaturamento?.faturamentoProjetado}`,
-            valorNumero: 860,
-            sufixo: proximoFaturamento?.faturamentoProjetado ?? 0 < 1000 ? "mi" : "bi",
-        },
+
     ];
 
 
@@ -912,9 +894,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                             </p>
                         </div>
                     </article>
-                    
-                    <section className={`row-2 ${largura > 768 ? 'grid grid-cols-2' : 'flex flex-col'} gap-6 px-5 pb-10`}>
-                                                                                {loading ? 
+                    <section className={`row-2 ${largura > 768 ? 'flex flex-wrap' : 'flex flex-col'} gap-6 px-5 pb-10`}>
+                        {loading ? 
                         <div className="flex-1 flex items-center justify-center">
                             <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
                         </div>
@@ -934,7 +915,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                 largura={largura}
                                 assinante={assinante}
                                 dark={dark}
-                                anoEscolhido={anoEscolhido}
                             />
                         ))}
                     </section>

@@ -1,5 +1,7 @@
 import { supabase } from "../auth/supabase-client";
 import type { PostgrestError } from "@supabase/supabase-js";
+import { allContext } from "../context/all-context";
+
 
 export interface Clube {
     id: string;
@@ -21,6 +23,7 @@ export interface Clube {
     faturamento_2024: number;
     divida_2024: number;
     faturamento_2023: number;
+    nota_clube: number;
 }
 
 export interface Coisas {
@@ -81,9 +84,8 @@ export interface Medias {
     chanceQuitarDivida: number;
     mediaChanceTitulo?: number;
     divida_2024?: number;
-    divida_2023?: number;
     faturamento_2024?: number;
-    faturamento_futuro?: number;
+    projetarFaturamento: number;
 }
 
 interface ReturnMedia {
@@ -144,7 +146,6 @@ export function projetarFaturamento(
     faturamentoProjetado: Number((faturamentoNovo).toFixed(2))
   };
 }
-
 
 export async function buscaCoisas(): Promise<ReturnCoisas> {
     const { data, error } = await supabase
@@ -408,7 +409,8 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
         custoJogador: 0,
         notaClube: 0,
         mediaTorcedores: 0,
-        chanceQuitarDivida: 0
+        chanceQuitarDivida: 0,
+        projetarFaturamento: 0,
     }
 
     if (data) {
@@ -564,7 +566,8 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
             custoJogador: calcularMedia(custoJogador),
             notaClube: calcularMedia(mediaNota),
             mediaTorcedores: calcularMedia(mediaTorcedores),
-            chanceQuitarDivida: calcularMedia(mediaChanceQuitarDivida)
+            chanceQuitarDivida: calcularMedia(mediaChanceQuitarDivida),
+            projetarFaturamento: 0
         }
 
         return { media, success: true };
@@ -580,7 +583,7 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
 
 }
 
-export async function CaclularMediaClube(clubeEscolhido: Clube): Promise<ReturnClubeMedia> {
+export async function CaclularMediaClube(clubeEscolhido: Clube, anoEscolhido?: number): Promise<ReturnClubeMedia> {
 
     let mediaClubeEscolhido: Medias = {
         nome: '',
@@ -599,7 +602,8 @@ export async function CaclularMediaClube(clubeEscolhido: Clube): Promise<ReturnC
         custoJogador: 0,
         notaClube: 0,
         mediaTorcedores: 0,
-        chanceQuitarDivida: 0
+        chanceQuitarDivida: 0,
+        projetarFaturamento: 0
     }
 
     try {
@@ -698,10 +702,11 @@ export async function CaclularMediaClube(clubeEscolhido: Clube): Promise<ReturnC
                 clubeEscolhido.faturamento,
                 clubeEscolhido.divida,
                 clubeEscolhido.lucro,
-                15,
+                anoEscolhido ?? 1,
                 0.3
             );
 
+            const faturamentoFuturo = projetarFaturamento((clubeEscolhido.faturamento/clubeEscolhido.faturamento_2023)*100, (clubeEscolhido.faturamento/clubeEscolhido.faturamento_2024)*100, rankingAtual, anoEscolhido ?? 1, clubeEscolhido.faturamento) 
 
             mediaClubeEscolhido = {
                 nome: clubeEscolhido.nome,
@@ -770,6 +775,8 @@ export async function CaclularMediaClube(clubeEscolhido: Clube): Promise<ReturnC
                 notaClube: Number(rankingAtual.toFixed(2)),
 
                 chanceQuitarDivida: Number(chanceDivida.toFixed(2)),
+
+                projetarFaturamento: faturamentoFuturo.faturamentoProjetado,
 
                 mediaTorcedores: Number(clubeEscolhido.numero_torcedores.toFixed(2)),
             }

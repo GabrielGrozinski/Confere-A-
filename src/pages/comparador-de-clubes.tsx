@@ -11,7 +11,7 @@ import { ClipLoader } from "react-spinners";
 
 
 type TopicoComparacao = {
-  label: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida';
+  label: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento';
   categoria: 'Financeiro' | 'Eficiência' | 'Mercado' | 'Indicadores'
 }
 
@@ -29,6 +29,7 @@ export type Topico =
   | 'Faturamento/Dívida'
   | 'Lucro/Faturamento'
   | 'Nota do Clube'
+  | 'Projetar Faturamento'
   | 'Chance de Quitar a Dívida';
 
 export type DadosClube = {
@@ -46,6 +47,7 @@ export type DadosClube = {
   custoJogador: number;
   notaClube: number;
   mediaTorcedores: number;
+  projetarFaturamento: number;
   chanceQuitarDivida: number;
 };
 
@@ -80,6 +82,7 @@ export default function ComparadorDeClubes() {
         { label: 'Lucro/Faturamento', categoria: 'Indicadores' },
         { label: 'Nota do Clube', categoria: 'Indicadores' },
         { label: 'Chance de Quitar a Dívida', categoria: 'Indicadores' },
+        { label: 'Projetar Faturamento', categoria: 'Indicadores' },
     ];
     const [topico, setTopico] = useState<Topico>('Faturamento');
     const correlacaoTopicoCampo: Record<Topico, keyof DadosClube> = {
@@ -96,6 +99,7 @@ export default function ComparadorDeClubes() {
     'Faturamento/Dívida': 'fatDiv',
     'Lucro/Faturamento': 'lucFat',
     'Nota do Clube': 'notaClube',
+    'Projetar Faturamento' : 'projetarFaturamento',
     'Chance de Quitar a Dívida': 'chanceQuitarDivida',
     };
 
