@@ -1,6 +1,5 @@
 import { supabase } from "../auth/supabase-client";
 import type { PostgrestError } from "@supabase/supabase-js";
-import { allContext } from "../context/all-context";
 
 
 export interface Clube {
@@ -23,6 +22,8 @@ export interface Clube {
     faturamento_2024: number;
     divida_2024: number;
     faturamento_2023: number;
+    chance_quitar_divida: number;
+    aumento_faturamento: number;
     nota_clube: number;
 }
 
@@ -34,34 +35,10 @@ export interface Coisas {
     custo: number;
 }
 
-interface Return {
-    data?: Clube | undefined;
-    error?: PostgrestError | null;
-    success: boolean;
-}
-
-interface ReturnTodos {
-    data?: Clube[] | undefined;
-    error?: PostgrestError | null;
-    success: boolean;
-}
-
-interface ReturnCoisas {
-    data?: Coisas[] | undefined;
-    error?: PostgrestError | null;
-    success: boolean;
-}
-
 export interface rankings {
     faturamento: number;
     divida: number;
     salario: number;
-}
-
-interface ReturnRanking {
-    rankings: rankings;
-    success: boolean;
-    error?: PostgrestError | null;
 }
 
 export interface Medias {
@@ -87,67 +64,47 @@ export interface Medias {
     faturamento_2024?: number;
     projetarFaturamento: number;
 }
+// Tipagem de variaveis.
 
-interface ReturnMedia {
+interface ReturnbuscaClube {
+    data?: Clube | undefined;
+    error?: PostgrestError | null;
+    success: boolean;
+}
+
+interface ReturnbuscaTodosClubes {
+    data?: Clube[] | undefined;
+    error?: PostgrestError | null;
+    success: boolean;
+}
+
+interface ReturnbuscaCoisas {
+    data?: Coisas[] | undefined;
+    error?: PostgrestError | null;
+    success: boolean;
+}
+
+interface ReturnRanking {
+    rankings: rankings;
+    success: boolean;
+    error?: PostgrestError | null;
+}
+
+interface ReturnbuscarMedia {
     media: Medias;
     success: boolean;
     error?: PostgrestError | null;
 }
 
-interface ReturnClubeMedia {
+interface ReturnCalcularMediaClube {
     clube: Medias;
     success: boolean;
     error?: any | null;
 }
+// Tipagem de Return
 
-export interface Faturamento {
-    crescimentoPercentual: number;
-    faturamentoProjetado: number;
-}
 
-export function projetarFaturamento(
-  crescimentoAno1: number,
-  crescimentoAno2: number,
-  notaClube: number,
-  anos: number,
-  faturamentoAtual: number
-): Faturamento {
-
-  if (anos < 1 || anos > 15) {
-    throw new Error("O número de anos deve estar entre 1 e 15.");
-  }
-
-  const g1 = crescimentoAno1 / 100;
-  const g2 = crescimentoAno2 / 100;
-
-  // 1️⃣ Base mais punitiva
-  const G_base = (0.3 * g1 + 0.7 * g2) * 0.6;
-
-  // 2️⃣ Tendência amplificada
-  let T = 1 + 1.5 * (g2 - g1);
-  T = Math.max(0.75, Math.min(1.25, T));
-
-  let G_calculado = G_base * T;
-
-  // 3️⃣ 🔥 Multiplicador final pela nota
-  G_calculado = G_calculado * (notaClube / 10);
-
-  // 4️⃣ Limite anual entre 1% e 20%
-  const G_final = Math.max(0.01, Math.min(0.20, G_calculado));
-
-  // 5️⃣ Crescimento linear acumulado
-  const crescimentoTotal = G_final * anos;
-
-  const faturamentoNovo =
-    faturamentoAtual * (1 + crescimentoTotal);
-
-  return {
-    crescimentoPercentual: Number((crescimentoTotal * 100).toFixed(2)),
-    faturamentoProjetado: Number((faturamentoNovo).toFixed(2))
-  };
-}
-
-export async function buscaCoisas(): Promise<ReturnCoisas> {
+export async function buscaCoisas(): Promise<ReturnbuscaCoisas> {
     const { data, error } = await supabase
         .from('coisas_do_mundo')
         .select('*');
@@ -159,7 +116,7 @@ export async function buscaCoisas(): Promise<ReturnCoisas> {
     return { success: true, data: data }
 }
 
-export async function buscaTodosClubes(): Promise<ReturnTodos> {
+export async function buscaTodosClubes(): Promise<ReturnbuscaTodosClubes> {
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*');
@@ -171,7 +128,7 @@ export async function buscaTodosClubes(): Promise<ReturnTodos> {
     return { success: true, data: data }
 }
 
-export async function buscaClube(nomeClube: string): Promise<Return> {
+export async function buscaClube(nomeClube: string): Promise<ReturnbuscaClube> {
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*')
@@ -242,111 +199,6 @@ const calcularMedia = (arr: number[]) => {
     return Number(somaFinal.toFixed(2));
 }
 
-const somarValores = (arr: number[]) => {
-    const somaFinal =
-        arr.length === 0 ? 0
-            :
-            arr.reduce((acc, n) => acc + n, 0);
-
-    return Number(somaFinal.toFixed(1));
-}
-
-function ChanceQuitarDivida_15_anos(
-    torcedores: number,
-    faturamento: number,
-    divida: number,
-    lucro: number,
-    anos: number,
-    estimativa: number
-) {
-    if (divida <= 0) return 100;
-    if (anos <= 0) return 0;
-
-    let G0 =
-        estimativa *
-        (0.03 * Math.log(torcedores + 1) + 0.00018 * faturamento);
-
-    G0 = Math.min(Math.max(G0, 0.04), 0.14);
-
-    const rigidez = Math.min(Math.max(divida / faturamento, 0.5), 3);
-
-    let lucroTotal = 0;
-    let lucroAno = lucro;
-    let G = G0;
-
-    for (let i = 1; i <= anos; i++) {
-
-        const capacidade = faturamento / divida;
-        const margemLucro = lucroAno / faturamento;
-
-        let anoRuim = false;
-
-        // 🟡 clube frágil
-        if (lucroAno > 0 && margemLucro < 0.05 && capacidade <= 1.5) {
-            const volatilidade =
-                0.15 + (1.5 - capacidade) * 0.2;
-
-            lucroAno *= 1 + (Math.random() * 2 - 1) * volatilidade;
-        }
-
-        // 🔴 clube estruturalmente quebrado
-        if (divida / faturamento >= 2.2) {
-            let probAnoRuim =
-                0.45 +
-                (divida / faturamento - 2.2) * 0.2 +
-                (1 - estimativa) * 0.35;
-
-            probAnoRuim = Math.min(Math.max(probAnoRuim, 0.45), 0.9);
-
-            if (Math.random() < probAnoRuim) {
-                anoRuim = true;
-
-                // força prejuízo
-                const choque =
-                    0.3 + Math.random() * 0.4; // 30% a 70% do faturamento
-
-                lucroAno = -faturamento * choque;
-            }
-        }
-
-        // 🔁 dinâmica normal só se NÃO foi ano ruim estrutural
-        if (!anoRuim) {
-            if (lucroAno < 0) {
-                lucroAno *= 1 - G / rigidez;
-            } else {
-                lucroAno *= 1 + G;
-            }
-        }
-
-        lucroTotal += lucroAno;
-        G *= 0.92;
-    }
-
-    let R: number;
-
-    if (lucro < 0) {
-        const capacidade = faturamento / divida;
-        const pesoPrejuizo = Math.abs(lucro) / faturamento;
-
-        const scoreEstrutural = Math.log(1 + capacidade);
-        const penalizacao =
-            1 - Math.min((pesoPrejuizo * rigidez) / 0.35, 1);
-
-        R = scoreEstrutural * penalizacao;
-    } else {
-        R = (lucroTotal / divida) / rigidez;
-    }
-
-    const threshold = 0.9 * rigidez;
-    const slope = 2 / rigidez;
-
-    let Pbase = 1 / (1 + Math.exp(-slope * (R - threshold)));
-
-    Pbase = (divida/faturamento) > 2.5 ? Pbase/4 : (divida/faturamento) > 2 ? Pbase/2 : (divida/faturamento) > 1 ? Pbase/1.2 : (divida/faturamento) > 0.8 ? Pbase/1.2 : (lucro*100/divida) < 10 ? Pbase/1.2 : Pbase;
-
-    return Math.max(0.01, Number((Pbase * 100).toFixed(2)));
-}
-
 export function calcularChanceTitulo(
   folhaSalarial: number,
   gastoContratacoes: number,
@@ -389,7 +241,7 @@ export function calcularChanceTitulo(
   return Math.max(0, Math.min(99.9, Number(porcentagem.toFixed(1))))
 }
 
-export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
+export async function buscarMedia(): Promise<ReturnbuscarMedia> {
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*');
@@ -427,7 +279,7 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
         const custoPonto: number[] = [];
         const custoJogador: number[] = [];
         const mediaTorcedores: number[] = [];
-        let mediaNota: number[] = [];
+        const mediaNota: number[] = [];
         const mediaChanceQuitarDivida: number[] = [];
         const mediaPontos: number[] = [];
         const mediaVitórias: number[] = [];
@@ -449,107 +301,10 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
             mediaTorcedores.push(clube.numero_torcedores);
             mediaPontos.push(clube.pontos);
             mediaVitórias.push(clube.vitorias);
+            mediaNota.push(clube.nota_clube);
+            mediaChanceQuitarDivida.push(clube.chance_quitar_divida);
 
-            const rankingAtual =
-                (
-                    (clube.faturamento / clube.divida*2)
-                    +
-                    (
-                        clube.lucro > 0 ?
-                            (clube.lucro*2 / clube.faturamento) * 15
-                            :
-                            (-clube.lucro / clube.faturamento) * 5
-                    )
-
-                );
-
-            mediaNota.push(Number(rankingAtual.toFixed(1)));
-
-            const chanceDivida =
-                ChanceQuitarDivida_15_anos(
-                    clube.numero_torcedores,
-                    clube.faturamento,
-                    clube.divida,
-                    clube.lucro,
-                    15,
-                    0.3
-                );
-            mediaChanceQuitarDivida.push(Number(chanceDivida.toFixed(1)));
         });
-
-        const scoreFaturamento = somarValores(mediaFaturamento);
-        const scoreTorcida = somarValores(mediaTorcedores);
-        const scoreDivida = somarValores(mediaDivida);
-        const scoreFinal = Number(((scoreFaturamento / scoreTorcida) - (scoreDivida / scoreTorcida)).toFixed(1));
-
-        clubes.forEach((clube, index) => {
-            const scoreClube = Number(((clube.faturamento / clube.numero_torcedores*2) - (clube.divida / clube.numero_torcedores)).toFixed(1));
-
-            const pontosAdicionais =
-                scoreFinal > 0 ?
-                    Number(((scoreClube - scoreFinal)).toFixed(1))
-                    :
-                    Number(((scoreClube + scoreFinal)).toFixed(1));
-
-            const pontosFiltrados =
-                (
-                pontosAdicionais > 100 ?
-                    2
-                    :
-                pontosAdicionais > 50 ?
-                    1
-                    :
-                pontosAdicionais > 0 ?
-                    0.5
-                    :
-                pontosAdicionais < 100 ?
-                    -2
-                    :
-                pontosAdicionais < 50 ?
-                    -1
-                    :
-                pontosAdicionais < 0 ?
-                    -0.5
-                    :
-                    0
-                );
-
-            const valorCompeticao =
-                (
-                    clube.competicao === 'libertadores' ?
-                        2
-                        :
-                        clube.competicao === 'pre-libertadores' ?
-                            1.5
-                            :
-                            clube.competicao === 'sul-americana' ?
-                                1.5
-                                :
-                                clube.competicao === 'brasileirao' ?
-                                    1
-                                    :
-                                    -3
-                );
-
-            mediaNota[index] = Number((mediaNota[index] + pontosFiltrados).toFixed(1));
-
-            if (mediaNota[index] > 10) {
-                mediaNota[index] = 10 + valorCompeticao > 10 ? 10 : 10 + valorCompeticao;
-            } else if (mediaNota[index] < 0) {
-                mediaNota[index] = 0 + valorCompeticao > 0 ? valorCompeticao : 0;
-            } else {
-                mediaNota[index] = 
-                    (mediaNota[index] + valorCompeticao) > 10 ? 
-                    10 
-                    : 
-                    (mediaNota[index] + valorCompeticao) < 0 ?
-                    0
-                    :
-                    mediaNota[index] + valorCompeticao;  
-            }
-
-            mediaNota[index] = Number(mediaNota[index].toFixed(1));
-        })
 
         media = {
             faturamento: calcularMedia(mediaFaturamento),
@@ -583,7 +338,7 @@ export async function buscarMedia(nomeClube: string): Promise<ReturnMedia> {
 
 }
 
-export async function CaclularMediaClube(clubeEscolhido: Clube, anoEscolhido?: number): Promise<ReturnClubeMedia> {
+export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: number): Promise<ReturnCalcularMediaClube> {
 
     let mediaClubeEscolhido: Medias = {
         nome: '',
@@ -607,106 +362,8 @@ export async function CaclularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
     }
 
     try {
-        const media = (await buscarMedia('')).media;
 
-
-        if (clubeEscolhido && media) {
-            const scoreFaturamento = media?.faturamento;
-            const scoreTorcida = media.mediaTorcedores;
-            const scoreDivida = media.divida;
-            const scoreFinal = Number(((scoreFaturamento / scoreTorcida) - (scoreDivida / scoreTorcida)).toFixed(1));
-
-            const scoreClube = Number(((clubeEscolhido.faturamento / clubeEscolhido.numero_torcedores*2) - (clubeEscolhido.divida / clubeEscolhido.numero_torcedores)).toFixed(1));
-
-            const pontosAdicionais =
-                scoreFinal > 0 ?
-                    Number(((scoreClube - scoreFinal)).toFixed(1))
-                    :
-                    Number(((scoreClube + scoreFinal)).toFixed(1));
-
-            const pontosFiltrados =
-                (
-                pontosAdicionais > 100 ?
-                    2
-                    :
-                pontosAdicionais > 50 ?
-                    1
-                    :
-                pontosAdicionais > 0 ?
-                    0.5
-                    :
-                pontosAdicionais < 100 ?
-                    -2
-                    :
-                pontosAdicionais < 50 ?
-                    -1
-                    :
-                pontosAdicionais < 0 ?
-                    -0.5
-                    :
-                    0
-                );
-
-            const valorCompeticao =
-                (
-                    clubeEscolhido.competicao === 'libertadores' ?
-                        2
-                        :
-                        clubeEscolhido.competicao === 'pre-libertadores' ?
-                            1.5
-                            :
-                            clubeEscolhido.competicao === 'sul-americana' ?
-                                1.5
-                                :
-                                clubeEscolhido.competicao === 'brasileirao' ?
-                                    1
-                                    :
-                                    -3
-                );
-
-            let rankingAtual =
-                Number (
-                    (
-                    (clubeEscolhido.faturamento / clubeEscolhido.divida*2)
-                    +
-                    (
-                        clubeEscolhido.lucro > 0 ?
-                            (clubeEscolhido.lucro*2 / clubeEscolhido.faturamento) * 15
-                            :
-                            (-clubeEscolhido.lucro / clubeEscolhido.faturamento) * 5
-                    )
-                    ).toFixed(1)
-                );
-
-            rankingAtual = Number((rankingAtual + pontosFiltrados).toFixed(1));
-
-            if (rankingAtual > 10) {
-                rankingAtual = 10 + valorCompeticao > 10 ? 10 : 10 + valorCompeticao;
-            } else if (rankingAtual < 0) {
-                rankingAtual = 0 + valorCompeticao > 0 ? valorCompeticao : 0;
-            } else {
-                rankingAtual = 
-                    (rankingAtual + valorCompeticao) > 10 ? 
-                    10 
-                    : 
-                    (rankingAtual + valorCompeticao) < 0 ?
-                    0
-                    :
-                    rankingAtual + valorCompeticao;  
-            }
-
-            rankingAtual = Number(rankingAtual.toFixed(1));
-
-            const chanceDivida = ChanceQuitarDivida_15_anos(
-                clubeEscolhido.numero_torcedores,
-                clubeEscolhido.faturamento,
-                clubeEscolhido.divida,
-                clubeEscolhido.lucro,
-                anoEscolhido ?? 1,
-                0.3
-            );
-
-            const faturamentoFuturo = projetarFaturamento((clubeEscolhido.faturamento/clubeEscolhido.faturamento_2023)*100, (clubeEscolhido.faturamento/clubeEscolhido.faturamento_2024)*100, rankingAtual, anoEscolhido ?? 1, clubeEscolhido.faturamento) 
+        if (clubeEscolhido) {
 
             mediaClubeEscolhido = {
                 nome: clubeEscolhido.nome,
@@ -772,17 +429,16 @@ export async function CaclularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
                 ).toFixed(2)
                 ),
 
-                notaClube: Number(rankingAtual.toFixed(2)),
+                notaClube: clubeEscolhido.nota_clube,
 
-                chanceQuitarDivida: Number(chanceDivida.toFixed(2)),
+                chanceQuitarDivida: (anoEscolhido ?? 1) * (clubeEscolhido.chance_quitar_divida/15),
 
-                projetarFaturamento: faturamentoFuturo.faturamentoProjetado,
+                projetarFaturamento: clubeEscolhido.faturamento + ((anoEscolhido ?? 1) * clubeEscolhido.aumento_faturamento),
 
                 mediaTorcedores: Number(clubeEscolhido.numero_torcedores.toFixed(2)),
             }
 
             return {clube: mediaClubeEscolhido, success: true};
-
         }
 
         return {success: false, clube:mediaClubeEscolhido}

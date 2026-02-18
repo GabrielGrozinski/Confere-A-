@@ -13,7 +13,7 @@ import type { Topico, DadosClube } from "../pages/comparador-de-clubes";
 
 interface Props {
   clubesSelecionados: Medias[];
-  topico: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida';
+  topico: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento';
 }
 
 type DadoGrafico = {
@@ -39,6 +39,7 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
     'Faturamento/Dívida': 'fatDiv',
     'Lucro/Faturamento': 'lucFat',
     'Nota do Clube': 'notaClube',
+    'Projetar Faturamento' : 'projetarFaturamento',
     'Chance de Quitar a Dívida': 'chanceQuitarDivida',
     };
 

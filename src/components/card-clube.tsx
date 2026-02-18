@@ -1,4 +1,4 @@
-import type { Clube, rankings, Medias, Faturamento } from "./busca-clube";
+import type { Clube, rankings, Medias } from "./busca-clube";
 import { useEffect, useState } from "react";
 import { AreaChart, Area } from "recharts";
 import { allContext } from "../context/all-context";
@@ -6,7 +6,8 @@ import HeaderFixo from "./header-fixo";
 import MenuAberto from "./menu-aberto";
 import CardProduto from "./card-produtos";
 import { ClipLoader } from "react-spinners";
-import { calcularChanceTitulo, projetarFaturamento } from "./busca-clube";
+import { calcularChanceTitulo } from "./busca-clube";
+
 
 
 interface props {
@@ -337,8 +338,6 @@ export function InfoCard(
 export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFundo }: props) {
     const [loading, setLoading] = useState<boolean>(true);
     const [assinante, setAssinante] = useState<boolean>(true);
-    const [ranking, setRanking] = useState<number>(0);
-    const [chanceQuitarDivida, setChanceQuitarDivida] = useState<number>(0);
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
     const { largura, menuAberto, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
@@ -350,117 +349,17 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     }, []);
 
     useEffect(() => {
-        if (!media || !clubeEscolhido || !ranking) return;
+        if (!media || !clubeEscolhido) return;
 
         const chance = calcularChanceTitulo(clubeEscolhido.folha_salarial, clubeEscolhido.valor_contratacoes, clubeEscolhido.pontos, clubeEscolhido.vitorias);
 
-        const novaChance = Number((chance * ranking/10).toFixed(2));
+        const novaChance = Number((chance * clubeEscolhido.nota_clube/10).toFixed(2));
         setChanceTitulo(novaChance);
 
     }, [media, clubeEscolhido]);
 
     useEffect(() => {
-        if (clubeEscolhido && media) {
-            const scoreFaturamento = media?.faturamento;
-            const scoreTorcida = media.mediaTorcedores;
-            const scoreDivida = media.divida;
-            const scoreFinal = Number(((scoreFaturamento / scoreTorcida) - (scoreDivida / scoreTorcida)).toFixed(1));
-
-            const scoreClube = Number(((clubeEscolhido.faturamento / clubeEscolhido.numero_torcedores*2) - (clubeEscolhido.divida / clubeEscolhido.numero_torcedores)).toFixed(1));
-
-            const pontosAdicionais =
-                scoreFinal > 0 ?
-                    Number(((scoreClube - scoreFinal)).toFixed(1))
-                    :
-                    Number(((scoreClube + scoreFinal)).toFixed(1));
-
-            const pontosFiltrados =
-                (
-                pontosAdicionais > 100 ?
-                    2
-                    :
-                pontosAdicionais > 50 ?
-                    1
-                    :
-                pontosAdicionais > 0 ?
-                    0.5
-                    :
-                pontosAdicionais < 100 ?
-                    -2
-                    :
-                pontosAdicionais < 50 ?
-                    -1
-                    :
-                pontosAdicionais < 0 ?
-                    -0.5
-                    :
-                    0
-                );
-
-            const valorCompeticao =
-                (
-                    clubeEscolhido.competicao === 'libertadores' ?
-                        2
-                        :
-                        clubeEscolhido.competicao === 'pre-libertadores' ?
-                            1.5
-                            :
-                            clubeEscolhido.competicao === 'sul-americana' ?
-                                1.5
-                                :
-                                clubeEscolhido.competicao === 'brasileirao' ?
-                                    1
-                                    :
-                                    -3
-                );
-
-            let rankingAtual =
-                Number (
-                    (
-                    (clubeEscolhido.faturamento / clubeEscolhido.divida*2)
-                    +
-                    (
-                        clubeEscolhido.lucro > 0 ?
-                            (clubeEscolhido.lucro*2 / clubeEscolhido.faturamento) * 15
-                            :
-                            (-clubeEscolhido.lucro / clubeEscolhido.faturamento) * 5
-                    )
-                    ).toFixed(1)
-                );
-
-            rankingAtual = Number((rankingAtual + pontosFiltrados).toFixed(1));
-
-            if (rankingAtual > 10) {
-                rankingAtual = 10 + valorCompeticao > 10 ? 10 : 10 + valorCompeticao;
-            } else if (rankingAtual < 0) {
-                rankingAtual = 0 + valorCompeticao > 0 ? valorCompeticao : 0;
-            } else {
-                rankingAtual = 
-                    (rankingAtual + valorCompeticao) > 10 ? 
-                    10 
-                    : 
-                    (rankingAtual + valorCompeticao) < 0 ?
-                    0
-                    :
-                    rankingAtual + valorCompeticao;  
-            }
-
-            rankingAtual = Number(rankingAtual.toFixed(1));
-
-            setRanking(Number(rankingAtual.toFixed(1)));
-
-            const chanceDivida = ChanceQuitarDivida_15_anos(
-                clubeEscolhido.numero_torcedores,
-                clubeEscolhido.faturamento,
-                clubeEscolhido.divida,
-                clubeEscolhido.lucro,
-                15,
-                0.3
-            );
-
-            setChanceQuitarDivida(chanceDivida >= 100 ? 100 : chanceDivida);
-
-        if (clubeEscolhido && media && rankingAtual && chanceDivida && chanceTitulo) {
+        if (clubeEscolhido && media && chanceTitulo) {
             const lucFat = clubeEscolhido.lucro*100 / clubeEscolhido.faturamento;
 
             const mediaClubeEscolhido: Medias = {
@@ -561,11 +460,11 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                 ) / 100,
 
                 notaClube: Math.round(
-                    ((ranking / media.notaClube) * 100 - 100) * 100
+                    ((clubeEscolhido.nota_clube / media.notaClube) * 100 - 100) * 100
                 ) / 100,
 
                 chanceQuitarDivida: Math.round(
-                    ((chanceQuitarDivida / media.chanceQuitarDivida) * 100 - 100) * 100
+                    ((clubeEscolhido.chance_quitar_divida / media.chanceQuitarDivida) * 100 - 100) * 100
                 ) / 100,
 
                 mediaTorcedores: Math.round(
@@ -581,8 +480,9 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
                 faturamento_2024: Number((clubeEscolhido.faturamento / clubeEscolhido.faturamento_2024
                 ).toFixed(2)) * 100 - 100,
-            }
 
+                projetarFaturamento: 0
+            }
 
             if (mediaClubeEscolhido.notaClube && mediaClubeEscolhido.chanceQuitarDivida) {
                 const mediaCardData: MediaCardData[] = [
@@ -612,10 +512,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         }
         setLoading(false);
 
-        }
-
     }, [clubeEscolhido, media, chanceTitulo]);
-
 
     if (!clubeEscolhido || !mediaData) return;
 
@@ -710,30 +607,30 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         {
             titulo: "Nota do Clube",
             icon: `fa-solid fa-star ${dark ? "text-yellow-400" : "text-yellow-500"}`,
-            valor: ranking,
-            valorNumero: ranking,
-            sufixo: ranking > 7 ?
+            valor: clubeEscolhido.nota_clube,
+            valorNumero: clubeEscolhido.nota_clube,
+            sufixo: clubeEscolhido.nota_clube > 7 ?
                 <> <span className="inline">- <span className="font-medium">Íncrivel</span></span> </>
                 :
-                ranking > 5 ? <> <span className="inline">- <span className="font-medium">Bom</span> </span> </>
+                clubeEscolhido.nota_clube > 5 ? <> <span className="inline">- <span className="font-medium">Bom</span> </span> </>
                 :
-                ranking > 3 ? <> <span className="inline">- <span className="font-medium">Ruim</span> </span> </>
+                clubeEscolhido.nota_clube > 3 ? <> <span className="inline">- <span className="font-medium">Ruim</span> </span> </>
                 :
                 <> <span className="inline">- <span className="font-medium">Horrível</span></span> </>
         },
         {
             titulo: "Chance de Quitar a Dívida",
             icon: `fa-solid fa-scale-balanced ${dark ? "text-purple-400" : "text-purple-700"}`,
-            valor: chanceQuitarDivida,
-            valorNumero: chanceQuitarDivida,
-            sufixo: chanceQuitarDivida > 75 ?
+            valor: clubeEscolhido.chance_quitar_divida,
+            valorNumero: clubeEscolhido.chance_quitar_divida,
+            sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
                 <> <span className="inline">- <span className="font-medium">Muito Alta</span></span> </>
                 :
-                chanceQuitarDivida > 60 ? <> <span className="inline">- <span className="font-medium">Alta</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline">- <span className="font-medium">Alta</span></span> </>
                 :
-                chanceQuitarDivida > 30 ? <> <span className="inline">- <span className="font-medium">Moderada</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline">- <span className="font-medium">Moderada</span></span> </>
                 :
-                chanceQuitarDivida > 15 ? <> <span className="inline">- <span className="font-medium">Baixa</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline">- <span className="font-medium">Baixa</span></span> </>
                 :
                 <> <span className="inline">- <span className="font-medium">Quase Impossível</span></span> </>
         },
@@ -770,102 +667,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
     ];
 
-
-    function ChanceQuitarDivida_15_anos(
-        torcedores: number,
-        faturamento: number,
-        divida: number,
-        lucro: number,
-        anos: number,
-        estimativa: number
-    ) {
-        if (divida <= 0) return 100;
-        if (anos <= 0) return 0;
-
-        let G0 =
-            estimativa *
-            (0.03 * Math.log(torcedores + 1) + 0.00018 * faturamento);
-
-        G0 = Math.min(Math.max(G0, 0.04), 0.14);
-
-        const rigidez = Math.min(Math.max(divida / faturamento, 0.5), 3);
-
-        let lucroTotal = 0;
-        let lucroAno = lucro;
-        let G = G0;
-
-        for (let i = 1; i <= anos; i++) {
-
-            const capacidade = faturamento / divida;
-            const margemLucro = lucroAno / faturamento;
-
-            let anoRuim = false;
-
-            // 🟡 clube frágil
-            if (lucroAno > 0 && margemLucro < 0.05 && capacidade <= 1.5) {
-                const volatilidade =
-                    0.15 + (1.5 - capacidade) * 0.2;
-
-                lucroAno *= 1 + (Math.random() * 2 - 1) * volatilidade;
-            }
-
-            // 🔴 clube estruturalmente quebrado
-            if (divida / faturamento >= 2.2) {
-                let probAnoRuim =
-                    0.45 +
-                    (divida / faturamento - 2.2) * 0.2 +
-                    (1 - estimativa) * 0.35;
-
-                probAnoRuim = Math.min(Math.max(probAnoRuim, 0.45), 0.9);
-
-                if (Math.random() < probAnoRuim) {
-                    anoRuim = true;
-
-                    // força prejuízo
-                    const choque =
-                        0.3 + Math.random() * 0.4; // 30% a 70% do faturamento
-
-                    lucroAno = -faturamento * choque;
-                }
-            }
-
-            // 🔁 dinâmica normal só se NÃO foi ano ruim estrutural
-            if (!anoRuim) {
-                if (lucroAno < 0) {
-                    lucroAno *= 1 - G / rigidez;
-                } else {
-                    lucroAno *= 1 + G;
-                }
-            }
-
-            lucroTotal += lucroAno;
-            G *= 0.92;
-        }
-
-        let R: number;
-
-        if (lucro < 0) {
-            const capacidade = faturamento / divida;
-            const pesoPrejuizo = Math.abs(lucro) / faturamento;
-
-            const scoreEstrutural = Math.log(1 + capacidade);
-            const penalizacao =
-                1 - Math.min((pesoPrejuizo * rigidez) / 0.35, 1);
-
-            R = scoreEstrutural * penalizacao;
-        } else {
-            R = (lucroTotal / divida) / rigidez;
-        }
-
-        const threshold = 0.9 * rigidez;
-        const slope = 2 / rigidez;
-
-        let Pbase = 1 / (1 + Math.exp(-slope * (R - threshold)));
-
-        Pbase = (divida/faturamento) > 2.5 ? Pbase/4 : (divida/faturamento) > 2 ? Pbase/2 : (divida/faturamento) > 1 ? Pbase/1.2 : (divida/faturamento) > 0.8 ? Pbase/1.2 : (lucro*100/divida) < 10 ? Pbase/1.2 : Pbase;
-
-        return Math.max(0.01, Number((Pbase * 100).toFixed(2)));
-    }
 
     return (
         <>

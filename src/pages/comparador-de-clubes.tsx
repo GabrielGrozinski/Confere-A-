@@ -1,4 +1,4 @@
-import { buscaTodosClubes, CaclularMediaClube } from "../components/busca-clube";
+import { buscaTodosClubes, CalcularMediaClube } from "../components/busca-clube";
 import { useEffect, useState } from "react";
 import type { Clube, Medias } from "../components/busca-clube";
 import '../styles/teste.css';
@@ -57,6 +57,7 @@ export default function ComparadorDeClubes() {
     const {menuAberto, setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
+    const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [clubesSelecionados, setClubesSelecionados] = useState<Medias[]>([]);
     const [valorClubes, setValorClubes] = useState<string>('0');
     const [popoverAberto, setPopoverAberto] = useState(false);
@@ -119,7 +120,7 @@ export default function ComparadorDeClubes() {
             const clubesFiltrados = clubesSelecionados.filter((clube) => clube.nome !== clubeEscolhido.nome);
             setClubesSelecionados(clubesFiltrados);
         } else {
-            const clubeNovo = await CaclularMediaClube(clubeEscolhido);
+            const clubeNovo = await CalcularMediaClube(clubeEscolhido, anoEscolhido);
             setClubesSelecionados((prev) => [...prev, clubeNovo.clube]);
         }
     }
@@ -178,13 +179,19 @@ export default function ComparadorDeClubes() {
             {!menuAberto ?
             <div className="min-h-screen flex flex-col items-center pb-10 mt-16">
                 <div className="min-h-10 w-full flex justify-center">
-                    <div className="mt-8 min-h-10 bg-slate-300 w-[70%] max-w-100 rounded-xl py-1 px-3 flex items-center">
+                    <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
                     <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
                     <Popover.Trigger asChild>
                         <button className="text-stone-800 font-medium flex items-center w-full justify-center">
                         Comparar por: <strong><span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]"></i></span></strong>
                         </button>
                     </Popover.Trigger>
+
+                    {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') && 
+                        <input className="min-w-20 max-w-20 min-h-full max-h-full border border-slate-800/20 rounded-lg text-center" value={anoEscolhido} onChange={(e) => {
+                            setAnoEscolhido(Number(e.currentTarget.value));
+                        }} placeholder="1" type="number" name="anoEscolhido" id="anoEscolhido" />
+                    }
 
                     <Popover.Portal>
                         <Popover.Content
@@ -228,6 +235,7 @@ export default function ComparadorDeClubes() {
                         </Popover.Content>
                     </Popover.Portal>
                     </Popover.Root>
+
                     </div>
                 </div>
                 <main id="main" className="row-1 w-[90%] grid grid-rows-[56px_400px_64px] relative mx-1 max-h-120 pt-2 mb-16">
