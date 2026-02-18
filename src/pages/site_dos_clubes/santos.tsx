@@ -26,7 +26,11 @@ export default function Santos() {
         custoJogador: 0,
         notaClube: 0,
         mediaTorcedores: 0,
-        chanceQuitarDivida: 0
+        chanceQuitarDivida: 0,
+        faturamento_2024: 0,
+        divida_2024: 0,
+        projetarFaturamento: 0,
+        aumento_faturamento: 0,
     });
 
     const corFundo = 'linear-gradient(135deg, #f3f4f6, #f5f5f5)';
@@ -40,7 +44,7 @@ export default function Santos() {
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia('Santos')
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
     }, []);

@@ -23,7 +23,6 @@ interface InfoCardProps {
     imagemSubtitulo?: string;
     imagemAlt?: string;
     valor: string | number;
-    valorNumero: number;
     sufixo?: string | React.ReactNode;
     icon?: string;
     mediaData: MediaCardData[];
@@ -141,7 +140,6 @@ export function InfoCard(
     { 
         titulo, 
         valor, 
-        valorNumero,
         subtitulo,
         imagemSubtitulo,
         imagemAlt,
@@ -523,35 +521,30 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             titulo: "Faturamento (2025)",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.faturamento}`,
-            valorNumero: 860,
             sufixo: clubeEscolhido.faturamento < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Balanço (2025)",
             icon: `fa-solid fa-chart-line ${dark ? "text-slate-300" : "text-slate-900"}`,
             valor: `R$ ${clubeEscolhido.lucro}`,
-            valorNumero: 40,
             sufixo: clubeEscolhido.lucro < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Dívida Bruta",
             icon: `fa-solid fa-triangle-exclamation ${dark ? "text-amber-300" : "text-amber-500"}`,
             valor: `R$ ${clubeEscolhido.divida}`,
-            valorNumero: 912,
             sufixo: clubeEscolhido.divida < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Folha Salarial",
             icon: `fa-solid fa-users ${dark ? "text-blue-400" : "text-blue-600"}`,
             valor: `R$ ${clubeEscolhido.folha_salarial}`,
-            valorNumero: 18,
             sufixo: clubeEscolhido.folha_salarial < 1000 ? "mi/mês" : "bi/mês",
         },
         {
             titulo: "Gastos com Contratações",
             icon: `fa-solid fa-money-bill-trend-up ${dark ? "text-green-400" : "text-green-600"}`,
             valor: `R$ ${clubeEscolhido.valor_contratacoes}`,
-            valorNumero: 25,
             sufixo: clubeEscolhido.valor_contratacoes < 1000 ? "mi" : "bi",
         },
         {
@@ -561,56 +554,48 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             imagemSubtitulo: clubeEscolhido.maior_contratacao.split(' - ')[2],
             imagemAlt: clubeEscolhido.maior_contratacao.split(' - ')[3],
             valor: `R$ ${(Number(clubeEscolhido.maior_contratacao.split(' - ')[1].split(' ')[0]) * 6).toFixed(1)}`,
-            valorNumero: 12,
             sufixo: clubeEscolhido.valor_contratacoes < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Faturamento/Dívida",
             icon: `fa-solid fa-money-bill-transfer ${dark ? "text-gray-300" : "text-gray-700"}`,
             valor: (clubeEscolhido.faturamento * 100 / clubeEscolhido.divida).toFixed(1),
-            valorNumero: 0.9,
             sufixo: "",
         },
         {
             titulo: "Lucro/Faturamento",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-teal-400" : "text-teal-600"}`,
             valor: (clubeEscolhido.lucro / clubeEscolhido.faturamento * 100).toFixed(1),
-            valorNumero: 0.9,
             sufixo: "",
         },
         {
             titulo: "Custo por Vitória",
             icon: `fa-solid fa-hand-holding-dollar ${dark ? "text-lime-400" : "text-lime-600"}`,
             valor: `R$ ${((clubeEscolhido.folha_salarial * 13 + clubeEscolhido.valor_contratacoes) / clubeEscolhido.vitorias).toFixed(1)}`,
-            valorNumero: 9.6,
             sufixo: "mi/vitória",
         },
         {
             titulo: "Custo por Gol",
             icon: `fa-solid fa-bullseye ${dark ? "text-orange-400" : "text-orange-600"}`,
             valor: `R$ ${((clubeEscolhido.folha_salarial * 13 + clubeEscolhido.valor_contratacoes) / clubeEscolhido.gols).toFixed(1)}`,
-            valorNumero: 3.3,
             sufixo: "mi/gol",
         },
         {
             titulo: "Custo por Ponto",
             icon: `fa-solid fa-coins ${dark ? "text-yellow-400" : "text-yellow-800"}`,
             valor: `R$ ${((clubeEscolhido.folha_salarial * 13 + clubeEscolhido.valor_contratacoes) / clubeEscolhido.pontos).toFixed(1)}`,
-            valorNumero: 3.3,
             sufixo: "mi/ponto",
         },
         {
             titulo: "Custo por Jogador",
             icon: `fa-solid fa-person-running ${dark ? "text-red-400" : "text-red-700"}`,
             valor: `R$ ${(clubeEscolhido.folha_salarial / clubeEscolhido.quant_jogadores).toFixed(1)}`,
-            valorNumero: 3.3,
             sufixo: "mi/jogador",
         },
         {
             titulo: "Nota do Clube",
             icon: `fa-solid fa-star ${dark ? "text-yellow-400" : "text-yellow-500"}`,
             valor: clubeEscolhido.nota_clube,
-            valorNumero: clubeEscolhido.nota_clube,
             sufixo: clubeEscolhido.nota_clube > 7 ?
                 <> <span className="inline">- <span className="font-medium">Íncrivel</span></span> </>
                 :
@@ -624,7 +609,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             titulo: "Chance de Quitar a Dívida",
             icon: `fa-solid fa-scale-balanced ${dark ? "text-purple-400" : "text-purple-700"}`,
             valor: clubeEscolhido.chance_quitar_divida,
-            valorNumero: clubeEscolhido.chance_quitar_divida,
             sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
                 <> <span className="inline">- <span className="font-medium">Muito Alta</span></span> </>
                 :
@@ -640,7 +624,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             titulo: "Chance de Título (2026)",
             icon: `fa-solid fa-trophy ${dark ? "text-orange-400" : "text-orange-500"}`,
             valor: chanceTitulo,
-            valorNumero: chanceTitulo,
             sufixo: chanceTitulo > 75 ?
                 <> <span className="inline">- <span className="font-medium">Muito Alta</span></span> </>
                 :
@@ -656,14 +639,12 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             titulo: "Faturamento (2024)",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.faturamento_2024}`,
-            valorNumero: 860,
             sufixo: clubeEscolhido.faturamento_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Dívida (2024)",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.divida_2024}`,
-            valorNumero: 860,
             sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
         },
 
@@ -712,7 +693,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                 imagemAlt={card.imagemAlt}
                                 icon={card.icon}
                                 valor={card.valor}
-                                valorNumero={card.valorNumero}
                                 sufixo={card.sufixo}
                                 mediaData={mediaData}
                                 largura={largura}

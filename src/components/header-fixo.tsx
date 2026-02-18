@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../auth/supabase-client";
 import type { Clube } from "./busca-clube";
 import { relacaoClubes } from "./busca-clube";
+import { ClipLoader } from "react-spinners";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
@@ -211,6 +212,9 @@ export default function HeaderFixo() {
                                         {clubes && clubes.length > 0 ?
                                         <div className="flex flex-col gap-4 justify-center py-2">
                                             {clubes.map((clube, index) => (
+                                                loading ?
+                                                <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
+                                                :
                                                 <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
                                                     <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
                                                     <div>

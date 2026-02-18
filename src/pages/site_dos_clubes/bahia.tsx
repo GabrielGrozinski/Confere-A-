@@ -26,7 +26,11 @@ export default function Bahia() {
         custoJogador: 0,
         notaClube: 0,
         mediaTorcedores: 0,
-        chanceQuitarDivida: 0
+        chanceQuitarDivida: 0,
+        faturamento_2024: 0,
+        divida_2024: 0,
+        projetarFaturamento: 0,
+        aumento_faturamento: 0,
     });
 
     const corFundo = 'linear-gradient(135deg, #0d47a1, #e53935)';
@@ -40,7 +44,7 @@ export default function Bahia() {
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia('Bahia')
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
     }, []);
