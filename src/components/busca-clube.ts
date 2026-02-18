@@ -63,6 +63,7 @@ export interface Medias {
     divida_2024?: number;
     faturamento_2024?: number;
     projetarFaturamento: number;
+    aumento_faturamento: number;
 }
 // Tipagem de variaveis.
 
@@ -263,6 +264,7 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
         mediaTorcedores: 0,
         chanceQuitarDivida: 0,
         projetarFaturamento: 0,
+        aumento_faturamento: 0
     }
 
     if (data) {
@@ -322,7 +324,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
             notaClube: calcularMedia(mediaNota),
             mediaTorcedores: calcularMedia(mediaTorcedores),
             chanceQuitarDivida: calcularMedia(mediaChanceQuitarDivida),
-            projetarFaturamento: 0
+            projetarFaturamento: 0,
+            aumento_faturamento: 0,
         }
 
         return { media, success: true };
@@ -358,8 +361,43 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
         notaClube: 0,
         mediaTorcedores: 0,
         chanceQuitarDivida: 0,
-        projetarFaturamento: 0
+        projetarFaturamento: 0,
+        aumento_faturamento: 0,
     }
+
+    const anoRecebido = anoEscolhido ?? 1;
+
+    const chanceDivida = (
+        clubeEscolhido.chance_quitar_divida === 100 ? 
+            clubeEscolhido.nome === 'Palmeiras' ? 
+                anoRecebido * (clubeEscolhido.chance_quitar_divida/7.5) >= 100 ? 
+                100 
+                : 
+                anoRecebido * (clubeEscolhido.chance_quitar_divida/7.5) 
+            : 
+            anoRecebido * (clubeEscolhido.chance_quitar_divida/2) >= 100 ? 100 
+            : 
+            anoRecebido * (clubeEscolhido.chance_quitar_divida/2) 
+        : 
+            anoRecebido > 30 ? 
+                anoRecebido * (clubeEscolhido.chance_quitar_divida) 
+            :
+            anoRecebido > 25 ?
+                anoRecebido * (clubeEscolhido.chance_quitar_divida/2.5)
+            :
+            anoRecebido > 20 ?
+                anoRecebido * (clubeEscolhido.chance_quitar_divida/5)
+            :
+            anoRecebido > 15 ?
+                clubeEscolhido.chance_quitar_divida
+            :
+            anoRecebido > 10 ?
+                anoRecebido * (clubeEscolhido.chance_quitar_divida/15)
+            :  
+            anoRecebido * (clubeEscolhido.chance_quitar_divida/15) >= 100 ? 
+                100 
+            : 
+        anoRecebido * (clubeEscolhido.chance_quitar_divida/15));
 
     try {
 
@@ -431,9 +469,25 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
 
                 notaClube: clubeEscolhido.nota_clube,
 
-                chanceQuitarDivida: (anoEscolhido ?? 1) * (clubeEscolhido.chance_quitar_divida/15),
+                chanceQuitarDivida:
+                (anoEscolhido === 0 || anoEscolhido === undefined) ?
+                clubeEscolhido.chance_quitar_divida
+                :
+                chanceDivida < 100 ? 
+                Number(chanceDivida.toFixed(2)) 
+                : 
+                chanceDivida > 100 ?
+                100
+                :
+                Math.round(chanceDivida),
 
-                projetarFaturamento: clubeEscolhido.faturamento + ((anoEscolhido ?? 1) * clubeEscolhido.aumento_faturamento),
+                projetarFaturamento: 
+                (anoEscolhido === 0 || anoEscolhido === undefined) ?
+                clubeEscolhido.faturamento
+                :
+                clubeEscolhido.faturamento + (anoRecebido * clubeEscolhido.aumento_faturamento),
+
+                aumento_faturamento: clubeEscolhido.aumento_faturamento,
 
                 mediaTorcedores: Number(clubeEscolhido.numero_torcedores.toFixed(2)),
             }

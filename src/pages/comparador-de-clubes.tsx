@@ -1,5 +1,5 @@
 import { buscaTodosClubes, CalcularMediaClube } from "../components/busca-clube";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Clube, Medias } from "../components/busca-clube";
 import '../styles/teste.css';
 import HeaderFixo from "../components/header-fixo";
@@ -59,6 +59,7 @@ export default function ComparadorDeClubes() {
     const [loading, setLoading] = useState<boolean>(true);
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [clubesSelecionados, setClubesSelecionados] = useState<Medias[]>([]);
+    const [clubesSelecionadosOriginal, setClubesSelecionadosOriginal] = useState<Medias[]>([]);
     const [valorClubes, setValorClubes] = useState<string>('0');
     const [popoverAberto, setPopoverAberto] = useState(false);
     const topicosComparacao: TopicoComparacao[] = [
@@ -103,6 +104,30 @@ export default function ComparadorDeClubes() {
     'Projetar Faturamento' : 'projetarFaturamento',
     'Chance de Quitar a Dívida': 'chanceQuitarDivida',
     };
+    const intervalRef = useRef<number | undefined>(undefined);
+
+    const startPress = () => {
+        if (anoEscolhido === 50) return;
+        if (intervalRef.current) return;
+
+        intervalRef.current = setInterval(() => {
+            setAnoEscolhido((prev) => prev === 50 ? 50 : prev + 1);
+        }, 50);
+    };
+
+    const downPress = () => {
+        if (anoEscolhido === 0) return;
+        if (intervalRef.current) return;
+
+        intervalRef.current = setInterval(() => {
+            setAnoEscolhido((prev) => prev === 0 ? 0 : prev - 1);
+        }, 50);
+    };
+
+    const stopPress = () => {
+        clearInterval(intervalRef.current);
+        intervalRef.current = undefined;
+    };
 
     useEffect(() => {
         setTopicoAtivo('Produto');
@@ -119,10 +144,72 @@ export default function ComparadorDeClubes() {
         if (jaExiste) {
             const clubesFiltrados = clubesSelecionados.filter((clube) => clube.nome !== clubeEscolhido.nome);
             setClubesSelecionados(clubesFiltrados);
+            setClubesSelecionadosOriginal(clubesFiltrados);
         } else {
             const clubeNovo = await CalcularMediaClube(clubeEscolhido, anoEscolhido);
             setClubesSelecionados((prev) => [...prev, clubeNovo.clube]);
+            const clubeOriginal = await CalcularMediaClube(clubeEscolhido, 15);
+            setClubesSelecionadosOriginal((prev) => [...prev, clubeOriginal.clube]);
         }
+    }
+
+    useEffect(() => {
+        atualizaAnoEscolhido();
+    }, [anoEscolhido])
+
+    const atualizaAnoEscolhido = () => {
+        const novosClubes = clubesSelecionadosOriginal.map((clube, index) => {
+
+            if (anoEscolhido === 0) return {...clube, chanceQuitarDivida: clubesSelecionadosOriginal[index].chanceQuitarDivida, projetarFaturamento: clubesSelecionadosOriginal[index].faturamento};
+
+            const chanceDivida = (
+                clube.chanceQuitarDivida === 100 ? 
+                    clube.nome === 'Palmeiras' ? 
+                        anoEscolhido * (clube.chanceQuitarDivida/7.5) >= 100 ? 
+                        100 
+                        : 
+                        anoEscolhido * (clube.chanceQuitarDivida/7.5) 
+                    : 
+                    anoEscolhido * (clube.chanceQuitarDivida/2) >= 100 ? 100 
+                    : 
+                    anoEscolhido * (clube.chanceQuitarDivida/2) 
+                :
+                    anoEscolhido >= 30 ?
+                    100
+                    : 
+                    anoEscolhido > 15 ?
+                        anoEscolhido * (clube.chanceQuitarDivida/(15 - (anoEscolhido - 15)))
+                    :  
+                    anoEscolhido === 15 ?
+                        clube.chanceQuitarDivida
+                    :
+                    anoEscolhido > 10 ?
+                        anoEscolhido * (clube.chanceQuitarDivida/15)
+                    :  
+                    anoEscolhido * (clube.chanceQuitarDivida/15) >= 100 ? 
+                        100 
+                    : 
+                anoEscolhido * (clube.chanceQuitarDivida/15)
+            );
+
+            const novaChance = 
+                chanceDivida < 100 ? 
+                    Number(chanceDivida.toFixed(2)) 
+                : chanceDivida > 100 ? 
+                    100 
+                : Math.round(chanceDivida);
+            const proximoFaturamento =
+                clube.faturamento + (anoEscolhido * clube.aumento_faturamento/1.8) +
+                ((anoEscolhido * clube.mediaTorcedores/50) * clube.aumento_faturamento);
+
+            return {
+                ...clube, // copia todas as propriedades
+                chanceQuitarDivida: novaChance,
+                projetarFaturamento: Math.round(proximoFaturamento)
+            };
+        });
+
+        setClubesSelecionados(novosClubes);
     }
 
     useEffect(() => {
@@ -188,9 +275,34 @@ export default function ComparadorDeClubes() {
                     </Popover.Trigger>
 
                     {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') && 
-                        <input className="min-w-20 max-w-20 min-h-full max-h-full border border-slate-800/20 rounded-lg text-center" value={anoEscolhido} onChange={(e) => {
-                            setAnoEscolhido(Number(e.currentTarget.value));
-                        }} placeholder="1" type="number" name="anoEscolhido" id="anoEscolhido" />
+                        <button 
+                        className="min-w-22 max-w-22 min-h-full max-h-full border border-slate-800/40 rounded-lg text-center flex items-center justify-center pl-1 my-1"  
+                        >
+                            <span>{2025 + anoEscolhido}</span>
+                            <span className="flex flex-col text-[12px] py-px ml-2">
+                                <i 
+                                onTouchStart={() => startPress} 
+                                className="fa-solid fa-sort-up cursor-pointer"
+                                onTouchEnd={() => stopPress}
+                                onMouseDown={startPress}
+                                onMouseUp={stopPress}
+                                onMouseLeave={stopPress}
+                                >
+
+                                </i>
+
+                                <i 
+                                onTouchStart={() => downPress}
+                                className="fa-solid fa-sort-down cursor-pointer"
+                                onTouchEnd={() => stopPress}
+                                onMouseDown={downPress}
+                                onMouseUp={stopPress}
+                                onMouseLeave={stopPress}
+                                >
+
+                                </i>
+                            </span>
+                        </button>
                     }
 
                     <Popover.Portal>

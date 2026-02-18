@@ -63,7 +63,7 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
 
     <div
       className="h-full min-w-40 pr-2"
-      style={{ width: largura < 1024 ? dadosOrdenados.length * 40 : dadosOrdenados.length * 60 }}
+      style={{ width: largura < 1024 ? dadosOrdenados.length * 40 : dadosOrdenados.length * 64 }}
     >
         <ResponsiveContainer width="100%" height="100%">
             <BarChart

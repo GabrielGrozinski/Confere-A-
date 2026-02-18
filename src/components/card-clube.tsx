@@ -481,7 +481,9 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                 faturamento_2024: Number((clubeEscolhido.faturamento / clubeEscolhido.faturamento_2024
                 ).toFixed(2)) * 100 - 100,
 
-                projetarFaturamento: 0
+                projetarFaturamento: 0,
+
+                aumento_faturamento: 0,
             }
 
             if (mediaClubeEscolhido.notaClube && mediaClubeEscolhido.chanceQuitarDivida) {
