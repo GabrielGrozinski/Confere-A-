@@ -1,5 +1,5 @@
 import { allContext } from "../context/all-context"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BotaoTema from "./botao-tema";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../auth/supabase-client";
@@ -15,6 +15,22 @@ export default function HeaderFixo() {
     const [loading, setLoading] = useState<boolean>(false);
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const [mostrarMenuUser, setMostrarMenuUser] = useState<boolean>(false);
+    const [mostrarBorder, setMostrarBorder] = useState<boolean>(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            if (scrollY > 30) {
+                setMostrarBorder(true);
+            } else {
+                setMostrarBorder(false);
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     function formatarString(texto: string) {
         return texto
@@ -77,9 +93,33 @@ export default function HeaderFixo() {
 
     return (
                 <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
-                className={`fixed top-0 w-full left-0 z-999 flex border-b px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16 ${dark ? 'border-b-neutral-100/10' : 'border-b-neutral-800/10'}`}>
+                className={`fixed top-0 w-full left-0 z-999 flex px-4 pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] ${mostrarBorder ? dark ? 'border-b-neutral-400/10 border-b' : 'border-b-neutral-800/10 border-b' : ''}`}>
 
-                    <h1 className={`font-[MONELOS] text-3xl whitespace-nowrap ${dark && 'text-white'}`}>Confere Aê</h1>
+                    <h1 className={`font-[MONELOS] flex items-center text-3xl whitespace-nowrap ${dark && 'text-white'}`}>
+                        <div className="relative translate-y-1.25 max-w-2xl mx-auto px-3 lg:px-4 text-center">
+                            <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/15 mb-4">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="lucide lucide-chart-column w-3.5 h-3.5 text-amber-400"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                                    <path d="M18 17V9"></path>
+                                    <path d="M13 17V5"></path>
+                                    <path d="M8 17v-3"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        Confere Aê
+                        </h1>
                     {largura < 1024 ? (
                         <div className="w-full flex items-center justify-end">
                                 {abaEntretenimento &&
@@ -240,7 +280,7 @@ export default function HeaderFixo() {
                                     {user.user_metadata.avatar_url ? 
                                         <img onClick={() => setMostrarMenuUser(!mostrarMenuUser)} src={user.user_metadata.avatar_url} className="min-h-11 max-h-11 min-w-11 max-w-11 rounded-full cursor-pointer shadow-[0px_0px_2px_#0000002a]" alt="" />
                                     :
-                                        <i onClick={() => setMostrarMenuUser(!mostrarMenuUser)} className={`fa-solid fa-circle-user text-4xl cursor-pointer ${dark ? 'text-neutral-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-neutral-700 text-shadow-[1px_1px_1px_#0000002a]'}`}></i>
+                                        <i onClick={() => setMostrarMenuUser(!mostrarMenuUser)} className={`fa-solid fa-circle-user text-4xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}></i>
                                     }
 
                                     {mostrarMenuUser &&
@@ -316,7 +356,7 @@ export default function HeaderFixo() {
                                     Login
                                 </button>
 
-                                <button onClick={() => navigate('/login/cadastro')} onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-amber-600 cursor-pointer">
+                                <button onClick={() => navigate('/login/cadastro')} onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-amber-500 cursor-pointer">
                                     <span className={`transition-all duration-200 ease-out absolute top-1/2 -translate-y-[54.7%] left-1/2 -translate-x-1/2 ${mostrarIcone ? 'left-[40%]' : ''}`}>Começar</span>
                                     <span>
                                         <i className={`fa-solid fa-crosshairs ml-1 text-slate-50 text-shadow-[1px_1px_1px_#0000002a] transition-all duration-200 ease-out absolute top-1/2 -translate-y-[44%] ${mostrarIcone ? 'opacity-100 right-[15%]' : 'opacity-0 right-0'}`}></i>
