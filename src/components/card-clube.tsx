@@ -520,7 +520,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         {
             titulo: "Faturamento (2025)",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
-            valor: `R$ ${clubeEscolhido.faturamento}`,
+            valor: `R$ ${clubeEscolhido.faturamento >= 1000 ? clubeEscolhido.faturamento/1000 : clubeEscolhido.faturamento}`,
             sufixo: clubeEscolhido.faturamento < 1000 ? "mi" : "bi",
         },
         {
@@ -532,7 +532,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         {
             titulo: "Dívida Bruta",
             icon: `fa-solid fa-triangle-exclamation ${dark ? "text-amber-300" : "text-amber-500"}`,
-            valor: `R$ ${clubeEscolhido.divida}`,
+            valor: `R$ ${clubeEscolhido.divida >= 1000 ? clubeEscolhido.divida/1000 : clubeEscolhido.divida}`,
             sufixo: clubeEscolhido.divida < 1000 ? "mi" : "bi",
         },
         {
@@ -597,54 +597,54 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             icon: `fa-solid fa-star ${dark ? "text-yellow-400" : "text-yellow-500"}`,
             valor: clubeEscolhido.nota_clube,
             sufixo: clubeEscolhido.nota_clube > 7 ?
-                <> <span className="inline">- <span className="font-medium">Íncrivel</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-normal">Muito bom</span></span> </>
                 :
-                clubeEscolhido.nota_clube > 5 ? <> <span className="inline">- <span className="font-medium">Bom</span> </span> </>
+                clubeEscolhido.nota_clube > 5 ? <> <span className="inline ml-1"> - <span className="font-normal">Bom</span> </span> </>
                 :
-                clubeEscolhido.nota_clube > 3 ? <> <span className="inline">- <span className="font-medium">Ruim</span> </span> </>
+                clubeEscolhido.nota_clube > 3 ? <> <span className="inline ml-1"> - <span className="font-normal">Fraco</span> </span> </>
                 :
-                <> <span className="inline">- <span className="font-medium">Horrível</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-normal">Ruim</span></span> </>
         },
         {
             titulo: "Chance de Quitar a Dívida",
             icon: `fa-solid fa-scale-balanced ${dark ? "text-purple-400" : "text-purple-700"}`,
             valor: clubeEscolhido.chance_quitar_divida,
             sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
-                <> <span className="inline">- <span className="font-medium">Muito Alta</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
                 :
-                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline">- <span className="font-medium">Alta</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline ml-1"> - <span className="font-normal">Alta</span></span> </>
                 :
-                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline">- <span className="font-medium">Moderada</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline ml-1"> - <span className="font-normal">Moderada</span></span> </>
                 :
-                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline">- <span className="font-medium">Baixa</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline ml-1"> - <span className="font-normal">Baixa</span></span> </>
                 :
-                <> <span className="inline">- <span className="font-medium">Quase Impossível</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-normal">Quase Impossível</span></span> </>
         },
         {
             titulo: "Chance de Título (2026)",
             icon: `fa-solid fa-trophy ${dark ? "text-orange-400" : "text-orange-500"}`,
             valor: chanceTitulo,
             sufixo: chanceTitulo > 75 ?
-                <> <span className="inline">- <span className="font-medium">Muito Alta</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
                 :
-                chanceTitulo > 60 ? <> <span className="inline">- <span className="font-medium">Alta</span></span> </>
+                chanceTitulo > 60 ? <> <span className="inline ml-1"> - <span className="font-normal">Alta</span></span> </>
                 :
-                chanceTitulo > 30 ? <> <span className="inline">- <span className="font-medium">Moderada</span></span> </>
+                chanceTitulo > 30 ? <> <span className="inline ml-1"> - <span className="font-normal">Moderada</span></span> </>
                 :
-                chanceTitulo > 15 ? <> <span className="inline">- <span className="font-medium">Baixa</span></span> </>
+                chanceTitulo > 15 ? <> <span className="inline ml-1"> - <span className="font-normal">Baixa</span></span> </>
                 :
-                <> <span className="inline">- <span className="font-medium">Quase Impossível</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-normal">Quase Impossível</span></span> </>
         },
         {
             titulo: "Faturamento (2024)",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
-            valor: `R$ ${clubeEscolhido.faturamento_2024}`,
+            valor: `R$ ${clubeEscolhido.faturamento_2024 >= 1000 ? clubeEscolhido.faturamento_2024/1000 : clubeEscolhido.faturamento_2024}`,
             sufixo: clubeEscolhido.faturamento_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Dívida (2024)",
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
-            valor: `R$ ${clubeEscolhido.divida_2024}`,
+            valor: `R$ ${clubeEscolhido.divida_2024 >= 1000 ? clubeEscolhido.divida_2024/1000 : clubeEscolhido.divida_2024}`,
             sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
         },
 

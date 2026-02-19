@@ -33,7 +33,7 @@ export default function Ceara() {
         aumento_faturamento: 0,
     });
 
-    const corFundo = 'linear-gradient(135deg, #121212, #f5f5f5)';
+    const corFundo = 'linear-gradient(135deg, #18181b, #18181b)';
 
     useEffect(() => {
         buscaClube('Ceará')

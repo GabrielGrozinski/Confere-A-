@@ -76,8 +76,8 @@ export default function HeaderFixo() {
     }
 
     return (
-                <div style={{background: dark ? "linear-gradient(to right, #0b1f33 40%, #0e243d)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
-                className={`fixed top-0 w-full left-0 z-10 flex border-b px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16 ${dark ? 'border-b-neutral-100/10' : 'border-b-neutral-800/10'}`}>
+                <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
+                className={`fixed top-0 w-full left-0 z-999 flex border-b px-4 pt-4 pb-2 xl:gap-4 max-h-16 min-h-16 ${dark ? 'border-b-neutral-100/10' : 'border-b-neutral-800/10'}`}>
 
                     <h1 className={`font-[MONELOS] text-3xl whitespace-nowrap ${dark && 'text-white'}`}>Confere Aê</h1>
                     {largura < 1024 ? (
@@ -135,7 +135,6 @@ export default function HeaderFixo() {
                                     className={`
                                     cursor-pointer relative transition-all 
                                     duration-200 ease-out tracking-wider
-                                    hover:font-semibold
                                     after:content-[""] 
                                     after:absolute 
                                     after:h-[1.5px] 
@@ -143,7 +142,7 @@ export default function HeaderFixo() {
                                     after:-bottom-1
                                     after:transition-all after:duration-400 after:ease-out 
                                     after:w-0
-                                    ${(dark && topicoAtivo === 'Explorar Dados') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Explorar Dados' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200 ' : ''}
+                                    ${(dark && topicoAtivo === 'Explorar Dados') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Explorar Dados' ? 'after:w-full font-medium text-amber-600 after:bg-amber-600': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}
                                     `}>
                                     Explorar Dados
                                 </article>
@@ -158,7 +157,6 @@ export default function HeaderFixo() {
                                     className={`
                                     cursor-pointer relative transition-all 
                                     duration-200 ease-out tracking-wider
-                                    hover:font-semibold 
                                     after:content-[""] 
                                     after:absolute 
                                     after:h-[1.5px] 
@@ -166,7 +164,7 @@ export default function HeaderFixo() {
                                     after:-bottom-1
                                     after:transition-all after:duration-200 after:ease-out 
                                     after:w-0
-                                    ${(dark && topicoAtivo === 'Produto') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Produto' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200' : ''}`}>
+                                    ${(dark && topicoAtivo === 'Produto') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Produto' ? 'after:w-full font-medium text-amber-600 after:bg-amber-600': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}`}>
                                     Produtos
                                 </article>
 
@@ -180,7 +178,6 @@ export default function HeaderFixo() {
                                     className={`
                                     cursor-pointer relative transition-all 
                                     duration-200 ease-out tracking-wider
-                                    hover:font-semibold 
                                     after:content-[""] 
                                     after:absolute 
                                     after:h-[1.5px] 
@@ -188,7 +185,7 @@ export default function HeaderFixo() {
                                     after:-bottom-1
                                     after:transition-all after:duration-200 after:ease-out 
                                     after:w-0
-                                    ${(dark && topicoAtivo === 'Preço') ? 'after:w-full font-semibold text-blue-400 after:bg-blue-400' : topicoAtivo === 'Preço' ? 'after:w-full font-semibold text-blue-600 after:bg-blue-600': dark ? 'text-slate-200' : ''}`}>
+                                    ${(dark && topicoAtivo === 'Preço') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Preço' ? 'after:w-full font-medium text-amber-600 after:bg-amber-600': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}`}>
                                     Preço
                                 </article>
 
@@ -308,7 +305,7 @@ export default function HeaderFixo() {
                                             </div>
 
                                             <div className={`py-3 w-full border-t ${dark ? 'border-t-slate-200/30' : 'border-t-slate-600/20'}`}>
-                                                <button className={`w-[92%] translate-x-[4%] bg-blue-500 p-0.75 pb-1 text-white text-sm text-shadow-[1px_1px_1px_#0000002a] shadow-[1px_1px_1px_#0000002a] cursor-pointer font-medium rounded-md`}>Fazer Upgrade</button>
+                                                <button className={`w-[92%] translate-x-[4%] bg-amber-500 p-0.75 pb-1 text-white text-sm text-shadow-[1px_1px_1px_#0000002a] shadow-[1px_1px_1px_#0000002a] cursor-pointer font-medium rounded-md`}>Fazer Upgrade</button>
                                             </div>
                                         </div>
                                     }
@@ -319,7 +316,7 @@ export default function HeaderFixo() {
                                     Login
                                 </button>
 
-                                <button onClick={() => navigate('/login/cadastro')} onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-blue-600 cursor-pointer">
+                                <button onClick={() => navigate('/login/cadastro')} onMouseEnter={() => setMostrarIcone(true)} onMouseLeave={() => setMostrarIcone(false)} className="relative p-1 min-h-9 max-h-9 min-w-30  rounded-2xl text-white bg-amber-600 cursor-pointer">
                                     <span className={`transition-all duration-200 ease-out absolute top-1/2 -translate-y-[54.7%] left-1/2 -translate-x-1/2 ${mostrarIcone ? 'left-[40%]' : ''}`}>Começar</span>
                                     <span>
                                         <i className={`fa-solid fa-crosshairs ml-1 text-slate-50 text-shadow-[1px_1px_1px_#0000002a] transition-all duration-200 ease-out absolute top-1/2 -translate-y-[44%] ${mostrarIcone ? 'opacity-100 right-[15%]' : 'opacity-0 right-0'}`}></i>

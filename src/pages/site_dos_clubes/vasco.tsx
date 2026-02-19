@@ -33,7 +33,7 @@ export default function Vasco() {
         aumento_faturamento: 0,
     });
 
-    const corFundo = 'linear-gradient(135deg, #1a1a1a, #eaeaea)';
+    const corFundo = 'linear-gradient(135deg, #171717, #171717)';
 
     useEffect(() => {
         buscaClube('Vasco')

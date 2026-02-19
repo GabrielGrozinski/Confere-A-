@@ -171,7 +171,7 @@ export default function PaginaInicial() {
 
             const headerBottom = header?.getBoundingClientRect().bottom;
 
-            if (headerBottom <= window.innerHeight && headerBottom > 0) {
+            if (headerBottom <= (window.innerHeight + window.innerHeight * 0.2) && headerBottom > 0) {
                 topicos.scrollIntoView({
                     behavior: "smooth",
                     block: "start"
@@ -186,7 +186,7 @@ export default function PaginaInicial() {
     }, [ativado]);
 
     return (
-        <div style={{background: dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
+        <div style={{background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
             {menuAberto ? 
             <div>
                 <HeaderFixo/>
@@ -194,70 +194,281 @@ export default function PaginaInicial() {
             </div>
             :
             <>
-            <header id="header" className="relative flex flex-col min-h-screen">
+            <header id="header" className={`relative flex flex-col min-h-[120vh]`}>
                      
                 <HeaderFixo />
 
 
                 <div className='flex flex-col items-center px-12 mb-10 mt-20 text-center gap-2'>
-                    <h1 className={`text-4xl font-mono ${dark && 'text-slate-200'}`}>O raio-X financeiro <br /> do futebol brasileiro</h1>
-                    <p className={`text-center ${dark ? 'text-neutral-400' : 'text-neutral-500'}`}>Descubra quem ganha muito, quem gasta mal e quem tá devendo!</p>
-                    <p key={valorCuriosidade} className={`animacao-entrada ${dark && 'text-slate-200'}`}>{curiosidadesFinanceiras[valorCuriosidade]}</p>
+
+                    <div className={`inline-flex items-center gap-2 px-4 mt-4 py-2 rounded-full backdrop-blur-sm ${dark ? 'bg-white/4 border border-white/6' : 'bg-black/4 border border-black/6'}`} x-file-name="HeroSection" x-line-number="73" x-component="div" x-id="HeroSection_73" x-dynamic="false">
+                        <div className={`w-2 h-2 rounded-full animate-pulse ${dark ? 'bg-emerald-400' : 'bg-emerald-600'}`} x-file-name="HeroSection" x-line-number="74" x-component="div" x-id="HeroSection_74" x-dynamic="false">
+                        </div>
+                        <span className={`text-xs font-medium tracking-wide uppercase ${dark ? 'text-white/50' : 'text-black/60'}`} x-file-name="HeroSection" x-line-number="75" x-component="span" x-id="HeroSection_75" x-dynamic="false">
+                            Dados atualizados para 2025
+                        </span>
+                    </div>
+
+                    <h1 className={`text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-6 ${dark ? 'text-white' : 'text-[#222222]'}`} x-file-name="HeroSection" x-line-number="81" x-component="h1" x-id="HeroSection_81" x-dynamic="true" x-source-type="unknown" x-source-editable="false">
+                            Entenda as finanças do <br /> 
+                        <span className="relative" x-file-name="HeroSection" x-line-number="83" x-component="span" x-id="HeroSection_83" x-dynamic="false">
+                            <span className={`text-transparent bg-clip-text ${dark ? 'bg-linear-to-r from-amber-300 to-amber-500' : 'bg-linear-to-r from-amber-400 to-amber-500'}`} x-file-name="HeroSection" x-line-number="84" x-component="span" x-id="HeroSection_84" x-dynamic="false">
+                                futebol brasileiro
+                            </span>
+                            
+                            <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none" x-file-name="HeroSection" x-line-number="85" x-component="svg" x-id="HeroSection_85" x-dynamic="false">
+                                <path d="M2 8 C50 2, 100 2, 150 6 S250 10, 298 4" stroke="url(#gold-line)" stroke-width="3" stroke-linecap="round" x-file-name="HeroSection" x-line-number="86" x-component="path" x-id="HeroSection_86" x-dynamic="false">
+                                </path>
+                                <defs x-file-name="HeroSection" x-line-number="87" x-component="defs" x-id="HeroSection_87" x-dynamic="false">
+                                    <linearGradient id="gold-line" x1="0" y1="0" x2="300" y2="0" x-file-name="HeroSection" x-line-number="88" x-component="linearGradient" x-id="HeroSection_88" x-dynamic="false">
+                                        <stop offset="0%" stop-color="#D4A74A" stop-opacity="0.2" x-file-name="HeroSection" x-line-number="89" x-component="stop" x-id="HeroSection_89" x-dynamic="false">
+                                            </stop>
+                                            <stop offset="50%" stop-color="#D4A74A" stop-opacity="0.6" x-file-name="HeroSection" x-line-number="90" x-component="stop" x-id="HeroSection_90" x-dynamic="false"></stop><stop offset="100%" stop-color="#D4A74A" stop-opacity="0.2" x-file-name="HeroSection" x-line-number="91" x-component="stop" x-id="HeroSection_91" x-dynamic="false">
+                                            </stop>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </span>
+                    </h1>
+
+                    <p className={`text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed ${dark ? 'text-white/40' : 'text-black/60'}`} x-file-name="HeroSection" x-line-number="97" x-component="p" x-id="HeroSection_97" x-dynamic="false">
+                        Faturamento, dívidas, custo por vitória e comparações detalhadas. Tudo o que você precisa para entender a saúde financeira dos clubes.
+                    </p>
                 </div>
 
-                <div className="relative max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full">
-                    <input 
-                    className={`
-                    w-full py-2 pr-4 pl-9 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/20'}`} 
-                    placeholder="Buscar clube" 
-                    type="search"
-                    value={busca}
-                    onChange={(e) => {
-                        setBusca(e.currentTarget.value);
-                        buscaClube(e.currentTarget.value);
-                    }}
-                    name="buscar-topico" 
-                    id="buscar-topico" />
+                <div
+                className="relative max-w-1/2 translate-x-1/2 mb-10 z-10"
+                x-file-name="HeroSection"
+                x-line-number="104"
+                x-component="div"
+                x-id="HeroSection_104"
+                x-dynamic="false"
+                >
+                    <div
+                        className="relative flex items-center"
+                        x-file-name="HeroSection"
+                        x-line-number="105"
+                        x-component="div"
+                        x-id="HeroSection_105"
+                        x-dynamic="false"
+                    >
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`lucide lucide-search absolute left-5 w-5 h-5 ${dark ? 'text-white/30' : 'text-black/30'}`}
+                        aria-hidden="true"
+                        >
+                        <path d="m21 21-4.34-4.34"></path>
+                        <circle cx="11" cy="11" r="8"></circle>
+                        </svg>
 
-                    <i className={`fa-solid fa-magnifying-glass absolute left-0 top-1/2 -translate-y-[40.4%] translate-x-1/2 ${dark ? 'text-neutral-300' : 'text-neutral-600'}`}></i>
+                        <input
+                        placeholder="Pesquise um clube... ex: Flamengo, Palmeiras"
+                        className={`w-full pl-14 pr-5 py-4 sm:py-5 border rounded-2xl  focus:outline-none transition-all duration-300 text-base sm:text-lg backdrop-blur-sm ${dark ? 'bg-white/4 border-white/8 text-white placeholder:text-white/25 focus:border-amber-400/30 focus:bg-white/6' : 'bg-black/4 border-black/8 text-black placeholder:text-black/35 focus:border-amber-500/70 focus:bg-black/6'}`}
+                        x-file-name="HeroSection"
+                        x-line-number="107"
+                        x-component="input"
+                        x-id="HeroSection_107"
+                        x-dynamic="false"
+                        type="search"
+                        value={busca}
+                        onChange={(e) => {
+                            setBusca(e.currentTarget.value);
+                            buscaClube(e.currentTarget.value);
+                        }}
+                        />
 
-                    <i onClick={() => {
-                        setBusca('');
-                        buscaClube('')
-                        }} 
-                        className={`fa-regular fa-circle-xmark absolute top-1/2 -translate-y-[45%] right-0 -translate-x-[66%] cursor-pointer text-lg ${!busca && 'opacity-0'} ${dark ? 'text-sky-100' : 'text-sky-950'}`}></i>
+                        <span
+                        data-ve-dynamic="true"
+                        x-excluded="true"
+                        style={{ display: "contents" }}
+                        ></span>
 
-                </div>
+                        <i onClick={() => {
+                            setBusca('');
+                            buscaClube('')
+                            }} 
+                            className={`fa-regular fa-circle-xmark absolute top-1/2 -translate-y-[50%] right-0 -translate-x-[36%] cursor-pointer text-2xl ${!busca && 'opacity-0'} ${dark ? 'text-zinc-300' : 'text-sky-950'}`}>
+                            
+                        </i>
+                    </div>
 
-                {loading ? 
-                    <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
-                : 
-                    (clubes && clubes.length > 0) ? (
-                        <div 
-                        className='max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full min-h-20 mt-1 rounded-xl p-4 pb-0 flex flex-wrap justify-center gap-2'>
+                    {clubes &&
+                    <section className={`p-2 min-h-20 mt-2 z-10 max-h-[50vh] overflow-y-auto pb-2 min-w-full border rounded-lg ${dark ? 'bg-slate-900 border-slate-700/20' : 'bg-[#f7fbff]'}`}>
+
+                        {loading ?
+                        <div className="flex justify-center">
+                            <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
+                        </div>
+                        :
+                        clubes.length > 0 ?
+                        <div className="flex flex-col gap-4 justify-center py-2">
                             {clubes.map((clube, index) => (
-                                <article onClick={() => navegar(clube.nome)} className="max-w-[40%] min-w-[40%] p-2 cursor-pointer mb-2 flex flex-col items-center" key={index}>
-                                    <img className="max-h-20 max-w-20 sm:max-w-24 sm:max-h-24 lg:max-w-30 lg:max-h-30" src={clube.imagem} alt="" />
-                                    <div className={`mt-1 text-lg ${dark ? 'text-stone-200' : 'text-stone-700'}`}>
-                                        <h1 className="text-center">{clube.nome}<span className="mx-1">-</span>{clube.estado}</h1>
+                                <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 relative ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
+                                    <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
+                                    <div className="relative w-full text-start">
+                                        <h1 className={`${dark ? 'text-slate-50 font-medium' : 'text-[#222222] font-medium'}`}>{clube.nome}</h1>
+                                        <h2 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>Série A</h2>
+                                        <i className={`fa-solid fa-angle-right absolute top-1/2 right-4 -translate-y-1/2 ${dark ? 'text-slate-400' : ''}`}></i>
                                     </div>
-                                </article>
+                                </div>
                             ))}
                         </div>
-                    ) : !busca ? (
-                        <>
-                            <h2 className={`max-w-3/4 translate-x-1/5 sm:max-w-1/2 sm:translate-x-1/2 lg:max-w-1/3 lg:translate-x-full ml-2 font-medium flex items-center mb-8 mt-1 text-[14px] ${dark ? 'text-slate-300' : 'text-slate-700'}`}>
-                            <i className="fa-solid fa-circle text-green-500 text-shadow-[1px_1px_1px_#0000001a] text-[8.5px] mr-2 translate-y-[15%]"></i>
-                            Dados atualizados 
-                            <i className="fa-solid fa-circle text-slate-600 text-[3px] mx-1.5 translate-y-[50%]"></i>
-                            <span className="font-normal">Temporada 2026</span>
-                            </h2>
+                        :
+                        <div className="min-w-full translate-y-[calc(50%+4px)] flex items-center justify-center">
+                            <h1 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                                Nenhum clube encontrado para "{busca}"
+                            </h1>
+                        </div>
+                        }
+                        
+                    </section>
+                    }
+                </div>
 
-                            <i className="fa-solid fa-chevron-down absolute bottom-16 left-1/2 -translate-x-1/2  text-slate-500 text-lg"></i>
-                        </>
-                    ) : (
-                        <h1 className="text-center text-xl text-slate-900 mt-4">Nenhum clube encontrado</h1>
-                    )
+                {!clubes &&
+                <>
+                    <span
+                    data-ve-dynamic="true"
+                    x-excluded="true"
+                    style={{ display: "contents" }}
+                    >
+                    <div
+                        className="max-w-3xl mx-auto"
+                        x-file-name="HeroSection"
+                        x-line-number="223"
+                        x-component="div"
+                        x-id="HeroSection_223"
+                        x-dynamic="false"
+                    >
+                        <div
+                        className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6"
+                        x-file-name="HeroSection"
+                        x-line-number="224"
+                        x-component="div"
+                        x-id="HeroSection_224"
+                        x-dynamic="false"
+                        >
+                        <span
+                            data-ve-dynamic="true"
+                            x-excluded="true"
+                            style={{ display: "contents" }}
+                        >
+                            {/* Item 1 */}
+                            <div
+                            className="text-center group"
+                            x-file-name="HeroSection"
+                            x-line-number="226"
+                            x-component="div"
+                            x-id="HeroSection_226"
+                            x-dynamic="true"
+                            >
+                            <p className={`text-2xl sm:text-3xl font-bold mb-1 transition-colors duration-300 ${dark ? 'text-white group-hover:text-amber-400' : 'text-black group-hover:text-amber-500'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                40+
+                                </span>
+                            </p>
+
+                            <p className={`text-xs sm:text-sm ${dark ? 'text-white/30' : 'text-black/40'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                Clubes analisados
+                                </span>
+                            </p>
+                            </div>
+
+                            {/* Item 2 */}
+                            <div className="text-center group">
+                            <p className={`text-2xl sm:text-3xl font-bold mb-1 transition-colors duration-300 ${dark ? 'text-white group-hover:text-amber-400' : 'text-black group-hover:text-amber-500'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                10 anos
+                                </span>
+                            </p>
+
+                            <p className={`text-xs sm:text-sm ${dark ? 'text-white/30' : 'text-black/40'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                Dados financeiros
+                                </span>
+                            </p>
+                            </div>
+
+                            {/* Item 3 */}
+                            <div className="text-center group">
+                            <p className={`text-2xl sm:text-3xl font-bold mb-1 transition-colors duration-300 ${dark ? 'text-white group-hover:text-amber-400' : 'text-black group-hover:text-amber-500'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                25+
+                                </span>
+                            </p>
+
+                            <p className={`text-xs sm:text-sm ${dark ? 'text-white/30' : 'text-black/40'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                Indicadores
+                                </span>
+                            </p>
+                            </div>
+
+                            {/* Item 4 */}
+                            <div className="text-center group">
+                            <p className={`text-2xl sm:text-3xl font-bold mb-1 transition-colors duration-300 ${dark ? 'text-white group-hover:text-amber-400' : 'text-black group-hover:text-amber-500'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                Mensais
+                                </span>
+                            </p>
+
+                            <p className={`text-xs sm:text-sm ${dark ? 'text-white/30' : 'text-black/40'}`}>
+                                <span
+                                data-ve-dynamic="true"
+                                x-excluded="true"
+                                style={{ display: "contents" }}
+                                >
+                                Atualizações
+                                </span>
+                            </p>
+                            </div>
+                        </span>
+                        </div>
+                    </div>
+                    </span>
+
+                    <p key={valorCuriosidade} className={`animacao-entrada text-center mt-12 ${dark && 'text-slate-200'}`}>{curiosidadesFinanceiras[valorCuriosidade]}</p>
+
+                    <i className="fa-solid fa-chevron-down absolute bottom-12 left-1/2 -translate-x-1/2 z-1 text-amber-500 text-lg"></i>
+                </>
+
                 }
 
 
