@@ -15,7 +15,7 @@ export default function TelaLogin() {
     const navigate = useNavigate();
     const [avisoErro, setAvisoErro] = useState<string>('');
     const [avisoSucesso, setAvisoSucesso] = useState<string>('');
-    const { loginGoogle, loginUser } = allContext();
+    const { loginGoogle, loginUser, dark } = allContext();
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
@@ -63,9 +63,36 @@ export default function TelaLogin() {
     }
 
     return (
-        <div style={{background: "linear-gradient(180deg,#f2f4fa 0%,#b3c4f9 100%)", boxShadow: "0 25px 60px #0000004a"}}
- className='absolute top-1/2 left-1/2 -translate-1/2 p-6 pt-2 rounded-2xl flex flex-col items-center justify-center outline-5 outline-white/70'>
-            <img className='max-w-1/2 max-h-12 scale-115 my-1' src="/teste.png" alt="" />
+        <div 
+            style={{background: "linear-gradient(180deg,#f2f4fa 0%,#b3c4f9 100%)", boxShadow: "0 25px 60px #0000004a"}}
+            className='absolute top-1/2 left-1/2 -translate-1/2 p-6 pt-2 rounded-2xl flex flex-col items-center justify-center outline-5 outline-white/70'>
+            <h1 className="font-[MONELOS] flex items-center text-xl lg:text-3xl whitespace-nowrap scale-125 translate-y-1 -translate-x-3">
+                <div className="relative translate-y-1.25 mx-auto px-3 text-center">
+                    <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/15 mb-4">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="lucide lucide-chart-column w-3.5 h-3.5 text-amber-400"
+                            aria-hidden="true"
+                        >
+                            <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                            <path d="M18 17V9"></path>
+                            <path d="M13 17V5"></path>
+                            <path d="M8 17v-3"></path>
+                        </svg>
+                    </div>
+                </div>
+                    <span className="font-semibold tracking-tight">
+                        Confere<span className="text-amber-400"> Aê</span>
+                    </span>
+            </h1>
             <div className="form-container cadastro-screen">
                 <form className="form cadastro-screen">
                     <input

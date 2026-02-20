@@ -1,6 +1,7 @@
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import { useEffect, useState } from "react";
+import FooterFixo from "../components/footer-fixo";
 
 
 export default function Preco() {
@@ -9,6 +10,9 @@ export default function Preco() {
 
     useEffect(() => {
         setTopicoAtivo('Preço');
+        window.scrollTo({
+            top: 0
+        })
     }, []);
 
     const planos = [
@@ -102,9 +106,11 @@ export default function Preco() {
         <div>
             <HeaderFixo />
 
-            <div style={{background: dark ? "linear-gradient(to bottom right, #0b1f33, #0e243d)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen pt-18 flex flex-col items-center">
+            <div style={{background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen pt-18 flex flex-col items-center mb-22">
 
-                <h1 className={`text-center text-4xl mt-10 mb-14 ${dark ? 'text-white' : ''}`}>Todos os planos</h1>
+                <h2 className={`text-[36px] md:text-[48px] font-bold mt-3 mb-15 tracking-[-0.015em] ${dark ? 'text-white' : 'text-zinc-900'}`}>
+                    Todos os Planos
+                </h2>
 
                 <div className="flex justify-center gap-8">
                 {planos.map((plano) => (
@@ -156,6 +162,8 @@ export default function Preco() {
                 </div>
 
             </div>
+
+            <FooterFixo />
         </div>
     )
 }

@@ -6,6 +6,7 @@ import { supabase } from "../auth/supabase-client";
 import type { Clube } from "./busca-clube";
 import { relacaoClubes } from "./busca-clube";
 import { ClipLoader } from "react-spinners";
+import MenuAberto from "./menu-aberto";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
@@ -93,9 +94,9 @@ export default function HeaderFixo() {
 
     return (
                 <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
-                className={`fixed top-0 w-full left-0 z-999 flex px-4 pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] ${mostrarBorder ? dark ? 'border-b-neutral-400/10 border-b' : 'border-b-neutral-800/10 border-b' : ''}`}>
+                className={`fixed top-0 w-full left-0 z-999 flex px-4 pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] box-border border-b ${menuAberto ? dark ? 'border-b-neutral-400/10 border-b' : 'border-b-neutral-800/10 border-b' : mostrarBorder ? dark ? 'border-b-neutral-400/10' : 'border-b-neutral-800/10 ' : 'border-b-transparent'}`}>
 
-                    <h1 className={`font-[MONELOS] flex items-center text-3xl whitespace-nowrap ${dark && 'text-white'}`}>
+                    <h1 className={`font-[MONELOS] flex items-center ${abaEntretenimento ? 'text-xl' : 'text-2xl'} lg:text-3xl whitespace-nowrap ${dark && 'text-white'}`}>
                         <div className="relative translate-y-1.25 max-w-2xl mx-auto px-3 lg:px-4 text-center">
                             <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/15 mb-4">
                                 <svg
@@ -118,15 +119,17 @@ export default function HeaderFixo() {
                                 </svg>
                             </div>
                         </div>
-                        Confere Aê
-                        </h1>
+                            <span className="font-semibold tracking-tight">
+                                Confere<span className="text-amber-400"> Aê</span>
+                            </span>
+                    </h1>
                     {largura < 1024 ? (
                         <div className="w-full flex items-center justify-end">
                                 {abaEntretenimento &&
                                     <div className="relative flex-1">
                                     <input 
                                     className={`
-                                    -translate-y-[2.5%] min-w-[70%] sm:min-w-50 flex-1 mx-4 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 bg-slate-900 text-slate-100' : 'placeholder:text-neutral-500 bg-white border-slate-800/30'}`} 
+                                    -translate-y-[2.5%] min-w-[60%] max-w-[75%] sm:min-w-50 flex-1 mx-4 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
                                     placeholder="Buscar clube" 
                                     type="search"
                                     value={busca}
@@ -138,8 +141,14 @@ export default function HeaderFixo() {
                                     id="buscar-topico" />
 
                                     {busca &&
-                                    <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-82 max-h-120 overflow-y-auto pb-2 min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
-                                        {clubes && clubes.length > 0 ?
+                                    <section className={`absolute p-2 bottom-0 ml-4 translate-y-[101%] min-h-20 max-h-120 overflow-y-auto pb-2 min-w-[75%] max-w-[75%] rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
+                                        {loading ?
+                                        <div className="w-full flex items-center justify-center">
+                                            <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
+                                        </div>
+                                        :
+                                        clubes &&
+                                        clubes.length > 0 ?
                                         <div className="flex flex-col gap-4 justify-center py-2">
                                             {clubes.map((clube, index) => (
                                                 <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
@@ -152,14 +161,23 @@ export default function HeaderFixo() {
                                             ))}
                                         </div>
                                         :
-                                        <div></div>
+                                        <div className="min-w-full text-center translate-y-1/5 flex items-center justify-center">
+                                            <h1 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                                                Nenhum clube encontrado para "{busca}"
+                                            </h1>
+                                        </div>
                                         }
                                     </section>
                                     }
                                     </div>
                                 }
 
-                            <i onClick={() => setMenuAberto(!menuAberto)} className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}></i>
+                            <i 
+                                onClick={() => {
+                                setMenuAberto(!menuAberto);
+                                setBusca('');
+                                }} 
+                                className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}></i>
                         </div>
                     ) : (
                         <section className="flex w-full justify-between">
@@ -182,7 +200,7 @@ export default function HeaderFixo() {
                                     after:-bottom-1
                                     after:transition-all after:duration-400 after:ease-out 
                                     after:w-0
-                                    ${(dark && topicoAtivo === 'Explorar Dados') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Explorar Dados' ? 'after:w-full font-medium text-amber-600 after:bg-amber-600': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}
+                                    ${(dark && topicoAtivo === 'Explorar Dados') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Explorar Dados' ? 'after:w-full font-medium text-amber-400 after:bg-amber-400': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}
                                     `}>
                                     Explorar Dados
                                 </article>
@@ -204,7 +222,7 @@ export default function HeaderFixo() {
                                     after:-bottom-1
                                     after:transition-all after:duration-200 after:ease-out 
                                     after:w-0
-                                    ${(dark && topicoAtivo === 'Produto') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Produto' ? 'after:w-full font-medium text-amber-600 after:bg-amber-600': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}`}>
+                                    ${(dark && topicoAtivo === 'Produto') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Produto' ? 'after:w-full font-medium text-amber-400 after:bg-amber-400': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}`}>
                                     Produtos
                                 </article>
 
@@ -225,33 +243,36 @@ export default function HeaderFixo() {
                                     after:-bottom-1
                                     after:transition-all after:duration-200 after:ease-out 
                                     after:w-0
-                                    ${(dark && topicoAtivo === 'Preço') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Preço' ? 'after:w-full font-medium text-amber-600 after:bg-amber-600': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}`}>
+                                    ${(dark && topicoAtivo === 'Preço') ? 'after:w-full font-medium text-amber-400 after:bg-amber-400' : topicoAtivo === 'Preço' ? 'after:w-full font-medium text-amber-400 after:bg-amber-400': dark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-800'}`}>
                                     Preço
                                 </article>
 
                                 {abaEntretenimento &&
                                     <div className="relative">
-                                    <input 
-                                    className={`
-                                    -translate-y-[2.5%] min-w-70 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 bg-slate-900 text-slate-100' : 'placeholder:text-neutral-500 bg-white border-slate-800/30'}`} 
-                                    placeholder="Buscar clube" 
-                                    type="search"
-                                    value={busca}
-                                    onChange={(e) => {
-                                        setBusca(e.currentTarget.value);
-                                        buscaClube(e.currentTarget.value);
-                                    }}
-                                    name="buscar-topico" 
-                                    id="buscar-topico" />
+                                        <input 
+                                        className={`
+                                        -translate-y-[2.5%] min-w-70 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
+                                        placeholder="Buscar clube" 
+                                        type="search"
+                                        value={busca}
+                                        onChange={(e) => {
+                                            setBusca(e.currentTarget.value);
+                                            buscaClube(e.currentTarget.value);
+                                        }}
+                                        name="buscar-topico" 
+                                        id="buscar-topico" />
 
                                     {busca &&
-                                    <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-82 max-h-120 overflow-y-auto pb-2 min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
-                                        {clubes && clubes.length > 0 ?
+                                    <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-20 max-h-120 overflow-y-auto pb-2 min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
+                                        {loading ?
+                                        <div className="w-full flex items-center justify-center">
+                                            <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
+                                        </div>
+                                        :
+                                        clubes &&
+                                        clubes.length > 0 ?
                                         <div className="flex flex-col gap-4 justify-center py-2">
                                             {clubes.map((clube, index) => (
-                                                loading ?
-                                                <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
-                                                :
                                                 <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
                                                     <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
                                                     <div>
@@ -262,7 +283,11 @@ export default function HeaderFixo() {
                                             ))}
                                         </div>
                                         :
-                                        <div></div>
+                                        <div className="min-w-full text-center translate-y-1/5 flex items-center justify-center">
+                                            <h1 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                                                Nenhum clube encontrado para "{busca}"
+                                            </h1>
+                                        </div>
                                         }
                                     </section>
                                     }
@@ -369,6 +394,10 @@ export default function HeaderFixo() {
                             </article>
                         </section>
                     )}
+
+                    {menuAberto &&
+                    <MenuAberto />
+                    }
 
                 </div>
     );

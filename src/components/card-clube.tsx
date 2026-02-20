@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { AreaChart, Area } from "recharts";
 import { allContext } from "../context/all-context";
 import HeaderFixo from "./header-fixo";
-import MenuAberto from "./menu-aberto";
 import CardProduto from "./card-produtos";
 import { ClipLoader } from "react-spinners";
 import { calcularChanceTitulo } from "./busca-clube";
@@ -338,8 +337,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     const [assinante, setAssinante] = useState<boolean>(true);
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
-    const { largura, menuAberto, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
-
+    const { largura, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
 
     useEffect(() => {
         setTopicoAtivo('Produto');
@@ -654,84 +652,80 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     return (
         <>
             <HeaderFixo />
-            {!menuAberto ? 
-                <main className={`min-h-screen mt-16 ${dark ? 'bg-[#0b1f33]' : 'bg-[#eee5f0]'} grid grid-rows-[auto_1fr]`}>
-                    <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around rounded-t-none mb-10 p-4 rounded-lg border-2 border-slate-800/20">
-                        <div className="flex flex-col">
-                            <img className="max-h-40 max-w-40 self-center" src={clubeEscolhido.imagem} alt="" />
-                            <h1 className={`text-4xl text-center ${clubeEscolhido.nome === 'Santos' ? 'text-zinc-800 text-shadow-[1px_1px_1px_#FFF0002a]' : 'text-slate-50 text-shadow-[1px_1px_1px_#0000002a]'} font-[mono]`}>{clubeEscolhido.nome}</h1>
-                        </div>
-                        <div className="flex flex-col pl-2 min-h-full max-h-full justify-evenly gap-1">
-                            <p
-                                style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }} className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
-                                <i className={`fa-solid fa-sack-dollar ${clubeEscolhido.nome === 'Santos' ? 'text-sky-400' : 'text-sky-900'} mr-1`}></i> {rank_do_clube.faturamento}° em faturamento
-                            </p>
-                            <p
-                                style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
-                                className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
-                                <i className="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> {rank_do_clube.divida}° em dívida
-                            </p>
-                            <p
-                                style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
-                                className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
-                                <i className="fa-solid fa-users text-blue-600 mr-1"></i> {rank_do_clube.salario}° em folha salarial
-                            </p>
-                        </div>
-                    </article>
-                    <section className={`row-2 ${largura > 768 ? 'flex flex-wrap' : 'flex flex-col'} gap-6 px-5 pb-10`}>
-                        {loading ? 
-                        <div className="flex-1 flex items-center justify-center">
-                            <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
-                        </div>
-                        :
-                        cards.map((card, index) => (
-                            <InfoCard
-                                key={index}
-                                titulo={card.titulo}
-                                subtitulo={card.subtitulo}
-                                imagemSubtitulo={card.imagemSubtitulo}
-                                imagemAlt={card.imagemAlt}
-                                icon={card.icon}
-                                valor={card.valor}
-                                sufixo={card.sufixo}
-                                mediaData={mediaData}
-                                largura={largura}
-                                assinante={assinante}
-                                dark={dark}
-                            />
-                        ))}
-                    </section>
-
-                    <div className="flex justify-center">
-                        <div className="bg-white p-2 rounded-2xl flex flex-col max-w-3/4">
-                            <h1 className="ml-4 text-xl">
-                                <i className="fa-solid fa-lock mr-1"></i>
-                                Conteúdo exclusivo para assinantes
-                            </h1>
-                            <ul className="mt-6 ml-10 flex flex-col gap-1">
-                                <li>
-                                    <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
-                                    Nota do clube
-                                </li>
-                                <li>
-                                    <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
-                                    Chance de pagar a dívida
-                                </li>
-                                <li>
-                                    <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
-                                    Números de 2024 e 2023
-                                </li>
-                            </ul>
-                            <button className="mt-4">
-                                <i className="fa-solid fa-lock"></i>
-                                Desbloquear dados premium
-                            </button>
-                        </div>
+            <main style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : ""}} className={`min-h-screen mt-16 ${dark ? '' : 'bg-[#eee5f0]'} grid grid-rows-[auto_1fr]`}>
+                <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around rounded-t-none mb-10 p-4 rounded-lg border-2 border-slate-800/20">
+                    <div className="flex flex-col">
+                        <img className="max-h-40 max-w-40 self-center" src={clubeEscolhido.imagem} alt="" />
+                        <h1 className={`text-4xl text-center ${clubeEscolhido.nome === 'Santos' ? 'text-zinc-800 text-shadow-[1px_1px_1px_#FFF0002a]' : 'text-slate-50 text-shadow-[1px_1px_1px_#0000002a]'} font-[mono]`}>{clubeEscolhido.nome}</h1>
                     </div>
-                </main>
-            : 
-            <MenuAberto />
-            }
+                    <div className="flex flex-col pl-2 min-h-full max-h-full justify-evenly gap-1">
+                        <p
+                            style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }} className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                            <i className={`fa-solid fa-sack-dollar ${clubeEscolhido.nome === 'Santos' ? 'text-sky-400' : 'text-sky-900'} mr-1`}></i> {rank_do_clube.faturamento}° em faturamento
+                        </p>
+                        <p
+                            style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
+                            className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                            <i className="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> {rank_do_clube.divida}° em dívida
+                        </p>
+                        <p
+                            style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
+                            className={`font-manrope rounded-md p-2 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                            <i className="fa-solid fa-users text-blue-600 mr-1"></i> {rank_do_clube.salario}° em folha salarial
+                        </p>
+                    </div>
+                </article>
+                <section className={`row-2 ${largura > 768 ? 'flex flex-wrap' : 'flex flex-col'} gap-6 px-5 pb-10`}>
+                    {loading ? 
+                    <div className="flex-1 flex items-center justify-center">
+                        <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
+                    </div>
+                    :
+                    cards.map((card, index) => (
+                        <InfoCard
+                            key={index}
+                            titulo={card.titulo}
+                            subtitulo={card.subtitulo}
+                            imagemSubtitulo={card.imagemSubtitulo}
+                            imagemAlt={card.imagemAlt}
+                            icon={card.icon}
+                            valor={card.valor}
+                            sufixo={card.sufixo}
+                            mediaData={mediaData}
+                            largura={largura}
+                            assinante={assinante}
+                            dark={dark}
+                        />
+                    ))}
+                </section>
+
+                <div className="flex justify-center">
+                    <div className="bg-white p-2 rounded-2xl flex flex-col max-w-3/4">
+                        <h1 className="ml-4 text-xl">
+                            <i className="fa-solid fa-lock mr-1"></i>
+                            Conteúdo exclusivo para assinantes
+                        </h1>
+                        <ul className="mt-6 ml-10 flex flex-col gap-1">
+                            <li>
+                                <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
+                                Nota do clube
+                            </li>
+                            <li>
+                                <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
+                                Chance de pagar a dívida
+                            </li>
+                            <li>
+                                <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
+                                Números de 2024 e 2023
+                            </li>
+                        </ul>
+                        <button className="mt-4">
+                            <i className="fa-solid fa-lock"></i>
+                            Desbloquear dados premium
+                        </button>
+                    </div>
+                </div>
+            </main>
             {mostrarCard &&
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
                     <div 

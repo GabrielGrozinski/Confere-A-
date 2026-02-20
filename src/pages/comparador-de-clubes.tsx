@@ -4,7 +4,6 @@ import type { Clube, Medias } from "../components/busca-clube";
 import '../styles/teste.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
-import MenuAberto from "../components/menu-aberto";
 import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
 import { ClipLoader } from "react-spinners";
@@ -54,7 +53,7 @@ export type DadosClube = {
 
 
 export default function ComparadorDeClubes() {
-    const {menuAberto, setTopicoAtivo, setAbaEntretenimento} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
@@ -263,7 +262,6 @@ export default function ComparadorDeClubes() {
         <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
             <HeaderFixo/>
 
-            {!menuAberto ?
             <div className="min-h-screen flex flex-col items-center pb-10 mt-16">
                 <div className="min-h-10 w-full flex justify-center">
                     <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
@@ -396,9 +394,6 @@ export default function ComparadorDeClubes() {
 
             </section>
             </div>
-            :
-            <MenuAberto />
-            }
         </div>
     )
 }

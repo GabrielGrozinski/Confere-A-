@@ -4,7 +4,6 @@ import type { Clube, Coisas } from "../components/busca-clube";
 import '../styles/teste.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
-import MenuAberto from "../components/menu-aberto";
 import { ClipLoader } from "react-spinners";
 
 
@@ -21,7 +20,7 @@ interface Porcentagem {
 }
 
 export default function CompararCoisas() {
-    const {menuAberto, setTopicoAtivo, setAbaEntretenimento} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
@@ -134,7 +133,6 @@ export default function CompararCoisas() {
         <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
             <HeaderFixo/>
 
-            {!menuAberto ?
             <div className="min-h-screen flex flex-col items-center pb-10">
             <div className="mt-36 rounded-lg rounded-t-none w-[90%] min-h-100 grid grid-rows-[1fr_15%]">
 
@@ -315,9 +313,6 @@ export default function CompararCoisas() {
                 </article>
             </section>
             </div>
-            :
-            <MenuAberto />
-            }
         </div>
     )
 }
