@@ -1,7 +1,7 @@
 import { buscaTodosClubes } from "../components/busca-clube";
 import { useEffect, useState, useMemo } from "react";
 import type { Clube } from "../components/busca-clube";
-import '../styles/teste.css';
+import '../styles/comparacao-unica.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import {
@@ -22,6 +22,7 @@ import {
   Gauge,
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
+import FooterFixo from "../components/footer-fixo";
 
 
 type TopicoComparacao = {
@@ -53,7 +54,7 @@ export type DadosClube = {
 
 
 export default function ClubeVsClube() {
-    const {setTopicoAtivo, setAbaEntretenimento} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, dark} = allContext();
     const [popoverAberto1, setPopoverAberto1] = useState(false);
     const [popoverAberto2, setPopoverAberto2] = useState(false);
     const [clubes, setClubes] = useState<Clube[]>();
@@ -436,15 +437,15 @@ export default function ClubeVsClube() {
 
 
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
             <HeaderFixo/>
 
             <div className="min-h-screen flex flex-col items-center mt-16 pt-2">
                 <main id="main" className="row-1 w-[90%] flex flex-col relative mx-1 pt-2">
-                    <h2 className="text-[32px] md:text-[40px] font-bold text-white mt-2 tracking-[-0.015em]">
+                    <h2 className={`text-[32px] md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>
-                    <p className="text-base text-[rgb(218,218,218)] mt-2 max-w-lg">
+                    <p className={`text-base mt-2 max-w-lg ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
                     Selecione dois clubes e veja a batalha financeira lado a lado.
                     </p>
 
@@ -452,23 +453,23 @@ export default function ClubeVsClube() {
                     <div className="w-full mx-auto px-6 flex items-center justify-center">
 
                         <div className="opacity-100 transform-none lg:max-w-250 lg:min-w-250 mt-4">
-                            <div className="bg-[rgb(26,28,30)] border border-white/10 rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden">
+                            <div className={`border rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-slate-200 border-slate-800/20'}`}>
                             
                                 <div className="grid grid-cols-2 gap-6 mb-10 lg:pl-6 lg:pr-8">
                                     
                                     <div>
-                                        <label className="text-xs font-medium text-[rgb(161,161,170)] mb-2 block uppercase tracking-wider">
+                                        <label className={`text-xs font-medium mb-2 block uppercase tracking-wider ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-900'}`}>
                                             Clube A
                                         </label>
-                                        <div className={`bg-[rgb(38,40,42)] border-2 border-[rgb(63,63,63)] text-white rounded-xl pl-1 pr-3 text-sm font-medium appearance-none focus:outline-none focus:border-[#DAFF01] max-h-13 min-h-13 focus:shadow-[0_0_0_4px_rgba(218,255,1,0.1)] transition-all flex items-center cursor-pointer`}>
+                                        <div className={`border-2 rounded-xl pl-1 pr-3 text-sm font-medium appearance-none max-h-13 min-h-13 focus:shadow-[0_0_0_4px_rgba(218,255,1,0.1)] transition-all flex items-center cursor-pointer ${dark ? 'bg-[rgb(38,40,42)] border-[rgb(63,63,63)]' : 'bg-white border-slate-700/30'}`}>
                                         <Popover.Root open={popoverAberto1} onOpenChange={setPopoverAberto1}>
                                         <Popover.Trigger asChild>
-                                            <button className="font-medium flex items-center w-full justify-between cursor-pointer min-h-13 max-h-full">
+                                            <button className="font-medium flex items-center w-full justify-between cursor-pointer pl-1 sm:pl-4.5 lg:pl-2.5 min-h-13 max-h-full">
                                                 <strong>
-                                                    <span className="p-0.5 px-2.5 ml-2 flex rounded-md text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{clubeANome}
+                                                    <span className={`p-0.5 flex rounded-md font-medium cursor-pointer items-center ${dark ? 'text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a]' : 'text-zinc-800'}`}>{clubeANome}
                                                     </span>
                                                 </strong>
-                                                <i className="fa-solid fa-angle-down ml-1 translate-y-[10%] text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a]"></i>
+                                                <i className={`fa-solid fa-angle-down ml-1 translate-y-[10%] text-shadow-[1px_1px_1px_#0000002a] ${dark ? 'text-[#DAFF01]' : 'text-zinc-800'}`}></i>
                                             </button>
                                         </Popover.Trigger>
 
@@ -519,20 +520,18 @@ export default function ClubeVsClube() {
                                     </div>
                                     
                                     <div>
-                                        <label className="text-xs font-medium text-[rgb(161,161,170)] mb-2 block uppercase tracking-wider">
+                                        <label className={`text-xs font-medium mb-2 block uppercase tracking-wider ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-900'}`}>
                                             Clube B
                                         </label>
-                                        <div className={`bg-[rgb(38,40,42)] border-2 border-[rgb(63,63,63)] text-white rounded-xl pl-1 pr-3 py-3.5 text-sm font-medium appearance-none focus:outline-none focus:border-[#DAFF01] max-h-13 min-h-13 focus:shadow-[0_0_0_4px_rgba(218,255,1,0.1)] transition-all flex items-center cursor-pointer`}>
+                                        <div className={`border-2 rounded-xl pl-1 pr-3 text-sm font-medium appearance-none max-h-13 min-h-13 focus:shadow-[0_0_0_4px_rgba(218,255,1,0.1)] transition-all flex items-center cursor-pointer ${dark ? 'bg-[rgb(38,40,42)] border-[rgb(63,63,63)]' : 'bg-white border-slate-700/30'}`}>
                                         <Popover.Root open={popoverAberto2} onOpenChange={setPopoverAberto2}>
                                         <Popover.Trigger asChild>
-                                            <button className="font-medium flex items-center w-full justify-between cursor-pointer min-h-13 max-h-full">
-
+                                            <button className="font-medium flex items-center w-full justify-between cursor-pointer pl-1 sm:pl-4.5 lg:pl-2.5 min-h-13 max-h-full">
                                                 <strong>
-                                                    <span className="p-0.5 px-2.5 ml-2 flex rounded-md text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{clubeBNome}
+                                                    <span className={`p-0.5 flex rounded-md font-medium cursor-pointer items-center ${dark ? 'text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a]' : 'text-zinc-800'}`}>{clubeBNome}
                                                     </span>
                                                 </strong>
-                                                <i className="fa-solid fa-angle-down ml-1 translate-y-[10%] text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a]"></i>
-
+                                                <i className={`fa-solid fa-angle-down ml-1 translate-y-[10%] text-shadow-[1px_1px_1px_#0000002a] ${dark ? 'text-[#DAFF01]' : 'text-zinc-800'}`}></i>
                                             </button>
                                         </Popover.Trigger>
 
@@ -592,11 +591,11 @@ export default function ClubeVsClube() {
 
                                     return (
                                     <div key={section.title}>
-                                        <div className="flex items-center gap-2 mb-2">
-                                        <Icon className="w-4 h-4 text-zinc-400" />
-                                        <span className="text-sm font-medium text-zinc-400">
-                                            {section.title}
-                                        </span>
+                                        <div className={`flex items-center gap-2 mb-2 ${dark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                                            <Icon className="w-4 h-4" />
+                                            <span className="text-sm font-medium">
+                                                {section.title}
+                                            </span>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-6">
@@ -605,28 +604,47 @@ export default function ClubeVsClube() {
 
                                             return (
                                             <div key={item.club}>
-                                                <div className="flex items-center justify-between mb-1">
-                                                <span className="text-xs font-medium text-white">
+                                                <div className="flex flex-col sm:flex-row items-center justify-between mb-1">
+                                                <span className={`text-xs font-medium ${dark ? 'text-white' : 'text-stone-900'}`}>
                                                     {item.club}
                                                 </span>
 
                                                 <span
                                                     className={`text-xs font-semibold ${
                                                     item.highlight
-                                                        ? "text-[#DAFF01]"
-                                                        : "text-zinc-400"
+                                                        ?
+                                                        dark
+                                                        ?
+                                                        "text-[#DAFF01]"
+                                                        :
+                                                        'text-orange-400'
+                                                        :
+                                                        dark ?
+                                                        "text-zinc-400"
+                                                        :
+                                                        'text-zinc-700'
                                                     }`}
                                                 >
                                                     {item.formatted}
                                                 </span>
                                                 </div>
 
-                                                <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden">
+                                                <div className={`w-full h-3 rounded-full overflow-hidden ${dark ? 'bg-zinc-900' : 'bg-slate-300'}`}>
                                                 <div
                                                     className={`h-full rounded-full transition-all duration-700 ${
                                                     item.highlight
-                                                        ? "bg-[#DAFF01]"
-                                                        : "bg-zinc-700"
+                                                        ? 
+                                                        dark
+                                                        ?
+                                                        "bg-[#DAFF01]"
+                                                        :
+                                                        'bg-orange-400'
+                                                        :
+                                                        dark
+                                                        ?
+                                                        "bg-zinc-700"
+                                                        :
+                                                        'bg-zinc-600'
                                                     }`}
                                                     style={{ width: `${percentage}%` }}
                                                 />
@@ -647,6 +665,8 @@ export default function ClubeVsClube() {
                 </main>
 
             </div>
+
+            <FooterFixo />
         </div>
     )
 }
