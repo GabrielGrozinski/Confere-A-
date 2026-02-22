@@ -94,7 +94,7 @@ export default function HeaderFixo() {
 
     return (
                 <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
-                className={`fixed top-0 w-full left-0 z-999 flex px-4 pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] box-border border-b ${menuAberto ? dark ? 'border-b-neutral-400/10 border-b' : 'border-b-neutral-800/10 border-b' : mostrarBorder ? dark ? 'border-b-neutral-400/10' : 'border-b-neutral-800/10 ' : 'border-b-transparent'}`}>
+                className={`fixed top-0 w-full max-w-full left-0 z-999 flex pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] box-border border-b ${menuAberto ? dark ? 'border-b-neutral-400/10 border-b' : 'border-b-neutral-800/10 border-b' : mostrarBorder ? dark ? 'border-b-neutral-400/10' : 'border-b-neutral-800/10 ' : 'border-b-transparent'}`}>
 
                     <h1 className={`font-[MONELOS] flex items-center ${abaEntretenimento ? 'text-xl' : 'text-2xl'} lg:text-3xl whitespace-nowrap ${dark && 'text-white'}`}>
                         <div className="relative translate-y-1.25 max-w-2xl mx-auto px-3 lg:px-4 text-center">
@@ -124,12 +124,12 @@ export default function HeaderFixo() {
                             </span>
                     </h1>
                     {largura < 1024 ? (
-                        <div className="w-full flex items-center justify-end">
-                                {abaEntretenimento &&
-                                    <div className="relative flex-1">
+                        abaEntretenimento ?
+                            <div className="w-full flex items-center justify-between px-2">
+                                <div className="relative min-w-10 max-w-26 sm:min-w-[50%] sm:max-w-[50%]">
                                     <input 
                                     className={`
-                                    -translate-y-[2.5%] min-w-[60%] max-w-[75%] sm:min-w-50 flex-1 mx-4 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
+                                    -translate-y-[2.5%] text-xs max-w-26 sm:max-w-full sm:min-w-full sm:ml-2 py-2 pl-3 pr-1 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
                                     placeholder="Buscar clube" 
                                     type="search"
                                     value={busca}
@@ -141,7 +141,7 @@ export default function HeaderFixo() {
                                     id="buscar-topico" />
 
                                     {busca &&
-                                    <section className={`absolute p-2 bottom-0 ml-4 translate-y-[101%] min-h-20 max-h-120 overflow-y-auto pb-2 min-w-[75%] max-w-[75%] rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
+                                    <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-20 max-h-120 sm:ml-2 overflow-y-auto pb-2 max-w-26 min-w-26 sm:max-w-full sm:min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
                                         {loading ?
                                         <div className="w-full flex items-center justify-center">
                                             <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
@@ -151,7 +151,7 @@ export default function HeaderFixo() {
                                         clubes.length > 0 ?
                                         <div className="flex flex-col gap-4 justify-center py-2">
                                             {clubes.map((clube, index) => (
-                                                <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
+                                                <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-2 sm:gap-6 items-center w-full flex sm:flex-row flex-col text-center sm:text-start sm:pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
                                                     <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
                                                     <div>
                                                         <h1 className={`${dark ? 'text-slate-50 font-medium' : 'text-[#222222] font-medium'}`}>{clube.nome}</h1>
@@ -167,18 +167,33 @@ export default function HeaderFixo() {
                                             </h1>
                                         </div>
                                         }
+                                        
                                     </section>
                                     }
-                                    </div>
-                                }
+                                </div>
 
-                            <i 
-                                onClick={() => {
-                                setMenuAberto(!menuAberto);
-                                setBusca('');
-                                }} 
-                                className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}></i>
-                        </div>
+                                <i 
+                                    onClick={() => {
+                                    setMenuAberto(!menuAberto);
+                                    setBusca('');
+                                    }} 
+                                    className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
+
+                                </i>
+                            </div>
+                            :
+                            <div className="w-full flex items-center justify-end pr-4">
+                                <i 
+                                    onClick={() => {
+                                    setMenuAberto(!menuAberto);
+                                    setBusca('');
+                                    }} 
+                                    className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
+
+                                </i>
+                            </div>
+                                    
+                             
                     ) : (
                         <section className="flex w-full justify-between">
                             <div className="flex ml-10 items-center gap-12 flex-1 mr-10">

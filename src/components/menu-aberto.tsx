@@ -33,7 +33,7 @@ export default function MenuAberto() {
 
                 <article 
                 onClick={() => {
-                    navigate('/');
+                    navigate('/preco');
                     setTopicoAtivo('Preço');
                     setMenuAberto(false);
                 }}

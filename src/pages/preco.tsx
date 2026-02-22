@@ -112,7 +112,7 @@ export default function Preco() {
                     Todos os Planos
                 </h2>
 
-                <div className="flex justify-center gap-8">
+                <div className="flex justify-center gap-8 flex-col lg:flex-row">
                 {planos.map((plano) => (
                     <div
                     key={plano.nome}

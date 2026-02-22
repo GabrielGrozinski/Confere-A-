@@ -837,7 +837,7 @@ export default function PaginaInicial() {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
 
-                        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 bg-amber-400/90 hover:bg-amber-400 text-[#080C14] font-semibold text-base px-8 py-6 rounded-xl group cursor-pointer">
+                        <button onClick={() => navigate('/produtos')} className="inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 bg-amber-400/90 hover:bg-amber-400 text-[#080C14] font-semibold text-base px-8 py-6 rounded-xl group cursor-pointer">
                             Explorar dados agora
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

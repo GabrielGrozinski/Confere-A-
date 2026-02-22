@@ -131,6 +131,9 @@ export default function ComparadorDeClubes() {
     useEffect(() => {
         setTopicoAtivo('Produto');
         setAbaEntretenimento(true);
+        window.scrollTo({
+            top: 0
+        });
 
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))

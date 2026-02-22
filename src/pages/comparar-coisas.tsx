@@ -33,6 +33,9 @@ export default function CompararCoisas() {
     useEffect(() => {
         setTopicoAtivo('Produto');
         setAbaEntretenimento(true);
+        window.scrollTo({
+            top: 0
+        });
 
         buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))

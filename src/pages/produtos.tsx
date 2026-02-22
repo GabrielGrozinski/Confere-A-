@@ -6,17 +6,20 @@ import type { Clube } from "../components/busca-clube";
 import { buscaTodosClubes, relacaoClubes } from "../components/busca-clube";
 import { ClipLoader } from "react-spinners";
 import FooterFixo from "../components/footer-fixo";
+import CardTodosClubes from "../components/card-todos-clubes";
 
 
 export default function Produtos() {
     const navigate = useNavigate();
     const {dark, setTopicoAtivo, setAbaEntretenimento} = allContext();
     const [loading, setLoading] = useState<boolean>(true);
+    const [mostrarClubes, setMostrarClubes] = useState<boolean>(false);
     const [clubes, setClubes] = useState<Clube[]>();
 
     const cards = [
     {
         id: 1,
+        navigate: '/clube-vs-clube',
         tag: "Flamengo vs Palmeiras",
         title: "Comparação Direta",
         description: (
@@ -39,6 +42,7 @@ export default function Produtos() {
     },
     {
         id: 2,
+        navigate: '/comparador-de-clubes',
         tag: "Clube vs Mundo",
         title: "Além do Futebol (individual)",
         description:
@@ -54,6 +58,7 @@ export default function Produtos() {
     },
     {
         id: 3,
+        navigate: '',
         tag: "Raio-X Financeiro",
         title: "Análise Individual",
         description:
@@ -70,6 +75,7 @@ export default function Produtos() {
     },
     {
         id: 4,
+        navigate: '/comparador-de-clubes',
         tag: "Comparação Geral",
         title: "Comparar Vários Clubes",
         description: (
@@ -88,6 +94,7 @@ export default function Produtos() {
     },
     {
         id: 5,
+        navigate: '/comparador-de-coisas',
         tag: "Clubes vs Mundo",
         title: "Além do Futebol (Comparação Geral)",
         description: (
@@ -152,12 +159,6 @@ export default function Produtos() {
     }, []);
 
 
-    function navegar(nomeClube: string) {
-        const nomeRota = relacaoClubes(nomeClube);
-        navigate(`/${nomeRota}`);
-    }
-
-
     return (
         <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen">
             <HeaderFixo />
@@ -178,9 +179,10 @@ export default function Produtos() {
                 {cards.map((card) => (
                     <div
                     key={card.id}
+                    onClick={() => card.id === 3 ? setMostrarClubes(true) : navigate(card.navigate)}
                     className="opacity-100 cursor-pointer transform-none"
                     >
-                    <div className={`group border rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full ${dark ? 'hover:border-[#DAFF01] border-white/10 bg-[rgb(26,28,30)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]' : 'hover:border-[#B8D600] border-black/20 bg-white hover:shadow-[0_20px_40px_ffffff] hover:outline hover:outline-[#DAFF01]'}`}>
+                    <div className={`group border rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full ${dark ? 'hover:border-[#DAFF01] active:border-[#DAFF01] border-white/10 bg-[rgb(26,28,30)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]' : 'hover:border-[#B8D600] active:border-[#B8D600] border-black/20 bg-white hover:shadow-[0_20px_40px_ffffff] hover:outline hover:outline-[#DAFF01]'}`}>
                         <div className={`absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${dark ? 'bg-[#DAFF01]' : 'bg-[#ddff20]'}`}></div>
 
                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors ${dark ? 'group-hover:bg-[#DAFF01]/20 bg-[#DAFF01]/10' : 'group-hover:bg-[#DAFF01]/60 bg-[#DAFF01]/40'}`}>
@@ -288,11 +290,83 @@ export default function Produtos() {
                                 </div>
                             </div>
 
+                            <div className="opacity-100 transform-none">
+                                <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
+                                        <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                                        <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                                    </svg>
+
+                                    <p className={`text-base leading-relaxed flex-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-800'}`}>
+                                        "Descobri, de uma vez por todas, se meu clube era bem administrado."
+                                    </p>
+
+                                    <div className={`mt-6 pt-5 border-t ${dark ? 'border-white/5' : 'border-black/10'}`}>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-[rgb(38,40,42)] flex items-center justify-center text-sm font-bold text-[#DAFF01]">
+                                                G
+                                            </div>
+                                            <div>
+                                                <p className={`text-sm font-semibold ${dark ? 'text-white' : 'text-zinc-800'}`}>
+                                                    Gabriel G.
+                                                </p>
+                                                <p className={`text-xs ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-500'}`}>
+                                                    Torcedor do São Paulo
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div className="opacity-100 transform-none">
+                                <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
+                                        <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                                        <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                                    </svg>
+
+                                    <p className={`text-base leading-relaxed flex-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-800'}`}>
+                                        "Descobri, de uma vez por todas, se meu clube era bem administrado."
+                                    </p>
+
+                                    <div className={`mt-6 pt-5 border-t ${dark ? 'border-white/5' : 'border-black/10'}`}>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-[rgb(38,40,42)] flex items-center justify-center text-sm font-bold text-[#DAFF01]">
+                                                G
+                                            </div>
+                                            <div>
+                                                <p className={`text-sm font-semibold ${dark ? 'text-white' : 'text-zinc-800'}`}>
+                                                    Gabriel G.
+                                                </p>
+                                                <p className={`text-xs ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-500'}`}>
+                                                    Torcedor do São Paulo
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
 
                         </div>
                     </div>
                 </section>
             </div>
+            
+            {mostrarClubes &&
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div
+                onClick={() => setMostrarClubes(false)}
+                className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+                />
+
+                <div className="min-h-80 min-w-[90%] sm:min-w-80">
+                    <CardTodosClubes setMostrarClubes={setMostrarClubes} />
+                </div>
+            </div>
+            }
 
             <FooterFixo />
         </div>

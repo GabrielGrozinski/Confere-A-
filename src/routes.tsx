@@ -28,6 +28,7 @@ import LoginLayout from "./pages/login/login-layout";
 import TelaLogin from "./pages/login/login";
 import TelaCadastro from "./pages/login/cadastro";
 import Preco from "./pages/preco";
+import ClubeVsClube from "./pages/clube-vs-clube";
 
 
 export default function Rotas() {
@@ -47,6 +48,8 @@ export default function Rotas() {
                     <Route index element={<TelaLogin/>} />
                     <Route path="cadastro" element={<TelaCadastro/>} />
                 </Route>
+
+                <Route path="clube-vs-clube" element={<ClubeVsClube/>} />
 
                 <Route path="produtos" element={<Produtos/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />
