@@ -21,6 +21,6 @@
 }
 
 /* active */
-#main ::-webkit-scrollbar-thumb:hover {
+#main ::-webkit-scrollbar-thumb:active {
   background-color: #8a7dff;
 }

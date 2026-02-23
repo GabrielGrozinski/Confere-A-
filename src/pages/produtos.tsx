@@ -1,20 +1,14 @@
 import HeaderFixo from "../components/header-fixo"
 import { useNavigate } from "react-router-dom";
 import { allContext } from "../context/all-context";
-import { useEffect, useState } from "react";
-import type { Clube } from "../components/busca-clube";
-import { buscaTodosClubes, relacaoClubes } from "../components/busca-clube";
-import { ClipLoader } from "react-spinners";
+import { useEffect } from "react";
 import FooterFixo from "../components/footer-fixo";
 import CardTodosClubes from "../components/card-todos-clubes";
 
 
 export default function Produtos() {
     const navigate = useNavigate();
-    const {dark, setTopicoAtivo, setAbaEntretenimento} = allContext();
-    const [loading, setLoading] = useState<boolean>(true);
-    const [mostrarClubes, setMostrarClubes] = useState<boolean>(false);
-    const [clubes, setClubes] = useState<Clube[]>();
+    const {dark, setTopicoAtivo, setAbaEntretenimento, mostrarClubes, setMostrarClubes} = allContext();
 
     const cards = [
     {
@@ -42,7 +36,7 @@ export default function Produtos() {
     },
     {
         id: 2,
-        navigate: '/comparador-de-clubes',
+        navigate: '/clube-vs-mundo',
         tag: "Clube vs Mundo",
         title: "Além do Futebol (individual)",
         description:
@@ -139,7 +133,7 @@ export default function Produtos() {
     {
         id: 4,
         value: "Plano",
-        title: "Gratuito",
+        title: "Gratuito e Pago",
         subtitle: "Preços justos",
     },
     ];
@@ -151,19 +145,15 @@ export default function Produtos() {
             top: 0
         })
         setAbaEntretenimento(false);
-        buscaTodosClubes()
-            .then((data) => setClubes(data.data))
-            .catch((error) => console.error('Houve um erro', error))
-            .finally(() => setLoading(false));
 
     }, []);
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen">
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen mt-15">
             <HeaderFixo />
 
-            <div className="max-w-400 mt-16 pt-4 mx-auto px-6">
+            <div className="max-w-400 pt-4 mx-auto px-6">
                 <div className="opacity-100 transform-none">
                     <div className="text-center mb-16">
                     <h2 className={`text-[36px] md:text-[48px] font-bold mt-3 mb-5 tracking-[-0.015em] ${dark ? 'text-white' : 'text-zinc-900'}`}>
@@ -227,7 +217,7 @@ export default function Produtos() {
                             key={item.id}
                             className="opacity-100 transform-none"
                             >
-                            <div className={`text-center py-8 px-4 border rounded-2xl transition-all duration-300 ${dark ? 'hover:border-[#DAFF01]/30 bg-[rgb(26,28,30)] border-white/10' : 'hover:border-amber-400 bg-stone-50 border-black/20'}`}>
+                            <div className={`text-center py-8 px-4 min-h-50 max-h-50 border rounded-2xl transition-all duration-300 ${dark ? 'hover:border-[#DAFF01]/30 bg-[rgb(26,28,30)] border-white/10' : 'hover:border-amber-400 bg-stone-50 border-black/20'}`}>
                                 <p className={`text-[36px] md:text-[48px] font-bold tracking-tight ${dark ? 'text-[#DAFF01]' : 'text-amber-300 text-shadow-[0px_1px_1px_#0000001a]'}`}>
                                 {item.value}
                                 </p>
@@ -262,7 +252,7 @@ export default function Produtos() {
 
                             <div className="opacity-100 transform-none">
                                 <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
                                         <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
                                         <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
                                     </svg>
@@ -292,7 +282,7 @@ export default function Produtos() {
 
                             <div className="opacity-100 transform-none">
                                 <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
                                         <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
                                         <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
                                     </svg>
@@ -322,7 +312,7 @@ export default function Produtos() {
 
                             <div className="opacity-100 transform-none">
                                 <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
                                         <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
                                         <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
                                     </svg>
@@ -355,7 +345,7 @@ export default function Produtos() {
                 </section>
             </div>
             
-            {mostrarClubes &&
+            {(mostrarClubes) &&
             <div className="fixed inset-0 z-50 flex items-center justify-center">
                 <div
                 onClick={() => setMostrarClubes(false)}
@@ -363,7 +353,7 @@ export default function Produtos() {
                 />
 
                 <div className="min-h-80 min-w-[90%] sm:min-w-80">
-                    <CardTodosClubes setMostrarClubes={setMostrarClubes} />
+                    <CardTodosClubes />
                 </div>
             </div>
             }

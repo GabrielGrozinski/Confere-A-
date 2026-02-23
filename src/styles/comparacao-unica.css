@@ -1,25 +1,42 @@
-#main ::-webkit-scrollbar {
+#main-clube-vs-clube ::-webkit-scrollbar {
   width: 8px;
 }
 
 /* trilho (fundo) */
-#main ::-webkit-scrollbar-track {
+#main-clube-vs-clube ::-webkit-scrollbar-track {
   background: transparent; /* ou uma cor */
 }
 
 /* barra em si */
-#main ::-webkit-scrollbar-thumb {
+#main-clube-vs-clube ::-webkit-scrollbar-thumb {
   background-color: #f97316;
   border-radius: 999px;
   border: 2px solid transparent; /* cria efeito flutuante */
   background-clip: content-box;
 }
+html.dark #main-clube-vs-clube ::-webkit-scrollbar-thumb {
+  background-color: #DAFF01;
+  border-radius: 999px;
+  border: 2px solid transparent; /* cria efeito flutuante */
+  background-clip: content-box;
+}
+
 /* hover */
-#main ::-webkit-scrollbar-thumb:hover {
-  background-color: #8a7dff;
+#main-clube-vs-clube ::-webkit-scrollbar-thumb:hover {
+  background-color: #f973167a;
 }
 
 /* active */
-#main ::-webkit-scrollbar-thumb:hover {
-  background-color: #8a7dff;
+#main-clube-vs-clube ::-webkit-scrollbar-thumb:active {
+  background-color: #f97316;
+}
+
+/* hover */
+html.dark #main-clube-vs-clube ::-webkit-scrollbar-thumb:hover {
+  background-color: #DAFF017a;
+}
+
+/* active */
+html.dark #main-clube-vs-clube ::-webkit-scrollbar-thumb:active {
+  background-color: #DAFF01;
 }

@@ -1,7 +1,7 @@
 import { buscaTodosClubes, CalcularMediaClube } from "../components/busca-clube";
 import { useEffect, useState, useRef } from "react";
 import type { Clube, Medias } from "../components/busca-clube";
-import '../styles/teste.css';
+import '../styles/comparacao-geral.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import GraficoComparativo from "../components/grafico-comparativo";
@@ -262,10 +262,10 @@ export default function ComparadorDeClubes() {
 
 
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
+        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="mt-15">
             <HeaderFixo/>
 
-            <div className="min-h-screen flex flex-col items-center pb-10 mt-16">
+            <div className="min-h-screen flex flex-col items-center pb-10">
                 <div className="min-h-10 w-full flex justify-center">
                     <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
                     <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>

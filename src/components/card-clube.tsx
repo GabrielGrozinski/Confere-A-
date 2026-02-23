@@ -652,7 +652,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     return (
         <>
             <HeaderFixo />
-            <main style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : ""}} className={`min-h-screen mt-16 ${dark ? '' : 'bg-[#eee5f0]'} grid grid-rows-[auto_1fr]`}>
+            <main style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : ""}} className={`min-h-screen mt-15 ${dark ? '' : 'bg-[#eee5f0]'} grid grid-rows-[auto_1fr]`}>
                 <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around rounded-t-none mb-10 p-4 rounded-lg border-2 border-slate-800/20">
                     <div className="flex flex-col">
                         <img className="max-h-40 max-w-40 self-center" src={clubeEscolhido.imagem} alt="" />

@@ -50,6 +50,8 @@ interface all_context_type {
     largura: number;
     abaEntretenimento: boolean;
     setAbaEntretenimento: (value: boolean) => void;
+    mostrarClubes: boolean;
+    setMostrarClubes: (value: boolean) => void;
 }
 
 export const all_context = createContext<all_context_type>({} as all_context_type);
@@ -57,6 +59,7 @@ export const all_context = createContext<all_context_type>({} as all_context_typ
 export function AllContext({children}: Props) {
     const [dark, setDark] = useState<boolean>(() => localStorage.getItem("tema") === "escuro");
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
+    const [mostrarClubes, setMostrarClubes] = useState<boolean>(false);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const [abaEntretenimento, setAbaEntretenimento] = useState<boolean>(false);
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
@@ -202,7 +205,9 @@ export function AllContext({children}: Props) {
                 abaEntretenimento,
                 setAbaEntretenimento,
                 anoEscolhido,
-                setAnoEscolhido
+                setAnoEscolhido,
+                mostrarClubes,
+                setMostrarClubes
             }}
         >
             {children}

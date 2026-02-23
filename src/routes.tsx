@@ -29,6 +29,7 @@ import TelaLogin from "./pages/login/login";
 import TelaCadastro from "./pages/login/cadastro";
 import Preco from "./pages/preco";
 import ClubeVsClube from "./pages/clube-vs-clube";
+import ClubeVsMundo from "./pages/clube-vs-mundo";
 
 
 export default function Rotas() {
@@ -50,6 +51,7 @@ export default function Rotas() {
                 </Route>
 
                 <Route path="clube-vs-clube" element={<ClubeVsClube/>} />
+                <Route path="clube-vs-mundo" element={<ClubeVsMundo/>} />
 
                 <Route path="produtos" element={<Produtos/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />

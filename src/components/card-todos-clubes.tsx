@@ -6,17 +6,14 @@ import { ClipLoader } from "react-spinners";
 import type { Clube } from "./busca-clube";
 
 
-interface Props {
-    setMostrarClubes: (value: boolean) => void;
-}
-
-export default function CardTodosClubes({setMostrarClubes}: Props) {
-    const { dark } = allContext();
+export default function CardTodosClubes() {
+    const { dark, setMostrarClubes } = allContext();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubes, setClubes] = useState<Clube[] | undefined>(undefined);
     const navigate = useNavigate();
 
     function navegar(nomeClube: string) {
+        setMostrarClubes(false);
         const nomeRota = relacaoClubes(nomeClube);
         navigate(`/${nomeRota}`);
     }
@@ -44,7 +41,7 @@ export default function CardTodosClubes({setMostrarClubes}: Props) {
             :
             <div className="flex-wrap flex justify-center overflow-y-auto">
             {clubes?.map((clube) => (
-                <div onClick={() => navegar(clube.nome)} className={`max-w-28 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center gap-1 justify-center max-h-29 min-h-29 w-full cursor-pointer relative scale-80 border ${dark ? 'bg-zinc-900 border-slate-500/20 hover:bg-amber-400' : 'bg-zinc-200 border-slate-800/20 hover:bg-amber-400'}`}>
+                <div key={clube.nome} onClick={() => navegar(clube.nome)} className={`max-w-28 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center gap-1 justify-center max-h-29 min-h-29 w-full cursor-pointer relative scale-80 border ${dark ? 'bg-zinc-900 border-slate-500/20 hover:bg-amber-400' : 'bg-zinc-200 border-slate-800/20 hover:bg-amber-400'}`}>
                     <img className="max-h-14 max-w-14" src={clube.imagem} alt={clube.nome} />
                     <h1 className={`text-center font-medium ${dark ? 'text-sky-50 text-shadow-[1px_1px_1px_#0000001a]' : 'text-slate-950 text-shadow-[0px_1px_1px_#0000002a]'}`}>{clube.nome}</h1>
                 </div>

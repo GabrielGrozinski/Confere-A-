@@ -394,7 +394,6 @@ export default function ClubeVsClube() {
 
     useEffect(() => {
         if (!clubes) return;
-        console.log('clubeA', clubeANome, 'clubeB', clubeBNome);
         const clubeAEscolhido = clubes?.filter((clube) => clube.nome === clubeANome);
         const clubeBEscolhido = clubes?.filter((clube) => clube.nome === clubeBNome);
 
@@ -437,11 +436,11 @@ export default function ClubeVsClube() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
             <HeaderFixo/>
 
-            <div className="min-h-screen flex flex-col items-center mt-16 pt-2">
-                <main id="main" className="row-1 w-[90%] flex flex-col relative mx-1 pt-2">
+            <div className="min-h-screen flex flex-col items-center pt-2">
+                <main id="main-clube-vs-clube" className="row-1 w-[90%] flex flex-col relative mx-1 pt-2">
                     <h2 className={`text-[32px] md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>

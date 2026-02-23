@@ -1,7 +1,7 @@
 import { buscaTodosClubes, buscaCoisas } from "../components/busca-clube";
 import { useEffect, useState } from "react";
 import type { Clube, Coisas } from "../components/busca-clube";
-import '../styles/teste.css';
+import '../styles/comparacao-geral.css';
 import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import { ClipLoader } from "react-spinners";

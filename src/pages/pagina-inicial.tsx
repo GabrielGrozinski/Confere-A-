@@ -184,7 +184,7 @@ export default function PaginaInicial() {
         setTopicoAtivo('Explorar Dados');
         window.scrollTo({
             top: 0
-        })
+        });
         setAbaEntretenimento(false);
 
         const intervalo = setInterval(() => {
@@ -319,13 +319,13 @@ export default function PaginaInicial() {
                             </span>
 
                             <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none" x-file-name="HeroSection" x-line-number="85" x-component="svg" x-id="HeroSection_85" x-dynamic="false">
-                                <path d="M2 8 C50 2, 100 2, 150 6 S250 10, 298 4" stroke="url(#gold-line)" stroke-width="3" stroke-linecap="round" x-file-name="HeroSection" x-line-number="86" x-component="path" x-id="HeroSection_86" x-dynamic="false">
+                                <path d="M2 8 C50 2, 100 2, 150 6 S250 10, 298 4" stroke="url(#gold-line)" strokeWidth="3" strokeLinecap="round" x-file-name="HeroSection" x-line-number="86" x-component="path" x-id="HeroSection_86" x-dynamic="false">
                                 </path>
                                 <defs x-file-name="HeroSection" x-line-number="87" x-component="defs" x-id="HeroSection_87" x-dynamic="false">
                                     <linearGradient id="gold-line" x1="0" y1="0" x2="300" y2="0" x-file-name="HeroSection" x-line-number="88" x-component="linearGradient" x-id="HeroSection_88" x-dynamic="false">
-                                        <stop offset="0%" stop-color="#D4A74A" stop-opacity="0.2" x-file-name="HeroSection" x-line-number="89" x-component="stop" x-id="HeroSection_89" x-dynamic="false">
+                                        <stop offset="0%" stopColor="#D4A74A" stopOpacity="0.2" x-file-name="HeroSection" x-line-number="89" x-component="stop" x-id="HeroSection_89" x-dynamic="false">
                                         </stop>
-                                        <stop offset="50%" stop-color="#D4A74A" stop-opacity="0.6" x-file-name="HeroSection" x-line-number="90" x-component="stop" x-id="HeroSection_90" x-dynamic="false"></stop><stop offset="100%" stop-color="#D4A74A" stop-opacity="0.2" x-file-name="HeroSection" x-line-number="91" x-component="stop" x-id="HeroSection_91" x-dynamic="false">
+                                        <stop offset="50%" stopColor="#D4A74A" stopOpacity="0.6" x-file-name="HeroSection" x-line-number="90" x-component="stop" x-id="HeroSection_90" x-dynamic="false"></stop><stop offset="100%" stopColor="#D4A74A" stopOpacity="0.2" x-file-name="HeroSection" x-line-number="91" x-component="stop" x-id="HeroSection_91" x-dynamic="false">
                                         </stop>
                                     </linearGradient>
                                 </defs>
@@ -810,9 +810,9 @@ export default function PaginaInicial() {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             className="lucide lucide-chart-column w-7 h-7 text-amber-400"
                             aria-hidden="true"
                         >
@@ -846,9 +846,9 @@ export default function PaginaInicial() {
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 className="lucide lucide-arrow-right w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
                                 aria-hidden="true"
                             >

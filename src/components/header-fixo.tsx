@@ -10,7 +10,7 @@ import MenuAberto from "./menu-aberto";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
-    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento } = allContext();
+    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes } = allContext();
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -94,9 +94,15 @@ export default function HeaderFixo() {
 
     return (
                 <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
-                className={`fixed top-0 w-full max-w-full left-0 z-999 flex pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] box-border border-b ${menuAberto ? dark ? 'border-b-neutral-400/10 border-b' : 'border-b-neutral-800/10 border-b' : mostrarBorder ? dark ? 'border-b-neutral-400/10' : 'border-b-neutral-800/10 ' : 'border-b-transparent'}`}>
+                className={`fixed top-0 w-full max-w-full left-0 z-999 flex pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] box-border ${
+                menuAberto || mostrarBorder
+                    ? dark
+                    ? 'border-b border-neutral-400/10'
+                    : 'border-b border-neutral-800/10'
+                    : 'border-b border-transparent'
+                }`}>
 
-                    <h1 className={`font-[MONELOS] flex items-center ${abaEntretenimento ? 'text-xl' : 'text-2xl'} lg:text-3xl whitespace-nowrap ${dark && 'text-white'}`}>
+                    <h1 onClick={() => navigate('/')} className={`font-[MONELOS] flex items-center text-xl lg:text-3xl whitespace-nowrap ${dark && 'text-white'}`}>
                         <div className="relative translate-y-1.25 max-w-2xl mx-auto px-3 lg:px-4 text-center">
                             <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/15 mb-4">
                                 <svg
@@ -191,7 +197,6 @@ export default function HeaderFixo() {
                                     setBusca('');
                                     }} 
                                     className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
-
                                 </i>
                             </div>
                                     
@@ -326,15 +331,16 @@ export default function HeaderFixo() {
                                     }
 
                                     {mostrarMenuUser &&
-                                        <div className={`absolute bottom-0 translate-y-[101%] min-w-[500%] -translate-x-[calc(100%-44px)] min-h-80 rounded-xl flex flex-col justify-between ${dark ? 'bg-slate-950' : 'bg-white shadow-[0px_0px_2px_#0000005a]'}`}>
+                                        <div className={`absolute bottom-0 translate-y-[101%] min-w-[500%] -translate-x-[calc(100%-44px)] border min-h-80 rounded-xl flex flex-col justify-between ${dark ? 'bg-[rgb(26,28,30)] border-slate-200/20' : 'bg-white border-slate-800/28'}`}>
                                             <div className="w-full flex-1 pt-3 flex flex-col justify-end gap-1 pb-3">
 
                                                 <button 
                                                 onClick={() => {
                                                     setMostrarMenuUser(false);
                                                     navigate('/produtos');
+                                                    setMostrarClubes(true)
                                                 }}
-                                                className={`flex w-[94%] justify-between items-center translate-x-[3%] mb-3 p-1 px-2 cursor-pointer rounded-md ${dark ? 'hover:bg-gray-900 text-neutral-400 hover:text-neutral-200' : 'hover:bg-gray-100 text-neutral-600 hover:text-neutral-800'}`}>
+                                                className={`flex w-[94%] justify-between mb-3 items-center translate-x-[3%] p-1 px-2 transition-all duration-150 cursor-pointer rounded-md ${dark ? 'hover:bg-zinc-700 text-neutral-400 hover:text-neutral-200' : 'hover:bg-zinc-300 text-neutral-600 hover:text-neutral-800'}`}>
                                                     Analisar Clube
                                                     <i className="fa-solid fa-ranking-star"></i>
                                                 </button>
@@ -345,7 +351,7 @@ export default function HeaderFixo() {
                                                         setMostrarMenuUser(false);
                                                         navigate('/comparador-de-clubes');
                                                     }}
-                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 cursor-pointer rounded-md ${dark ? 'hover:bg-gray-900 text-neutral-400 hover:text-neutral-200' : 'hover:bg-gray-100 text-neutral-600 hover:text-neutral-800'}`}>
+                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 transition-all duration-150 cursor-pointer rounded-md ${dark ? 'hover:bg-zinc-700 text-neutral-400 hover:text-neutral-200' : 'hover:bg-zinc-300 text-neutral-600 hover:text-neutral-800'}`}>
                                                         Comparar Clubes
                                                         <i className="fa-solid fa-layer-group"></i>
                                                     </button>
@@ -355,7 +361,7 @@ export default function HeaderFixo() {
                                                         setMostrarMenuUser(false);
                                                         navigate('/comparador-de-coisas');
                                                     }} 
-                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 cursor-pointer rounded-md ${dark ? 'hover:bg-gray-900 text-neutral-400 hover:text-neutral-200' : 'hover:bg-gray-100 text-neutral-600 hover:text-neutral-800'}`}>
+                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 transition-all duration-150 cursor-pointer rounded-md ${dark ? 'hover:bg-zinc-700 text-neutral-400 hover:text-neutral-200' : 'hover:bg-zinc-300 text-neutral-600 hover:text-neutral-800'}`}>
                                                         Comparar Coisas
                                                         <i className="fa-solid fa-chart-simple"></i>
                                                     </button>
@@ -367,7 +373,7 @@ export default function HeaderFixo() {
                                                         deslogarUser();
                                                         navigate('/');
                                                     }} 
-                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 cursor-pointer rounded-md ${dark ? 'hover:bg-gray-900 text-neutral-400 hover:text-neutral-200' : 'hover:bg-gray-100 text-neutral-600 hover:text-neutral-800'}`}>
+                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 transition-all duration-150 cursor-pointer rounded-md ${dark ? 'hover:bg-zinc-700 text-neutral-400 hover:text-neutral-200' : 'hover:bg-zinc-300 text-neutral-600 hover:text-neutral-800'}`}>
                                                         Sair
                                                         <i className="fa-solid fa-arrow-right-from-bracket"></i>
                                                     </button>
@@ -378,7 +384,7 @@ export default function HeaderFixo() {
                                                         setSession(undefined);
                                                         navigate('/login');
                                                     }}
-                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 cursor-pointer rounded-md ${dark ? 'hover:bg-gray-900 text-neutral-400 hover:text-neutral-200' : 'hover:bg-gray-100 text-neutral-600 hover:text-neutral-800'}`}>
+                                                    className={`flex w-[94%] justify-between items-center translate-x-[3%] p-1 px-2 transition-all duration-150 cursor-pointer rounded-md ${dark ? 'hover:bg-zinc-700 text-neutral-400 hover:text-neutral-200' : 'hover:bg-zinc-300 text-neutral-600 hover:text-neutral-800'}`}>
                                                         Trocar conta
                                                         <i className="fa-solid fa-door-open"></i>
                                                     </button>
