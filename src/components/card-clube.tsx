@@ -6,7 +6,8 @@ import HeaderFixo from "./header-fixo";
 import CardProduto from "./card-produtos";
 import { ClipLoader } from "react-spinners";
 import { calcularChanceTitulo } from "./busca-clube";
-
+import FooterFixo from "./footer-fixo";
+import adsense from '/adsense.png';
 
 
 interface props {
@@ -26,7 +27,7 @@ interface InfoCardProps {
     icon?: string;
     mediaData: MediaCardData[];
     largura: number;
-    assinante: boolean;
+    assinante: boolean | undefined;
     dark: boolean;
 }
 
@@ -152,9 +153,11 @@ export function InfoCard(
     const {setMostrarCard} = allContext();
     
     return (
+        (assinante === undefined || assinante) &&
+
         <div
         onClick={() => setMostrarCard(true)} 
-        className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-slate-50'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} lg: min-w-[calc(50%-24px)] overflow-hidden`}>
+        className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-[#f3ebf5]'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} lg: min-w-[calc(50%-24px)] overflow-hidden`}>
             <h2 className={`${dark ? 'text-slate-200' : 'text-slate-700'} font-mono`}>
                 <i className={`${icon}`}></i>{" "}
                 <span>{titulo}</span>
@@ -162,7 +165,7 @@ export function InfoCard(
             {subtitulo &&
             <p className={`font-medium ${dark ? 'text-zinc-100' : 'text-zinc-800'} flex items-center`}>
                 <img
-                className="rounded-sm mr-2 w-8.5 h-6"
+                className="rounded-sm mr-2 w-6.5 h-4.75"
                 src={imagemSubtitulo}
                 alt={imagemAlt}/>   
                 {subtitulo}
@@ -334,7 +337,7 @@ export function InfoCard(
 
 export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFundo }: props) {
     const [loading, setLoading] = useState<boolean>(true);
-    const [assinante, setAssinante] = useState<boolean>(true);
+    const [assinante, setAssinante] = useState<boolean>(false);
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
     const { largura, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
@@ -592,6 +595,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Nota do Clube",
+            assinante,
             icon: `fa-solid fa-star ${dark ? "text-yellow-400" : "text-yellow-500"}`,
             valor: clubeEscolhido.nota_clube,
             sufixo: clubeEscolhido.nota_clube > 7 ?
@@ -605,6 +609,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Chance de Quitar a Dívida",
+            assinante,
             icon: `fa-solid fa-scale-balanced ${dark ? "text-purple-400" : "text-purple-700"}`,
             valor: clubeEscolhido.chance_quitar_divida,
             sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
@@ -620,6 +625,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Chance de Título (2026)",
+            assinante,
             icon: `fa-solid fa-trophy ${dark ? "text-orange-400" : "text-orange-500"}`,
             valor: chanceTitulo,
             sufixo: chanceTitulo > 75 ?
@@ -635,12 +641,14 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Faturamento (2024)",
+            assinante,
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.faturamento_2024 >= 1000 ? clubeEscolhido.faturamento_2024/1000 : clubeEscolhido.faturamento_2024}`,
             sufixo: clubeEscolhido.faturamento_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Dívida (2024)",
+            assinante,
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.divida_2024 >= 1000 ? clubeEscolhido.divida_2024/1000 : clubeEscolhido.divida_2024}`,
             sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
@@ -648,11 +656,55 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
     ];
 
+    type PremiumCard = {
+    id: string
+    title: string
+    description: string
+    previewText: string
+    iconClass: string
+    }
+
+    const premiumCards: PremiumCard[] = [
+    {
+        id: "quitacao-divida",
+        title: "Chance de Quitar Dívida",
+        description:
+        "Análise completa com projeções financeiras e cenários para quitação da dívida do clube",
+        previewText: "Baseado em 12 indicadores econômicos...",
+        iconClass: "fa-solid fa-scale-balanced",
+    },
+    {
+        id: "nota-clube",
+        title: "Nota do Clube",
+        description:
+        "Avaliação detalhada da saúde financeira com rating de investimento",
+        previewText: "Score calculado por especialistas...",
+        iconClass: "fa-solid fa-trophy",
+    },
+    {
+        id: "faturamento",
+        title: "Faturamento (2024)",
+        description:
+        "Avaliação detalhada da saúde financeira com rating de investimento",
+        previewText: "Score calculado por especialistas...",
+        iconClass: "fa-solid fa-sack-dollar",
+    },
+    {
+        id: "divida",
+        title: "Dívida (2024)",
+        description:
+        "Avaliação detalhada da saúde financeira com rating de investimento",
+        previewText: "Score calculado por especialistas...",
+        iconClass: "fa-solid fa-sack-dollar",
+    },
+    ]
+
 
     return (
         <>
             <HeaderFixo />
-            <main style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : ""}} className={`min-h-screen mt-15 ${dark ? '' : 'bg-[#eee5f0]'} grid grid-rows-[auto_1fr]`}>
+            
+            <main style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen mt-15 pb-4 grid grid-rows-[auto_1fr]">
                 <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around rounded-t-none mb-10 p-4 rounded-lg border-2 border-slate-800/20">
                     <div className="flex flex-col">
                         <img className="max-h-40 max-w-40 self-center" src={clubeEscolhido.imagem} alt="" />
@@ -675,57 +727,327 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                         </p>
                     </div>
                 </article>
-                <section className={`row-2 ${largura > 768 ? 'flex flex-wrap' : 'flex flex-col'} gap-6 px-5 pb-10`}>
-                    {loading ? 
-                    <div className="flex-1 flex items-center justify-center">
-                        <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
-                    </div>
-                    :
-                    cards.map((card, index) => (
-                        <InfoCard
-                            key={index}
-                            titulo={card.titulo}
-                            subtitulo={card.subtitulo}
-                            imagemSubtitulo={card.imagemSubtitulo}
-                            imagemAlt={card.imagemAlt}
-                            icon={card.icon}
-                            valor={card.valor}
-                            sufixo={card.sufixo}
-                            mediaData={mediaData}
-                            largura={largura}
-                            assinante={assinante}
-                            dark={dark}
-                        />
-                    ))}
-                </section>
 
-                <div className="flex justify-center">
-                    <div className="bg-white p-2 rounded-2xl flex flex-col max-w-3/4">
-                        <h1 className="ml-4 text-xl">
-                            <i className="fa-solid fa-lock mr-1"></i>
-                            Conteúdo exclusivo para assinantes
-                        </h1>
-                        <ul className="mt-6 ml-10 flex flex-col gap-1">
-                            <li>
-                                <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
-                                Nota do clube
-                            </li>
-                            <li>
-                                <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
-                                Chance de pagar a dívida
-                            </li>
-                            <li>
-                                <i className="fa-solid fa-circle text-slate-900 text-[5.5px] mr-2"></i>
-                                Números de 2024 e 2023
-                            </li>
-                        </ul>
-                        <button className="mt-4">
-                            <i className="fa-solid fa-lock"></i>
-                            Desbloquear dados premium
-                        </button>
+                <main className="grid grid-cols-[auto_1fr_auto] lg:px-4 items-center row-2">
+
+                    <div className="lg:flex justify-start hidden sticky left-0 top-20 self-start">
+                        <img className="max-w-[90%]" src={adsense} alt="" />
                     </div>
-                </div>
+
+                    <div className="col-2">
+                        <section className={`flex ${largura >= 1444 ? 'flex-wrap' : largura >= 1024 ? 'flex-col' : largura > 768 ? 'flex flex-wrap' : ' flex-col'} gap-6 px-5 pb-10`}>
+                            {loading ?
+                            <div className="flex-1 flex items-center justify-center">
+                                <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
+                            </div>
+                            :
+                            cards.map((card, index) => (
+                                <InfoCard
+                                    key={index}
+                                    titulo={card.titulo}
+                                    subtitulo={card.subtitulo}
+                                    imagemSubtitulo={card.imagemSubtitulo}
+                                    imagemAlt={card.imagemAlt}
+                                    icon={card.icon}
+                                    valor={card.valor}
+                                    sufixo={card.sufixo}
+                                    mediaData={mediaData}
+                                    largura={largura}
+                                    assinante={card.assinante}
+                                    dark={dark}
+                                />
+                            ))}
+                        </section>
+
+                        {!assinante &&
+                            <div className="mt-12">
+
+                                <div
+                                className="text-center mb-16"
+                                x-file-name="PremiumSection"
+                                x-line-number="16"
+                                x-component="div"
+                                x-id="PremiumSection_16"
+                                x-dynamic="false"
+                                >
+                                <div
+                                    className="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 mb-4"
+                                    x-file-name="PremiumSection"
+                                    x-line-number="17"
+                                    x-component="div"
+                                    x-id="PremiumSection_17"
+                                    x-dynamic="false"
+                                >
+                                    <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    className="lucide lucide-sparkles h-4 w-4"
+                                    aria-hidden="true"
+                                    x-file-name="PremiumSection"
+                                    x-line-number="18"
+                                    x-component="Sparkles"
+                                    x-id="PremiumSection_18"
+                                    x-dynamic="false"
+                                    >
+                                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                    <path d="M20 3v4"></path>
+                                    <path d="M22 5h-4"></path>
+                                    <path d="M4 17v2"></path>
+                                    <path d="M5 18H3"></path>
+                                    </svg>
+
+                                    Conteúdo Exclusivo
+                                </div>
+
+                                <h2
+                                    className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                                    x-file-name="PremiumSection"
+                                    x-line-number="21"
+                                    x-component="h2"
+                                    x-id="PremiumSection_21"
+                                    x-dynamic="false"
+                                >
+                                    Análises 
+                                    <span
+                                    className="text-yellow-600 ml-1.5"
+                                    x-file-name="PremiumSection"
+                                    x-line-number="22"
+                                    x-component="span"
+                                    x-id="PremiumSection_22"
+                                    x-dynamic="false"
+                                    >
+                                    Premium
+                                    </span>
+                                </h2>
+
+                                <p
+                                    className="text-lg text-gray-600 max-w-2xl mx-auto"
+                                    x-file-name="PremiumSection"
+                                    x-line-number="24"
+                                    x-component="p"
+                                    x-id="PremiumSection_24"
+                                    x-dynamic="false"
+                                >
+                                    Desbloqueie insights avançados e projeções exclusivas sobre o futuro do
+                                    Corinthians.
+                                </p>
+                                </div>
+
+                                <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
+
+                                <span className="contents">
+
+                                    <div className="rounded-xl bg-card text-card-foreground shadow relative border-2 border-yellow-200 hover:border-yellow-400 hover:shadow-2xl transition-all duration-300 overflow-hidden group">
+
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-bl-full opacity-50 group-hover:opacity-70 transition-opacity"></div>
+
+                                    <div className="flex flex-col space-y-1.5 p-6 relative">
+
+                                        <div className="flex items-start justify-between mb-3">
+
+                                        <div className="p-4 rounded-2xl bg-yellow-500 text-white shadow-lg group-hover:scale-110 transition-transform">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 lucide lucide-lock" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                            </svg>
+                                        </div>
+
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-sm text-gray-600 font-medium">A partir de</span>
+                                            <span className="text-2xl font-bold text-yellow-600">
+                                            <span className="contents">R$ 5,00</span>
+                                            </span>
+                                            <span className="text-xs text-gray-500">uma vez</span>
+                                        </div>
+
+                                        </div>
+
+                                        <div className="tracking-tight text-2xl font-bold text-gray-900 mb-2">
+                                        Chance de Quitar Dívida
+                                        </div>
+
+                                        <div className="text-base text-gray-600">
+                                        Análise detalhada com projeções financeiras, cenários otimistas e pessimistas.
+                                        </div>
+
+                                    </div>
+
+                                    <div className="p-6 pt-0 relative">
+                                        <div className="space-y-3">
+
+                                        <p className="text-sm font-semibold text-gray-900 mb-3">
+                                            O que está incluído:
+                                        </p>
+
+                                        <span className="contents">
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Projeção de quitação em 3 cenários</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Análise de fluxo de caixa</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Impacto de novos patrocínios</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Comparativo com outros clubes</span>
+                                            </div>
+
+                                        </span>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center p-6 pt-6">
+                                        <button className="inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-5 w-5 lucide lucide-lock group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+
+                                        Desbloquear Acesso
+                                        </button>
+                                    </div>
+
+                                    </div>
+
+
+                                    <div className="rounded-xl bg-card text-card-foreground shadow relative border-2 border-yellow-200 hover:border-yellow-400 hover:shadow-2xl transition-all duration-300 overflow-hidden group">
+
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-bl-full opacity-50 group-hover:opacity-70 transition-opacity"></div>
+
+                                    <div className="flex flex-col space-y-1.5 p-6 relative">
+
+                                        <div className="flex items-start justify-between mb-3">
+
+                                        <div className="p-4 rounded-2xl bg-yellow-500 text-white shadow-lg group-hover:scale-110 transition-transform">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 lucide lucide-lock" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                            </svg>
+                                        </div>
+
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-sm text-gray-600 font-medium">A partir de</span>
+                                            <span className="text-2xl font-bold text-yellow-600">
+                                            <span className="contents">R$ 9,90</span>
+                                            </span>
+                                            <span className="text-xs text-gray-500">uma vez</span>
+                                        </div>
+
+                                        </div>
+
+                                        <div className="tracking-tight text-2xl font-bold text-gray-900 mb-2">
+                                        Chance de Quitar Dívida
+                                        </div>
+
+                                        <div className="text-base text-gray-600">
+                                        Análise detalhada com projeções financeiras, cenários otimistas e pessimistas.
+                                        </div>
+
+                                    </div>
+
+                                    <div className="p-6 pt-0 relative">
+                                        <div className="space-y-3">
+
+                                        <p className="text-sm font-semibold text-gray-900 mb-3">
+                                            O que está incluído:
+                                        </p>
+
+                                        <span className="contents">
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Projeção de quitação em 3 cenários</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Análise de fluxo de caixa</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Impacto de novos patrocínios</span>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5 lucide lucide-circle-check" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            <span className="text-sm text-gray-700">Comparativo com outros clubes</span>
+                                            </div>
+
+                                        </span>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center p-6 pt-6">
+                                        <button className="inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-5 w-5 lucide lucide-lock group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+
+                                        Desbloquear Acesso
+                                        </button>
+                                    </div>
+
+                                    </div>
+                                </span>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div className="lg:flex justify-end hidden sticky left-0 top-20 self-start">
+                        <img className="max-w-[90%]" src={adsense} alt="" />
+                    </div>
+
+                </main>
             </main>
+
             {mostrarCard &&
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
                     <div 
@@ -738,6 +1060,8 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     </div>
                 </div>
             }
+
+            <FooterFixo />
         </>
     )
 }

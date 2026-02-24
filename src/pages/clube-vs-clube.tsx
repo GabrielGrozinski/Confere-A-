@@ -668,7 +668,7 @@ export default function ClubeVsClube() {
                     </div>
                 </main>
 
-                <div className="lg:flex justify-start hidden">
+                <div className="lg:flex justify-end hidden">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
             </div>

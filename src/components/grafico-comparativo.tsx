@@ -82,7 +82,7 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
                 return (
                     <g transform={`translate(${x},${y})`}>
                     <image
-                        className="xl:scale-200"
+                        className="xl:scale-200 lg:scale-150"
                         href={item.img}
                         x={-10}
                         y={largura < 1280 ? 12 : 6}

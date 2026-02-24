@@ -25,6 +25,7 @@ export interface Clube {
     chance_quitar_divida: number;
     aumento_faturamento: number;
     nota_clube: number;
+    valor_estimado: number
 }
 
 export interface Coisas {

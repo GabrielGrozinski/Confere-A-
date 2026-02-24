@@ -8,6 +8,7 @@ import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
 import { ClipLoader } from "react-spinners";
 import adsense from '/adsense.png';
+import FooterFixo from "../components/footer-fixo";
 
 
 type TopicoComparacao = {
@@ -54,7 +55,7 @@ export type DadosClube = {
 
 
 export default function ComparadorDeClubes() {
-    const {setTopicoAtivo, setAbaEntretenimento} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, largura} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
@@ -385,14 +386,33 @@ export default function ComparadorDeClubes() {
                                     <ClipLoader size={30} color='#fff'/>
                                 </div>
                                 :
-                                clubes?.map((clube) => (
-                                    <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
-                                        <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
-                                            <i className="fa-solid fa-check text-[10px]"></i>
+                                clubes?.map((clube, index) => (
+                                    <>
+                                        <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
+                                            <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
+                                                <i className="fa-solid fa-check text-[10px]"></i>
+                                            </div>
+                                            <img className="max-h-22" src={clube.imagem} alt={clube.nome} />
+                                            <h1 className="text-center text-sky-950">{clube.nome}</h1>
                                         </div>
-                                        <img className="max-h-22" src={clube.imagem} alt={clube.nome} />
-                                        <h1 className="text-center text-sky-950">{clube.nome}</h1>
-                                    </div>
+
+                                        {
+                                            largura >= 1280 ?
+                                                (index - 5 === -1 || index - 5 === 4 || index - 5 === 9 || index - 5 === 14) &&
+                                                    <div className="min-h-34 col-span-full min-w-full px-4">
+                                                        <div className="min-w-full min-h-34">
+
+                                                        </div>
+                                                    </div>
+                                            :
+                                            largura >= 1024 &&
+                                                (index - 4 === -1 || index - 4 === 3 || index - 4 === 7 || index - 4 === 11 || index - 4 === 15) &&
+                                                    <div className="cols-span-full bg-red-400">
+
+                                                    </div>
+                                            
+                                        }
+                                    </>
                                 ))}
                             </div>
                         </article>
@@ -404,6 +424,8 @@ export default function ComparadorDeClubes() {
                 </div>
 
             </div>
+
+            <FooterFixo />
         </div>
     )
 }
