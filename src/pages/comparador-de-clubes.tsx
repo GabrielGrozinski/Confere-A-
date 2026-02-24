@@ -7,6 +7,7 @@ import { allContext } from "../context/all-context";
 import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
 import { ClipLoader } from "react-spinners";
+import adsense from '/adsense.png';
 
 
 type TopicoComparacao = {
@@ -265,137 +266,143 @@ export default function ComparadorDeClubes() {
         <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="mt-15">
             <HeaderFixo/>
 
-            <div className="min-h-screen flex flex-col items-center pb-10">
-                <div className="min-h-10 w-full flex justify-center">
-                    <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
-                    <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
-                    <Popover.Trigger asChild>
-                        <button className="text-stone-800 font-medium flex items-center w-full justify-center">
-                        Comparar por: <strong><span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]"></i></span></strong>
-                        </button>
-                    </Popover.Trigger>
+            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-10 relative">
 
-                    {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') && 
-                        <button 
-                        className="min-w-22 max-w-22 min-h-full max-h-full border border-slate-800/40 rounded-lg text-center flex items-center justify-center pl-1 my-1"  
-                        >
-                            <span>{2025 + anoEscolhido}</span>
-                            <span className="flex flex-col text-[12px] py-px ml-2">
-                                <i 
-                                onTouchStart={() => startPress} 
-                                className="fa-solid fa-sort-up cursor-pointer"
-                                onTouchEnd={() => stopPress}
-                                onMouseDown={startPress}
-                                onMouseUp={stopPress}
-                                onMouseLeave={stopPress}
-                                >
-
-                                </i>
-
-                                <i 
-                                onTouchStart={() => downPress}
-                                className="fa-solid fa-sort-down cursor-pointer"
-                                onTouchEnd={() => stopPress}
-                                onMouseDown={downPress}
-                                onMouseUp={stopPress}
-                                onMouseLeave={stopPress}
-                                >
-
-                                </i>
-                            </span>
-                        </button>
-                    }
-
-                    <Popover.Portal>
-                        <Popover.Content
-                        sideOffset={8}
-                        className="w-96 max-h-96 overflow-y-auto rounded-xl bg-slate-900 border border-gray-700/70 p-4 shadow-xl z-10"
-                        >
-                        <div className="space-y-6">
-                            {Object.entries(agrupadosPorCategoria).map(
-                            ([categoria, topicos]) => (
-                                <div key={categoria} className="space-y-2">
-                                <h4 className="text-xs font-semibold uppercase text-slate-400">
-                                    {categoria}
-                                </h4>
-
-                                <div className="space-y-1">
-                                    {topicos.map((item: TopicoComparacao) => (
-                                    <button
-                                        key={item.label}
-                                        onClick={() => {
-                                            setTopico(item.label);
-                                            setPopoverAberto(false);
-                                        }}
-                                        className={`
-                                        w-full text-left px-3 py-2 rounded-md
-                                        transition
-                                        ${
-                                            topico === item.label
-                                            ? 'bg-sky-500/20 text-sky-300'
-                                            : 'hover:bg-slate-800 text-slate-200'
-                                        }
-                                        `}
-                                    >
-                                        {item.label}
-                                    </button>
-                                    ))}
-                                </div>
-                                </div>
-                            )
-                            )}
-                        </div>
-                        </Popover.Content>
-                    </Popover.Portal>
-                    </Popover.Root>
-
-                    </div>
+                <div className="lg:flex justify-start hidden sticky left-0 top-20 self-start">
+                    <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
-                <main id="main" className="row-1 w-[90%] grid grid-rows-[56px_400px_64px] relative mx-1 max-h-120 pt-2 mb-16">
-                    <div className="row-1 h-full min-w-full flex gap-0 bg-yellow-500 shadow-[4px_-4px_3px_#0000002a] rounded-t-xl rounded-br-none items-center justify-center border-b border-b-slate-800/50">
-                            <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">Clubes Brasileiros</h1>
-                    </div>
 
-                    <GraficoComparativo clubesSelecionados={clubesSelecionados} topico={topico} />
-
-
-                    <div className="row-3 rounded-b-xs border-t border-t-slate-800/50 h-full min-w-full bg-[#3e495e] p-2 flex items-center flex-col">
-                            <h1 className="text-sm text-slate-200 text-shadow-[1px_1px_1px_#0000002a]">
-                                {
-                                    (correlacaoTopicoCampo[topico] === 'chanceQuitarDivida' || correlacaoTopicoCampo[topico] === 'fatDiv' || correlacaoTopicoCampo[topico] === 'lucFat' || correlacaoTopicoCampo[topico] === 'notaClube' || correlacaoTopicoCampo[topico] === 'custoGol' || correlacaoTopicoCampo[topico] === 'custoJogador' || correlacaoTopicoCampo[topico] === 'custoPonto' || correlacaoTopicoCampo[topico] === 'folha_salarial' || correlacaoTopicoCampo[topico] === 'custoVitoria') ? 'Média dos Clubes'
-                                    :
-                                    'Total dos Clubes'
-                                }
-                            </h1>
-                            <h2 className="text-sm text-amber-300 text-shadow-[1px_1px_1px_#0000002a]">{valorClubes}</h2>
-                    </div>
-                </main>
- 
-            <section className="max-w-full min-w-full mt-8 flex flex-col relative">
-                <article className="col-1">
-                    <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
-
-                    <div className="w-full h-full mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center px-4">
-                       {loading ? 
-                        <div className="flex-1 flex items-center justify-center">
-                            <ClipLoader size={30} color='#fff'/>
-                        </div>
-                        :
-                        clubes?.map((clube) => (
-                            <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
-
-                                <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
-                                    <i className="fa-solid fa-check text-[10px]"></i>
-                                </div>
-
-                                <img className="max-h-22" src={clube.imagem} alt={clube.nome} />
-                                <h1 className="text-center text-sky-950">{clube.nome}</h1>
+                <main className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                    <div className="min-h-10 w-full flex justify-center">
+                        <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
+                        <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
+                        <Popover.Trigger asChild>
+                            <button className="text-stone-800 font-medium flex items-center w-full justify-center">
+                            Comparar por: <strong><span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]"></i></span></strong>
+                            </button>
+                        </Popover.Trigger>
+                        {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') &&
+                            <button
+                            className="min-w-22 max-w-22 min-h-full max-h-full border border-slate-800/40 rounded-lg text-center flex items-center justify-center pl-1 my-1"
+                            >
+                                <span>{2025 + anoEscolhido}</span>
+                                <span className="flex flex-col text-[12px] py-px ml-2">
+                                    <i
+                                    onTouchStart={() => startPress}
+                                    className="fa-solid fa-sort-up cursor-pointer"
+                                    onTouchEnd={() => stopPress}
+                                    onMouseDown={startPress}
+                                    onMouseUp={stopPress}
+                                    onMouseLeave={stopPress}
+                                    >
+                                    </i>
+                                    <i
+                                    onTouchStart={() => downPress}
+                                    className="fa-solid fa-sort-down cursor-pointer"
+                                    onTouchEnd={() => stopPress}
+                                    onMouseDown={downPress}
+                                    onMouseUp={stopPress}
+                                    onMouseLeave={stopPress}
+                                    >
+                                    </i>
+                                </span>
+                            </button>
+                        }
+                        <Popover.Portal>
+                            <Popover.Content
+                            sideOffset={8}
+                            className="w-96 max-h-96 overflow-y-auto rounded-xl bg-slate-900 border border-gray-700/70 p-4 shadow-xl z-10"
+                            >
+                            <div className="space-y-6">
+                                {Object.entries(agrupadosPorCategoria).map(
+                                ([categoria, topicos]) => (
+                                    <div key={categoria} className="space-y-2">
+                                    <h4 className="text-xs font-semibold uppercase text-slate-400">
+                                        {categoria}
+                                    </h4>
+                                    <div className="space-y-1">
+                                        {topicos.map((item: TopicoComparacao) => (
+                                        <button
+                                            key={item.label}
+                                            onClick={() => {
+                                                setTopico(item.label);
+                                                setPopoverAberto(false);
+                                            }}
+                                            className={`
+                                            w-full text-left px-3 py-2 rounded-md
+                                            transition
+                                            ${
+                                                topico === item.label
+                                                ? 'bg-sky-500/20 text-sky-300'
+                                                : 'hover:bg-slate-800 text-slate-200'
+                                            }
+                                            `}
+                                        >
+                                            {item.label}
+                                        </button>
+                                        ))}
+                                    </div>
+                                    </div>
+                                )
+                                )}
                             </div>
-                        ))}
+                            </Popover.Content>
+                        </Popover.Portal>
+                        </Popover.Root>
+                        </div>
                     </div>
-                </article>
 
-            </section>
+                    <main id="main" className="grid grid-rows-[56px_400px_64px] relative mx-1 max-h-120 pt-2 mb-16">
+                        <h1 className="absolute top-0 right-0 translate-y-20 text-neutral-400 font-mono font-semibold -translate-x-[10%] z-1 text-xs">
+                            {(topico === 'Chance de Quitar a Dívida' || topico === 'Faturamento/Dívida' || topico === 'Lucro/Faturamento') ? 'Valor em Porcentagem' : topico === 'Nota do Clube' ? 'Valor em unidades' : 'Valor em milhões de Reais'}
+                        </h1>
+                        <div className="row-1 h-full min-w-full flex gap-0 bg-yellow-500 shadow-[4px_-4px_3px_#0000002a] rounded-t-xl rounded-br-none items-center justify-center border-b border-b-slate-800/50">
+
+                            <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">
+                                Clubes Brasileiros
+                            </h1>
+
+                        </div>
+                        <GraficoComparativo clubesSelecionados={clubesSelecionados} topico={topico} />
+                        <div className="row-3 rounded-b-xs border-t border-t-slate-800/50 h-full min-w-full bg-[#3e495e] p-2 flex items-center flex-col">
+                                <h1 className="text-sm text-slate-200 text-shadow-[1px_1px_1px_#0000002a]">
+                                    {
+                                        (correlacaoTopicoCampo[topico] === 'chanceQuitarDivida' || correlacaoTopicoCampo[topico] === 'fatDiv' || correlacaoTopicoCampo[topico] === 'lucFat' || correlacaoTopicoCampo[topico] === 'notaClube' || correlacaoTopicoCampo[topico] === 'custoGol' || correlacaoTopicoCampo[topico] === 'custoJogador' || correlacaoTopicoCampo[topico] === 'custoPonto' || correlacaoTopicoCampo[topico] === 'folha_salarial' || correlacaoTopicoCampo[topico] === 'custoVitoria') ? 'Média dos Clubes'
+                                        :
+                                        'Total dos Clubes'
+                                    }
+                                </h1>
+                                <h2 className="text-sm text-amber-300 text-shadow-[1px_1px_1px_#0000002a]">{valorClubes}</h2>
+                        </div>
+                    </main>
+
+                    <section className="max-w-full min-w-full mt-8 flex flex-col relative">
+                        <article className="col-1">
+                            <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
+                            <div className="w-full h-full mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center px-4">
+                            {loading ?
+                                <div className="flex-1 flex items-center justify-center">
+                                    <ClipLoader size={30} color='#fff'/>
+                                </div>
+                                :
+                                clubes?.map((clube) => (
+                                    <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
+                                        <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
+                                            <i className="fa-solid fa-check text-[10px]"></i>
+                                        </div>
+                                        <img className="max-h-22" src={clube.imagem} alt={clube.nome} />
+                                        <h1 className="text-center text-sky-950">{clube.nome}</h1>
+                                    </div>
+                                ))}
+                            </div>
+                        </article>
+                    </section>
+                </main>
+
+                <div className="lg:flex justify-end hidden sticky left-0 top-20 self-start">
+                    <img className="max-w-[90%]" src={adsense} alt="" />
+                </div>
+
             </div>
         </div>
     )

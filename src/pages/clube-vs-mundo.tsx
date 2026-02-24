@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
+import adsense from '/adsense.png';
 
 
 type TopicoComparacao = {
@@ -182,6 +183,13 @@ export default function ClubeVsMundo() {
                 icon: "clapperboard"
             },
             {
+                category: "Cultura Pop",
+                title: "1 ano de Netflix",
+                price: "R$ 600 cada",
+                quantity: Math.floor(valorTopico/(600/1000/1000)),
+                icon: "clapperboard"
+            },
+            {
                 category: "Empresa",
                 title: "McDonald's",
                 price: "R$ 40M cada",
@@ -306,12 +314,17 @@ export default function ClubeVsMundo() {
         <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
             <HeaderFixo/>
 
-            <div className="min-h-screen flex flex-col items-center pt-2">
-                <main id="main-clube-vs-clube" className="row-1 w-[90%] flex flex-col relative mx-1 pt-2">
-                    <h2 className={`text-[32px] md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
+            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2">
+
+                <div className="lg:flex justify-start hidden">
+                    <img className="max-w-[90%]" src={adsense} alt="" />
+                </div>
+
+                <main id="main-clube-vs-clube" className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                    <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Além do Futebol
                     </h2>
-                    <p className={`text-base mt-2 max-w-lg ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
+                    <p className={`text-base text-center mt-2 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
                     A dívida do seu clube compra quantas Ferraris? Descubra comparações surpreendentes.
                     </p>
 
@@ -514,7 +527,7 @@ export default function ClubeVsMundo() {
                                         <p className={`text-3xl font-bold mt-1 ${dark ? 'text-[#DAFF01]' : 'text-orange-400'}`}>
                                             {card.quantity}
                                             <span className={`text-base font-medium ml-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-[#222222]'}`}>
-                                            unidades
+                                            {card.title === '1 ano de Netflix' ? 'anos' : 'unidades'}
                                             </span>
                                         </p>
                                         </div>
@@ -529,6 +542,10 @@ export default function ClubeVsMundo() {
 
                     </div>
                 </main>
+
+                <div className="lg:flex justify-start hidden">
+                    <img className="max-w-[90%]" src={adsense} alt="" />
+                </div>
 
             </div>
 

@@ -57,9 +57,6 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
 
     {clubesSelecionados.length > 0 ? 
     <>
-    <h1 className="absolute top-0 right-0 translate-y-1/2 text-neutral-400 font-mono font-semibold -translate-x-[10%] z-1 text-xs">
-        {(topico === 'Chance de Quitar a Dívida' || topico === 'Faturamento/Dívida' || topico === 'Lucro/Faturamento') ? 'Valor em Porcentagem' : topico === 'Nota do Clube' ? 'Valor em unidades' : 'Valor em milhões de Reais'}
-    </h1>
 
     <div
       className="h-full min-w-40 pr-2"

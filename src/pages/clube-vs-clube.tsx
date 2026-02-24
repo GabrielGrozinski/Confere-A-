@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
+import adsense from '/adsense.png';
 
 
 type TopicoComparacao = {
@@ -436,15 +437,19 @@ export default function ClubeVsClube() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15 overflow-x-hidden">
             <HeaderFixo/>
 
-            <div className="min-h-screen flex flex-col items-center pt-2">
-                <main id="main-clube-vs-clube" className="row-1 w-[90%] flex flex-col relative mx-1 pt-2">
-                    <h2 className={`text-[32px] md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
+            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2">
+                <div className="lg:flex justify-start hidden">
+                    <img className="max-w-[90%]" src={adsense} alt="" />
+                </div>
+
+                <main id="main-clube-vs-clube" className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                    <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>
-                    <p className={`text-base mt-2 max-w-lg ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
+                    <p className={`text-base text-center mt-2 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
                     Selecione dois clubes e veja a batalha financeira lado a lado.
                     </p>
 
@@ -663,6 +668,9 @@ export default function ClubeVsClube() {
                     </div>
                 </main>
 
+                <div className="lg:flex justify-start hidden">
+                    <img className="max-w-[90%]" src={adsense} alt="" />
+                </div>
             </div>
 
             <FooterFixo />
