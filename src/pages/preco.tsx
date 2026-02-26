@@ -17,148 +17,154 @@ export default function Preco() {
 
     const planos = [
     {
-        nome: 'Gratuito',
-        preco: 0,
-        descricao: 'O que o Confere Aê oferece',
-        bgLight: 'bg-white shadow-[0px_0px_2px_#0000002a] border border-slate-800/20 text-slate-800',
-        bgDark: 'bg-slate-900 text-slate-100 border border-slate-300/20',
-        buttonClass: (dark: boolean) =>
-            dark
-            ? 'bg-slate-900 border-slate-300/20'
-            : 'bg-white border-slate-800/30',
-        features: [
-        { texto: 'Ferramentas gratuítas', icone: 'fa-check fa-solid' },
-        { texto: 'Análise de cada clube', icone: 'fa-check fa-solid' },
-        { texto: 'Comparador de Clubes', icone: 'fa-check fa-solid' },
-        { texto: 'Comparador de Coisas', icone: 'fa-check fa-solid' }
+        id: 0,
+        preco: "R$ 0,00",
+        titulo: "Gratuíto",
+        descricao:
+        "O que o Confere Aê oferece.",
+        icone: 'fa-solid fa-arrows-rotate text-shadow-[1px_1px_1px_#0000002a]',
+        beneficios: [
+        "Ferramentas gratuítas",
+        "Análise de cada clube",
+        "Comparador de Clubes",
+        "Comparador de Coisas",
         ],
-        getButtonText: (planoAtivo: string) =>
-        planoAtivo === 'Gratuito'
-            ? 'Seu Plano Atual'
-            : 'Plano Gratuito'
+        botao: "Desbloquear Acesso",
     },
     {
-        nome: 'Torcedor',
-        preco: 5,
-        descricao: 'Analise melhor seu Clube',
-        bgLight: 'bg-sky-100 shadow-[0px_0px_2px_#0000002a] border border-slate-800/20 text-slate-900',
-        bgDark: 'bg-blue-950 text-slate-100 border border-slate-300/20',
-        buttonClass: (dark: boolean, planoAtivo: string) =>
-        dark
-            ? `border border-slate-200/30 ${
-                planoAtivo === 'Torcedor' || planoAtivo === 'Sócio'
-                ? 'bg-blue-950'
-                : 'bg-blue-700 cursor-pointer'
-            }`
-            : `border ${
-                planoAtivo === 'Torcedor' || planoAtivo === 'Sócio'
-                ? 'bg-sky-100 border-slate-800/40'
-                : 'bg-sky-400/80 text-slate-100 text-shadow-[1px_1px_1px_#0000002a] cursor-pointer border-slate-400/40'
-            }`,
-        features: [
-        { texto: 'Sem anúncios', icone: 'fa-check fa-solid' },
-        { texto: 'Potencial de Crescimento', icone: 'fa-check fa-solid' },
-        { texto: 'Comparação com 2024', icone: 'fa-check fa-solid' },
-        { texto: 'Comparação com 2023', icone: 'fa-check fa-solid' },
-        { texto: 'Chance de Título', icone: 'fa-check fa-solid' }
+        id: 1,
+        preco: "R$ 5,00",
+        titulo: "Torcedor",
+        descricao:
+        "Acesse análises avançadas e compare a evolução do seu clube com dados históricos e projeções exclusivas.",
+        icone: 'fa-solid fa-trophy text-shadow-[1px_1px_1px_#0000002a]',
+        beneficios: [
+        "Faturamento de 2024",
+        "Dívida de 2024",
+        "Potencial de Crescimento",
+        "Chance de Título",
+        "Valor estimado do clube",
+        "Sem anúncios",
         ],
-        getButtonText: (planoAtivo: string) => {
-        if (planoAtivo === 'Torcedor') return 'Seu Plano Atual'
-        if (planoAtivo === 'Sócio') return 'Plano Torcedor'
-        return 'Fazer upgrade para o Torcedor'
-        }
+        botao: "Desbloquear Acesso",
     },
     {
-        nome: 'Sócio',
-        preco: 10,
-        descricao: 'Analista Supremo',
-        bgLight: 'bg-violet-200/80 shadow-[0px_0px_2px_#0000002a] border border-slate-800/20 text-slate-900',
-        bgDark: 'bg-violet-800/40 text-slate-100 border border-slate-300/20',
-        buttonClass: (dark: boolean, planoAtivo: string) =>
-        dark
-            ? `border-slate-300/40 ${
-                planoAtivo === 'Sócio'
-                ? 'bg-violet-800/40'
-                : 'bg-violet-600 cursor-pointer'
-            }`
-            : `border ${
-                planoAtivo === 'Sócio'
-                ? 'bg-violet-200/80 border-slate-800/40'
-                : 'bg-violet-500 text-white text-shadow-[1px_1px_1px_#0000002a] cursor-pointer border-slate-400/40'
-            }`,
-        features: [
-        { texto: 'Ferramentas em Desenvolvimento', icone: 'fa-check fa-solid' },
-        { texto: 'Nota do Clube', icone: 'fa-check fa-solid' },
-        { texto: 'Chance de Quitar a Dívida', icone: 'fa-check fa-solid' },
-        { texto: 'Potencial de Crescimento', icone: 'fa-check fa-solid' },
-        { texto: 'Comparação com 2024', icone: 'fa-check fa-solid' },
-        { texto: 'Comparação com 2023', icone: 'fa-check fa-solid' },
-        { texto: 'Sem anúncios', icone: 'fa-check fa-solid' }
+        id: 2,
+        preco: "R$ 9,90",
+        titulo: "Sócio",
+        descricao:
+        "A experiência mais completa para quem quer entender o clube como um verdadeiro analista.",
+        icone: 'fa-brands fa-web-awesome text-shadow-[1px_1px_1px_#0000002a]',
+        beneficios: [
+        "Chance de Título",
+        "Valor estimado do clube",
+        "Faturamento de 2024",
+        "Dívida de 2024",
+        "Nota geral do Clube",
+        "Chance de Quitar a Dívida",
+        "Potencial de Crescimento",
+        "Todas as ferramentas em desenvolvimento",
+        "Sem anúncios",
+
         ],
-        getButtonText: (planoAtivo: string) =>
-        planoAtivo === 'Sócio'
-            ? 'Seu Plano Atual'
-            : 'Fazer upgrade para o Sócio'
-    }
-    ]
+        botao: "Desbloquear Acesso",
+    },
+    ];
 
     return (
-        <div>
+        <div style={{background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
             <HeaderFixo />
 
-            <div style={{background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen pt-18 flex flex-col items-center mb-22">
+            <div className="min-h-screen pt-18 flex flex-col items-center mb-22">
 
                 <h2 className={`text-[36px] md:text-[48px] font-bold mt-3 mb-15 tracking-[-0.015em] ${dark ? 'text-white' : 'text-zinc-900'}`}>
                     Todos os Planos
                 </h2>
 
                 <div className="flex justify-center gap-8 flex-col lg:flex-row">
-                {planos.map((plano) => (
-                    <div
-                    key={plano.nome}
-                    onClick={() => setPlanoAtivo(plano.nome)}
-                    className={`min-h-140 min-w-80 rounded-xl flex flex-col p-8 gap-4 text-3xl relative ${
-                        !dark ? plano.bgLight : plano.bgDark
-                    }`}
-                    >
-                    {plano.nome === 'Torcedor' &&
-                        <div className={`absolute text-sm p-2 px-4 pb-2.25 top-0 right-0 -translate-y-1/2 -translate-x-1/8 rounded-full border ${dark ? 'bg-blue-700 border-slate-800/40' : 'bg-sky-400 text-white text-shadow-[1px_1px_1px_#0000002a] border-slate-400/40'}`}>
-                            Mais Popular
+                    {planos.map((plano) => (
+                        <div
+                        key={plano.id}
+                        className={`rounded-xl grid max-h-180 min-h-180 min-w-100 max-w-100 grid-rows-[1fr_10%] bg-card text-card-foreground shadow relative border-2 hover:shadow-2xl transition-all duration-300 overflow-hidden group ${plano.id === 2 ? dark ? 'border-red-500 hover:border-red-600 bg-[rgb(26,28,30)]' : 'border-red-400 hover:border-red-500 bg-white' : dark ? 'border-amber-300 hover:border-amber-400 bg-[rgb(26,28,30)]' : 'border-yellow-200 hover:border-yellow-400 bg-white'}`}
+                        >
+                            <div>
+                                <div className={`absolute top-0 right-0 w-32 h-32 rounded-bl-full transition-opacity ${plano.id === 2 ? dark ? 'bg-red-200 opacity-90 group-hover:opacity-100' : 'bg-red-200 opacity-90 group-hover:opacity-100' : dark ? ' bg-amber-100 opacity-90 group-hover:opacity-100' : 'bg-yellow-100  opacity-50 group-hover:opacity-70'}`}></div>
+                                <div className="flex flex-col space-y-1.5 p-6 relative">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div className={`p-4 rounded-2xl text-white shadow-lg group-hover:scale-110 transition-transform ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'}`}>
+                                            <i className={plano.icone}></i>
+                                        </div>
+                                        <div className="flex flex-col items-end translate-x-2">
+                                            <span className="text-sm text-gray-700 font-medium">
+                                            A partir de
+                                            </span>
+                                            <span className={`text-2xl font-bold ${plano.id === 2 ? 'text-red-700' : 'text-yellow-600'}`}>
+                                            {plano.preco}
+                                            </span>
+                                            <span className="text-xs text-gray-500">uma vez</span>
+                                        </div>
+                                    </div>
+                                    <div className={`tracking-tight text-2xl font-bold mb-2 ${dark ? 'text-gray-100' : 'text-gray-900'}`}>
+                                    {plano.titulo}
+                                    </div>
+                                    <div className={`text-base ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    {plano.descricao}
+                                    </div>
+                                </div>
+                                <div className="p-6 pt-0 relative">
+                                    <div className="space-y-3">
+                                    <p className={`text-sm font-semibold mb-3 ${dark ? 'text-gray-100' : 'text-gray-900'}`}>
+                                        O que está incluído:
+                                    </p>
+                                    {plano.beneficios.map((beneficio, index) => (
+                                        <div key={index} className="flex items-start gap-3">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            className={`lucide lucide-circle-check h-5 w-5 shrink-0 mt-0.5 ${plano.id === 2 ? 'text-red-600' : 'text-yellow-600'}`}
+                                            aria-hidden="true"
+                                        >
+                                            <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            ></circle>
+                                            <path
+                                            d="m9 12 2 2 4-4"
+                                            ></path>
+                                        </svg>
+                                        <span className={`text-sm font-medium relative ${dark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {beneficio}
+                                            {plano.id === 2 && (beneficio === 'Chance de Título' || beneficio === 'Valor estimado do clube' || beneficio === 'Faturamento de 2024' || beneficio === 'Dívida de 2024' || beneficio === 'Nota geral do Clube' || beneficio === 'Chance de Quitar a Dívida' || beneficio === 'Potencial de Crescimento') &&
+                                                <i className={`fa-solid fa-bolt ml-1 ${plano.id === 2 ? 'text-red-400' : dark ? 'text-amber-200' : 'text-amber-400'}`}></i>
+                                            }
+                                        </span>
+                                        </div>
+                                    ))}
+                                    </div>
+                                        {plano.id === 2 &&
+                                        <p className={`mt-6 ${dark ? 'text-white' : 'text-zinc-900'}`}>
+                                                <i className={`fa-solid fa-bolt ml-1 ${plano.id === 2 ? 'text-red-400' : dark ? 'text-amber-200' : 'text-amber-400'}`}></i>
+                                                : Possibilidade de comparar com outros clubes. 
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-center p-6 pt-6">
+                                <button className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${plano.id === 0 ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
+                                {plano.botao}
+                                </button>
+                            </div>
                         </div>
-                    }
-                    <h1>{plano.nome}</h1>
-
-                    <h2 className="flex text-2xl">
-                        <span className={`mr-1 ${dark ? 'text-neutral-300' : 'text-neutral-600'}`}>
-                        R$
-                        </span>
-
-                        <span className="text-5xl ml-2 flex items-center font-medium">
-                        {plano.preco}
-                        <span className="text-xs translate-y-[12.5%] ml-2 font-thin">
-                            Pague apenas <br /> uma vez
-                        </span>
-                        </span>
-                    </h2>
-
-                    <p className="text-lg">{plano.descricao}</p>
-
-                    <button
-                        className={`w-full rounded-full border mt-4 p-2 pb-2.25 font-medium text-sm ${plano.buttonClass(dark, planoAtivo)}`}
-                    >
-                        {plano.getButtonText(planoAtivo)}
-                    </button>
-
-                    <ul className="flex flex-col gap-4 mt-2">
-                        {plano.features.map((feature) => (
-                        <li key={feature.texto} className="flex text-sm place-items-center gap-2">
-                            <i className={feature.icone}></i>
-                            {feature.texto}
-                        </li>
-                        ))}
-                    </ul>
-                    </div>
-                ))}
+                    ))}
                 </div>
 
             </div>

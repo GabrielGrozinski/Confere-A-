@@ -57,7 +57,14 @@ interface all_context_type {
 export const all_context = createContext<all_context_type>({} as all_context_type);
 
 export function AllContext({children}: Props) {
-    const [dark, setDark] = useState<boolean>(() => localStorage.getItem("tema") === "escuro");
+    const [dark, setDark] = useState<boolean>(() => {
+        const tema = localStorage.getItem("tema") === "escuro";
+        if (tema === undefined || tema === null) {
+            return true
+        } else {
+            return tema;
+        }
+    });
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [mostrarClubes, setMostrarClubes] = useState<boolean>(false);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');

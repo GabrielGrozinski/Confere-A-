@@ -20,6 +20,7 @@ import {
   Calculator,
   Star,
   Gauge,
+  BadgeDollarSign
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
@@ -116,6 +117,7 @@ export default function ClubeVsClube() {
     custoPontos: Calculator,
     notaClube: Star,
     chanceQuitarDivida: Gauge,
+    valor_estimado: BadgeDollarSign
     } as const;
 
     type IconName = keyof typeof iconMap;
@@ -389,6 +391,24 @@ export default function ClubeVsClube() {
                 },
                 ],
             },
+            {
+                title: "Valor Estimado",
+                icon: "valor_estimado",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: clubeA.valor_estimado,
+                    formatted: `R$ ${clubeA.valor_estimado >= 1000 ? `${clubeA.valor_estimado/1000} BI` : `${clubeA.valor_estimado} MI`}`,
+                    highlight: clubeA.valor_estimado >= clubeB.valor_estimado,
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: clubeB.valor_estimado,
+                    formatted: `R$ ${clubeB.valor_estimado >= 1000 ? `${clubeB.valor_estimado/1000} BI` : `${clubeB.valor_estimado} MI`}`,
+                    highlight: clubeA.valor_estimado <= clubeB.valor_estimado
+                },
+                ],
+            },
         ];
 
     }, [clubeA, clubeB]);
@@ -621,7 +641,7 @@ export default function ClubeVsClube() {
                                                         ?
                                                         "text-[#DAFF01]"
                                                         :
-                                                        'text-orange-400'
+                                                        'text-orange-500'
                                                         :
                                                         dark ?
                                                         "text-zinc-400"
@@ -642,7 +662,7 @@ export default function ClubeVsClube() {
                                                         ?
                                                         "bg-[#DAFF01]"
                                                         :
-                                                        'bg-orange-400'
+                                                        'bg-orange-500'
                                                         :
                                                         dark
                                                         ?

@@ -12,7 +12,7 @@ import FooterFixo from "../components/footer-fixo";
 
 
 type TopicoComparacao = {
-  label: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento';
+  label: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento' | 'Valor Estimado';
   categoria: 'Financeiro' | 'Eficiência' | 'Mercado' | 'Indicadores'
 }
 
@@ -31,7 +31,8 @@ export type Topico =
   | 'Lucro/Faturamento'
   | 'Nota do Clube'
   | 'Projetar Faturamento'
-  | 'Chance de Quitar a Dívida';
+  | 'Chance de Quitar a Dívida'
+  | 'Valor Estimado';
 
 export type DadosClube = {
   faturamento: number;
@@ -50,6 +51,7 @@ export type DadosClube = {
   mediaTorcedores: number;
   projetarFaturamento: number;
   chanceQuitarDivida: number;
+  valor_estimado: number;
 };
 
 
@@ -86,6 +88,7 @@ export default function ComparadorDeClubes() {
         { label: 'Nota do Clube', categoria: 'Indicadores' },
         { label: 'Chance de Quitar a Dívida', categoria: 'Indicadores' },
         { label: 'Projetar Faturamento', categoria: 'Indicadores' },
+        { label: 'Valor Estimado', categoria: 'Indicadores' },
     ];
     const [topico, setTopico] = useState<Topico>('Faturamento');
     const correlacaoTopicoCampo: Record<Topico, keyof DadosClube> = {
@@ -104,6 +107,7 @@ export default function ComparadorDeClubes() {
     'Nota do Clube': 'notaClube',
     'Projetar Faturamento' : 'projetarFaturamento',
     'Chance de Quitar a Dívida': 'chanceQuitarDivida',
+    'Valor Estimado':'valor_estimado'
     };
     const intervalRef = useRef<number | undefined>(undefined);
 

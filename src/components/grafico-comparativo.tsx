@@ -13,7 +13,7 @@ import type { Topico, DadosClube } from "../pages/comparador-de-clubes";
 
 interface Props {
   clubesSelecionados: Medias[];
-  topico: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento';
+  topico: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento' | 'Valor Estimado';
 }
 
 type DadoGrafico = {
@@ -41,6 +41,7 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
     'Nota do Clube': 'notaClube',
     'Projetar Faturamento' : 'projetarFaturamento',
     'Chance de Quitar a Dívida': 'chanceQuitarDivida',
+    'Valor Estimado':'valor_estimado'
     };
 
   const dadosOrdenados: DadoGrafico[] = clubesSelecionados

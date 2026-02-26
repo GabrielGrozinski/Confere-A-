@@ -25,7 +25,7 @@ export interface Clube {
     chance_quitar_divida: number;
     aumento_faturamento: number;
     nota_clube: number;
-    valor_estimado: number
+    valor_estimado: number;
 }
 
 export interface Coisas {
@@ -65,6 +65,8 @@ export interface Medias {
     faturamento_2024?: number;
     projetarFaturamento: number;
     aumento_faturamento: number;
+    valor_estimado: number
+
 }
 // Tipagem de variaveis.
 
@@ -265,7 +267,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
         mediaTorcedores: 0,
         chanceQuitarDivida: 0,
         projetarFaturamento: 0,
-        aumento_faturamento: 0
+        aumento_faturamento: 0,
+        valor_estimado: 0,
     }
 
     if (data) {
@@ -286,6 +289,7 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
         const mediaChanceQuitarDivida: number[] = [];
         const mediaPontos: number[] = [];
         const mediaVitórias: number[] = [];
+        const mediaValorEstimado: number[] = [];
 
         const clubes: Clube[] = data;
         clubes.forEach((clube) => {
@@ -306,6 +310,7 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
             mediaVitórias.push(clube.vitorias);
             mediaNota.push(clube.nota_clube);
             mediaChanceQuitarDivida.push(clube.chance_quitar_divida);
+            mediaValorEstimado.push(clube.valor_estimado);
 
         });
 
@@ -327,6 +332,7 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
             chanceQuitarDivida: calcularMedia(mediaChanceQuitarDivida),
             projetarFaturamento: 0,
             aumento_faturamento: 0,
+            valor_estimado: calcularMedia(mediaValorEstimado)
         }
 
         return { media, success: true };
@@ -364,6 +370,7 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
         chanceQuitarDivida: 0,
         projetarFaturamento: 0,
         aumento_faturamento: 0,
+        valor_estimado: 0
     }
 
     const anoRecebido = anoEscolhido ?? 1;
@@ -491,6 +498,8 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
                 aumento_faturamento: clubeEscolhido.aumento_faturamento,
 
                 mediaTorcedores: Number(clubeEscolhido.numero_torcedores.toFixed(2)),
+
+                valor_estimado: clubeEscolhido.valor_estimado
             }
 
             return {clube: mediaClubeEscolhido, success: true};
