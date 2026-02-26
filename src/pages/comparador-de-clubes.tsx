@@ -9,16 +9,19 @@ import * as Popover from '@radix-ui/react-popover';
 import { ClipLoader } from "react-spinners";
 import adsense from '/adsense.png';
 import FooterFixo from "../components/footer-fixo";
+import CardsPremium from "../components/cards-premium";
 
 
 type TopicoComparacao = {
-  label: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento' | 'Valor Estimado';
-  categoria: 'Financeiro' | 'Eficiência' | 'Mercado' | 'Indicadores'
+  label: 'Faturamento' | 'Dívida' | 'Faturamento (2024)' | 'Dívida (2024)' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento' | 'Valor Estimado';
+  categoria: 'Financeiro' | 'Eficiência' | 'Mercado' | 'Indicadores' | 'Premium';
 }
 
 export type Topico =
   | 'Faturamento'
   | 'Dívida'
+  | 'Faturamento (2024)'
+  | 'Dívida (2024)'
   | 'Lucro'
   | 'Folha Salarial'
   | 'Contratações'
@@ -37,6 +40,8 @@ export type Topico =
 export type DadosClube = {
   faturamento: number;
   divida: number;
+  faturamento_2024: number;
+  divida_2024: number;
   lucro: number;
   contratacoes: number;
   folha_salarial: number;
@@ -57,8 +62,9 @@ export type DadosClube = {
 
 
 export default function ComparadorDeClubes() {
-    const {setTopicoAtivo, setAbaEntretenimento, largura} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, largura, dark} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
+    const [assinante, setAssinante] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [clubesSelecionados, setClubesSelecionados] = useState<Medias[]>([]);
@@ -66,6 +72,14 @@ export default function ComparadorDeClubes() {
     const [valorClubes, setValorClubes] = useState<string>('0');
     const [popoverAberto, setPopoverAberto] = useState(false);
     const topicosComparacao: TopicoComparacao[] = [
+        // ---------------- Premium ----------------
+        { label: 'Faturamento (2024)', categoria: 'Premium' },
+        { label: 'Dívida (2024)', categoria: 'Premium' },
+        { label: 'Valor Estimado', categoria: 'Premium' },
+        { label: 'Projetar Faturamento', categoria: 'Premium' },
+        { label: 'Chance de Quitar a Dívida', categoria: 'Premium' },
+        { label: 'Nota do Clube', categoria: 'Premium' },
+
         // ---------------- FINANCEIRO ----------------
         { label: 'Faturamento', categoria: 'Financeiro' },
         { label: 'Dívida', categoria: 'Financeiro' },
@@ -85,15 +99,14 @@ export default function ComparadorDeClubes() {
         // ---------------- INDICADORES ----------------
         { label: 'Faturamento/Dívida', categoria: 'Indicadores' },
         { label: 'Lucro/Faturamento', categoria: 'Indicadores' },
-        { label: 'Nota do Clube', categoria: 'Indicadores' },
-        { label: 'Chance de Quitar a Dívida', categoria: 'Indicadores' },
-        { label: 'Projetar Faturamento', categoria: 'Indicadores' },
-        { label: 'Valor Estimado', categoria: 'Indicadores' },
+
     ];
     const [topico, setTopico] = useState<Topico>('Faturamento');
     const correlacaoTopicoCampo: Record<Topico, keyof DadosClube> = {
     'Faturamento': 'faturamento',
     'Dívida': 'divida',
+    'Faturamento (2024)':'faturamento_2024',
+    'Dívida (2024)':'divida_2024',
     'Lucro': 'lucro',
     'Folha Salarial': 'folha_salarial',
     'Contratações': 'contratacoes',
@@ -110,6 +123,7 @@ export default function ComparadorDeClubes() {
     'Valor Estimado':'valor_estimado'
     };
     const intervalRef = useRef<number | undefined>(undefined);
+    const premiumRef = useRef<HTMLDivElement | null>(null);
 
     const startPress = () => {
         if (anoEscolhido === 50) return;
@@ -154,6 +168,9 @@ export default function ComparadorDeClubes() {
             setClubesSelecionados(clubesFiltrados);
             setClubesSelecionadosOriginal(clubesFiltrados);
         } else {
+            if (!assinante && clubesSelecionados.length === 5) {
+                return fazerScroll();
+            }
             const clubeNovo = await CalcularMediaClube(clubeEscolhido, anoEscolhido);
             setClubesSelecionados((prev) => [...prev, clubeNovo.clube]);
             const clubeOriginal = await CalcularMediaClube(clubeEscolhido, 15);
@@ -267,101 +284,136 @@ export default function ComparadorDeClubes() {
     }, {} as Record<string, TopicoComparacao[]>);
 
 
+    function fazerScroll() {
+        if (!premiumRef.current) return;
+
+        premiumRef.current.scrollIntoView({
+            behavior: 'smooth',
+        })
+    }
+
+
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }} className="mt-15">
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #1d2330, #3e495e)" : "linear-gradient(to bottom right, #fdfbf6, #fdfbf6)"}} className="mt-15">
+
             <HeaderFixo/>
 
             <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-10 relative">
 
-                <div className="lg:flex justify-start hidden sticky left-0 top-20 self-start">
+                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
 
-                <main className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                <main className="col-span-full lg:col-2 w-full flex flex-col relative pt-2">
                     <div className="min-h-10 w-full flex justify-center">
                         <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
                         <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
-                        <Popover.Trigger asChild>
-                            <button className="text-stone-800 font-medium flex items-center w-full justify-center">
-                            Comparar por: <strong><span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]"></i></span></strong>
-                            </button>
-                        </Popover.Trigger>
-                        {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') &&
-                            <button
-                            className="min-w-22 max-w-22 min-h-full max-h-full border border-slate-800/40 rounded-lg text-center flex items-center justify-center pl-1 my-1"
-                            >
-                                <span>{2025 + anoEscolhido}</span>
-                                <span className="flex flex-col text-[12px] py-px ml-2">
-                                    <i
-                                    onTouchStart={() => startPress}
-                                    className="fa-solid fa-sort-up cursor-pointer"
-                                    onTouchEnd={() => stopPress}
-                                    onMouseDown={startPress}
-                                    onMouseUp={stopPress}
-                                    onMouseLeave={stopPress}
-                                    >
-                                    </i>
-                                    <i
-                                    onTouchStart={() => downPress}
-                                    className="fa-solid fa-sort-down cursor-pointer"
-                                    onTouchEnd={() => stopPress}
-                                    onMouseDown={downPress}
-                                    onMouseUp={stopPress}
-                                    onMouseLeave={stopPress}
-                                    >
-                                    </i>
-                                </span>
-                            </button>
-                        }
-                        <Popover.Portal>
-                            <Popover.Content
-                            sideOffset={8}
-                            className="w-96 max-h-96 overflow-y-auto rounded-xl bg-slate-900 border border-gray-700/70 p-4 shadow-xl z-10"
-                            >
-                            <div className="space-y-6">
-                                {Object.entries(agrupadosPorCategoria).map(
-                                ([categoria, topicos]) => (
-                                    <div key={categoria} className="space-y-2">
-                                    <h4 className="text-xs font-semibold uppercase text-slate-400">
-                                        {categoria}
-                                    </h4>
-                                    <div className="space-y-1">
-                                        {topicos.map((item: TopicoComparacao) => (
-                                        <button
-                                            key={item.label}
-                                            onClick={() => {
-                                                setTopico(item.label);
-                                                setPopoverAberto(false);
-                                            }}
-                                            className={`
-                                            w-full text-left px-3 py-2 rounded-md
-                                            transition
-                                            ${
-                                                topico === item.label
-                                                ? 'bg-sky-500/20 text-sky-300'
-                                                : 'hover:bg-slate-800 text-slate-200'
-                                            }
-                                            `}
+
+                            <Popover.Trigger asChild>
+                                <button className="text-stone-800 font-medium flex items-center w-full justify-center">
+                                    Comparar por: 
+                                        <strong>
+                                                <span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} 
+                                                    <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]">
+                                                    
+                                                    </i>
+                                                </span>
+                                            </strong>
+                                </button>
+                            </Popover.Trigger>
+
+                            {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') &&
+                                <button
+                                className="min-w-22 max-w-22 min-h-full max-h-full border border-slate-800/40 rounded-lg text-center flex items-center justify-center pl-1 my-1"
+                                >
+                                    <span>{2025 + anoEscolhido}</span>
+                                    <span className="flex flex-col text-[12px] py-px ml-2 scale-90">
+                                        <i
+                                        onTouchStart={() => startPress}
+                                        className="fa-solid fa-sort-up cursor-pointer"
+                                        onTouchEnd={() => stopPress}
+                                        onMouseDown={startPress}
+                                        onMouseUp={stopPress}
+                                        onMouseLeave={stopPress}
                                         >
-                                            {item.label}
-                                        </button>
-                                        ))}
-                                    </div>
-                                    </div>
-                                )
-                                )}
-                            </div>
-                            </Popover.Content>
-                        </Popover.Portal>
+                                        </i>
+                                        <i
+                                        onTouchStart={() => downPress}
+                                        className="fa-solid fa-sort-down cursor-pointer"
+                                        onTouchEnd={() => stopPress}
+                                        onMouseDown={downPress}
+                                        onMouseUp={stopPress}
+                                        onMouseLeave={stopPress}
+                                        >
+                                        </i>
+                                    </span>
+                                </button>
+                            }
+
+                            <Popover.Portal>
+                                <Popover.Content
+                                sideOffset={8}
+                                className="w-96 max-h-96 overflow-y-auto rounded-xl bg-slate-900 border border-gray-700/70 p-4 shadow-xl z-10"
+                                >
+                                <div className="space-y-6">
+                                    {Object.entries(agrupadosPorCategoria).map(
+                                    ([categoria, topicos]) => (
+                                        <div key={categoria} className="space-y-2">
+                                        <h4 className="text-xs font-semibold uppercase text-slate-400">
+                                            {categoria}
+                                        </h4>
+                                        <div className="space-y-1">
+                                            {topicos.map((item: TopicoComparacao) => (
+                                            <button
+                                                key={item.label}
+                                                onClick={() => {
+                                                    setPopoverAberto(false);
+                                                    assinante ?
+                                                        setTopico(item.label)
+                                                    :
+                                                    (item.categoria === 'Premium')
+                                                    ?
+                                                        fazerScroll()
+                                                    :
+                                                        setTopico(item.label);
+                                                    
+                                                }}
+                                                className={`
+                                                w-full text-left px-3 py-2 rounded-md
+                                                transition
+                                                ${
+                                                    topico === item.label
+                                                    ? 'bg-sky-500/20 text-sky-300'
+                                                    : 'hover:bg-slate-800 text-slate-200'
+                                                }
+                                                `}
+                                            >
+                                                {item.label}
+                                                {(item.categoria === 'Premium') &&
+                                                <div className="inline relative">
+                                                    <div onClick={() => fazerScroll()} className={`ml-2 absolute flex top-1/2 -translate-y-[45%] right-0 translate-x-[125%] items-center justify-center min-h-6 min-w-6 cursor-pointer rounded-md ${(item.label === 'Nota do Clube' || item.label === 'Chance de Quitar a Dívida') ? 'bg-red-600' : 'bg-yellow-500'}`}>
+                                                        <i className={`${(item.label === 'Nota do Clube' || item.label === 'Chance de Quitar a Dívida') ? 'fa-brands fa-web-awesome' : 'fa-solid fa-trophy'} text-slate-100 text-[10px] -translate-x-[0.63px] translate-y-px text-shadow-[0px_2px_1px_#0000002a]`}></i>
+                                                    </div>
+                                                </div>
+                                                }
+                                            </button>
+                                            ))}
+                                        </div>
+                                        </div>
+                                    )
+                                    )}
+                                </div>
+                                </Popover.Content>
+                            </Popover.Portal>
                         </Popover.Root>
                         </div>
                     </div>
 
                     <main id="main" className="grid grid-rows-[56px_400px_64px] relative mx-1 max-h-120 pt-2 mb-16">
-                        <h1 className="absolute top-0 right-0 translate-y-20 text-neutral-400 font-mono font-semibold -translate-x-[10%] z-1 text-xs">
+                        <h1 className={`absolute top-0 right-0 translate-y-20 font-mono font-semibold -translate-x-[10%] z-1 text-xs ${dark ? 'text-neutral-400' : 'text-neutral-700'}`}>
                             {(topico === 'Chance de Quitar a Dívida' || topico === 'Faturamento/Dívida' || topico === 'Lucro/Faturamento') ? 'Valor em Porcentagem' : topico === 'Nota do Clube' ? 'Valor em unidades' : 'Valor em milhões de Reais'}
                         </h1>
-                        <div className="row-1 h-full min-w-full flex gap-0 bg-yellow-500 shadow-[4px_-4px_3px_#0000002a] rounded-t-xl rounded-br-none items-center justify-center border-b border-b-slate-800/50">
+                        <div className={`row-1 h-full min-w-full flex gap-0 bg-yellow-500 shadow-sm rounded-t-xl rounded-br-none items-center justify-center border-b ${dark ? 'border-b-slate-800/50' : 'border-b-slate-200/50'}`}>
 
                             <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">
                                 Clubes Brasileiros
@@ -369,30 +421,30 @@ export default function ComparadorDeClubes() {
 
                         </div>
                         <GraficoComparativo clubesSelecionados={clubesSelecionados} topico={topico} />
-                        <div className="row-3 rounded-b-xs border-t border-t-slate-800/50 h-full min-w-full bg-[#3e495e] p-2 flex items-center flex-col">
-                                <h1 className="text-sm text-slate-200 text-shadow-[1px_1px_1px_#0000002a]">
+                        <div className={`row-3 rounded-b-xs border-t h-full min-w-full p-2 flex items-center flex-col ${dark ? 'bg-[#3e495e] border-t-slate-800/50 text-slate-200 text-shadow-[1px_1px_1px_#0000002a]' : 'bg-[#e1e8f7] border-t-slate-300/50 text-zinc-800'}`}>
+                                <h1 className="text-sm">
                                     {
                                         (correlacaoTopicoCampo[topico] === 'chanceQuitarDivida' || correlacaoTopicoCampo[topico] === 'fatDiv' || correlacaoTopicoCampo[topico] === 'lucFat' || correlacaoTopicoCampo[topico] === 'notaClube' || correlacaoTopicoCampo[topico] === 'custoGol' || correlacaoTopicoCampo[topico] === 'custoJogador' || correlacaoTopicoCampo[topico] === 'custoPonto' || correlacaoTopicoCampo[topico] === 'folha_salarial' || correlacaoTopicoCampo[topico] === 'custoVitoria') ? 'Média dos Clubes'
                                         :
                                         'Total dos Clubes'
                                     }
                                 </h1>
-                                <h2 className="text-sm text-amber-300 text-shadow-[1px_1px_1px_#0000002a]">{valorClubes}</h2>
+                                <h2 className={`text-sm ${dark ? 'text-amber-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-amber-600 font-medium'}`}>{valorClubes}</h2>
                         </div>
                     </main>
 
                     <section className="max-w-full min-w-full mt-8 flex flex-col relative">
                         <article className="col-1">
-                            <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
+                            <h1 className={`font-medium text-lg text-center ${dark ? 'text-slate-100' : 'text-slate-800'}`}>Clubes Brasileiros</h1>
                             <div className="w-full h-full mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center px-4">
                             {loading ?
                                 <div className="flex-1 flex items-center justify-center">
-                                    <ClipLoader size={30} color='#fff'/>
+                                    <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
                                 </div>
                                 :
                                 clubes?.map((clube, index) => (
                                     <>
-                                        <div onClick={() => adicionaClube(clube)} className="bg-stone-50 rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80">
+                                        <div onClick={() => adicionaClube(clube)} className="rounded-md shadow-[0px_1px_2px_#0000003a] flex flex-col items-center justify-center max-h-34 min-h-34 w-full cursor-pointer relative scale-80 bg-stone-50">
                                             <div className={`absolute top-1 right-1 flex items-center justify-center p-0.75 rounded-sm shadow-[0px_0px_2px_#0000003a] ${clubesSelecionados.some((c) => c.nome === clube.nome) && 'bg-[#8f79d0] text-white text-shadow-[1px_1px_1px_#0000002a]'}`}>
                                                 <i className="fa-solid fa-check text-[10px]"></i>
                                             </div>
@@ -421,9 +473,13 @@ export default function ComparadorDeClubes() {
                             </div>
                         </article>
                     </section>
+
+                    <div ref={premiumRef} className="scroll-mt-10">
+                        <CardsPremium />
+                    </div>
                 </main>
 
-                <div className="lg:flex justify-end hidden sticky left-0 top-20 self-start">
+                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
 

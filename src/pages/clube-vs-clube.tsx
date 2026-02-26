@@ -1,5 +1,5 @@
 import { buscaTodosClubes } from "../components/busca-clube";
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import type { Clube } from "../components/busca-clube";
 import '../styles/comparacao-unica.css';
 import HeaderFixo from "../components/header-fixo";
@@ -16,15 +16,20 @@ import {
   UserPlus,
   Target,
   Award,
-  CircleDollarSign,
   Calculator,
   Star,
   Gauge,
-  BadgeDollarSign
+  HandCoins,
+  Coins,
+  BadgeDollarSign,
+  TrendingUpDown,
+  TrendingUp
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
 import adsense from '/adsense.png';
+import CardsPremium from "../components/cards-premium";
+import { calcularChanceTitulo } from "../components/busca-clube";
 
 
 type TopicoComparacao = {
@@ -59,11 +64,30 @@ export default function ClubeVsClube() {
     const {setTopicoAtivo, setAbaEntretenimento, dark} = allContext();
     const [popoverAberto1, setPopoverAberto1] = useState(false);
     const [popoverAberto2, setPopoverAberto2] = useState(false);
+    const [chanceTituloA, setChanceTituloA] = useState<number>(0);
+    const [chanceTituloB, setChanceTituloB] = useState<number>(0);
+    const [assinante, setAssinante] = useState(true);
     const [clubes, setClubes] = useState<Clube[]>();
     const [clubeA, setClubeA] = useState<Clube | undefined>();
     const [clubeANome, setClubeANome] = useState<Topico>('Flamengo');
     const [clubeB, setClubeB] = useState<Clube | undefined>();
     const [clubeBNome, setClubeBNome] = useState<Topico>('Palmeiras');
+    const premiumRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!clubeA || !clubeB) return;
+
+        const chanceA = calcularChanceTitulo(clubeA.folha_salarial, clubeA.valor_contratacoes, clubeA.pontos, clubeA.vitorias);
+
+        const novaChanceA = Number((chanceA * clubeA.nota_clube/10).toFixed(2));
+        setChanceTituloA(novaChanceA);
+
+        const chanceB = calcularChanceTitulo(clubeB.folha_salarial, clubeB.valor_contratacoes, clubeB.pontos, clubeB.vitorias);
+
+        const novaChanceB = Number((chanceB * clubeB.nota_clube/10).toFixed(2));
+        setChanceTituloB(novaChanceB);
+
+    }, [clubeA, clubeB]);
 
     const topicosComparacao: TopicoComparacao[] = [
         // ---------------- SP ----------------
@@ -113,11 +137,13 @@ export default function ClubeVsClube() {
     contratacoes: UserPlus,
     gols: Target,
     custoVitoria: Award,
-    custoGols: CircleDollarSign,
+    custoGols: Coins,
     custoPontos: Calculator,
+    custoJogador: HandCoins,
     notaClube: Star,
     chanceQuitarDivida: Gauge,
-    valor_estimado: BadgeDollarSign
+    chanceTitulo: TrendingUpDown,
+    valor_estimado: BadgeDollarSign,
     } as const;
 
     type IconName = keyof typeof iconMap;
@@ -125,15 +151,72 @@ export default function ClubeVsClube() {
     type FinancialItem = {
     club: string;
     value: number;
-    formatted: string;
+    formatted: string | React.ReactNode;
     highlight?: boolean;
     };
 
     type FinancialSection = {
-    title: string;
+    title: string | React.ReactNode;
     icon: IconName;
     items: FinancialItem[];
     };
+
+    function fazerScroll() {
+        if (!premiumRef.current) return;
+
+        premiumRef.current.scrollIntoView({
+            behavior: 'smooth',
+        })
+    }
+
+    function criaTag(titulo: string, socio: string) {
+        return (
+                <> 
+                    <div className="inline relative">
+                        {titulo}
+                        <div onClick={() => fazerScroll()} className={`ml-2 absolute flex top-1/2 -translate-y-[45%] right-0 translate-x-[125%] items-center justify-center min-h-6 min-w-6 cursor-pointer rounded-md ${socio === 'sócio' ? 'bg-red-600' : 'bg-yellow-500'}`}>
+                            <i className={`${socio === 'sócio' ? 'fa-brands fa-web-awesome' : 'fa-solid fa-trophy'} text-slate-100 text-[10px] -translate-x-[0.63px] translate-y-px text-shadow-[0px_2px_1px_#0000002a]`}></i>
+                        </div>
+                    </div>
+
+                </>
+        )
+    }
+
+    function verificaAssinanteValue(topico: number) {
+        return (
+            assinante ? topico : 0
+        )
+    }
+
+    function verificaAssinanteFormatted(value: number, formato: string) {
+        return (
+            assinante ?
+                `${value}${formato}`
+            :
+                <>
+                    <i className="fa-solid fa-lock"></i>
+                </>
+        )
+    }
+
+    function verificaAssinanteHigh(topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) {
+        return (
+            assinante ?
+                direcaoClube === 'A' ?
+                    direcao ?
+                        topicoA >= topicoB
+                    :
+                        topicoA <= topicoB
+                :
+                    direcao ?
+                        topicoA <= topicoB
+                    :
+                        topicoA >= topicoB
+            :
+            false
+        )
+    }
 
     const financialData: FinancialSection[] = useMemo(() => {
         if (!clubeA || !clubeB) return [];
@@ -338,6 +421,24 @@ export default function ClubeVsClube() {
                 ],
             },
             {
+                title: "Custo/Jogador",
+                icon: "custoJogador",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: (clubeA.folha_salarial / clubeA.quant_jogadores),
+                    formatted: `R$ ${(clubeA.folha_salarial / clubeA.quant_jogadores).toFixed(1)} mi/jogador`,
+                    highlight: (clubeA.folha_salarial / clubeA.quant_jogadores) <= (clubeB.folha_salarial / clubeB.quant_jogadores),
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: (clubeB.folha_salarial / clubeB.quant_jogadores),
+                    formatted: `R$ ${(clubeB.folha_salarial / clubeB.quant_jogadores).toFixed(1)} mi/jogador`,
+                    highlight: (clubeA.folha_salarial / clubeA.quant_jogadores) >= (clubeB.folha_salarial / clubeB.quant_jogadores)
+                },
+                ],
+            },
+            {
                 title: "Custo/Pontos",
                 icon: "custoPontos",
                 items: [
@@ -356,62 +457,134 @@ export default function ClubeVsClube() {
                 ],
             },
             {
-                title: "Nota do Clube",
-                icon: "notaClube",
+                title: criaTag('Chance de Título (2026)', 'torcedor'),  
+                icon: "chanceTitulo",
                 items: [
                 {
                     club: clubeA.nome.slice(0, 3).toUpperCase(),
-                    value: clubeA.nota_clube,
-                    formatted: `${clubeA.nota_clube}/10`,
-                    highlight: clubeA.nota_clube >= clubeB.nota_clube,
+                    value: verificaAssinanteValue(chanceTituloA),
+                    formatted: verificaAssinanteFormatted(chanceTituloA, '%'),
+                    highlight: verificaAssinanteHigh(chanceTituloA, chanceTituloB, 'A', true),
                 },
                 {
                     club: clubeB.nome.slice(0, 3).toUpperCase(),
-                    value: clubeB.nota_clube,
-                    formatted: `${clubeB.nota_clube}/10`,
-                    highlight: clubeA.nota_clube <= clubeB.nota_clube,
+                    value: verificaAssinanteValue(chanceTituloB),
+                    formatted: verificaAssinanteFormatted(chanceTituloB, '%'),
+                    highlight: verificaAssinanteHigh(chanceTituloA, chanceTituloB, 'B', true),
                 },
                 ],
             },
             {
-                title: "Chance de Quitar a Dívida (15 anos)",
-                icon: "chanceQuitarDivida",
-                items: [
-                {
-                    club: clubeA.nome.slice(0, 3).toUpperCase(),
-                    value: clubeA.chance_quitar_divida,
-                    formatted: `${clubeA.chance_quitar_divida}%`,
-                    highlight: clubeA.chance_quitar_divida >= clubeB.chance_quitar_divida,
-                },
-                {
-                    club: clubeB.nome.slice(0, 3).toUpperCase(),
-                    value: clubeB.chance_quitar_divida,
-                    formatted: `${clubeB.chance_quitar_divida}%`,
-                    highlight: clubeA.chance_quitar_divida <= clubeB.chance_quitar_divida,
-                },
-                ],
-            },
-            {
-                title: "Valor Estimado",
+                title: criaTag('Valor Estimado', 'torcedor'),        
                 icon: "valor_estimado",
                 items: [
                 {
                     club: clubeA.nome.slice(0, 3).toUpperCase(),
-                    value: clubeA.valor_estimado,
-                    formatted: `R$ ${clubeA.valor_estimado >= 1000 ? `${clubeA.valor_estimado/1000} BI` : `${clubeA.valor_estimado} MI`}`,
-                    highlight: clubeA.valor_estimado >= clubeB.valor_estimado,
+                    value: verificaAssinanteValue(clubeA.valor_estimado),
+                    formatted: verificaAssinanteFormatted(clubeA.valor_estimado, clubeA.valor_estimado >= 1000 ? ' MI' : ' BI'),
+                    highlight: verificaAssinanteHigh(clubeA.valor_estimado, clubeB.valor_estimado, 'A', true),
                 },
                 {
                     club: clubeB.nome.slice(0, 3).toUpperCase(),
-                    value: clubeB.valor_estimado,
-                    formatted: `R$ ${clubeB.valor_estimado >= 1000 ? `${clubeB.valor_estimado/1000} BI` : `${clubeB.valor_estimado} MI`}`,
-                    highlight: clubeA.valor_estimado <= clubeB.valor_estimado
+                    value: verificaAssinanteValue(clubeB.valor_estimado),
+                    formatted: verificaAssinanteFormatted(clubeB.valor_estimado, clubeB.valor_estimado >= 1000 ? ' MI' : ' BI'),
+                    highlight: verificaAssinanteHigh(clubeA.valor_estimado, clubeB.valor_estimado, 'B', true),
+                },
+                ],
+            },
+            {
+                title: criaTag('Receita (2024)', 'torcedor'),
+                icon: "faturamento",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeA.faturamento_2024),
+                    formatted: verificaAssinanteFormatted(clubeA.faturamento_2024, clubeA.faturamento_2024 >= 1000 ? ' MI' : ' BI'),
+                    highlight: verificaAssinanteHigh(clubeA.faturamento_2024, clubeB.faturamento_2024, 'A', true),
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeB.faturamento_2024),
+                    formatted: verificaAssinanteFormatted(clubeB.faturamento_2024, clubeB.faturamento_2024 >= 1000 ? ' MI' : ' BI'),
+                    highlight: verificaAssinanteHigh(clubeA.faturamento_2024, clubeB.faturamento_2024, 'B', true),
+                },
+                ],
+            },
+            {
+                title: criaTag('Dívida (2024)', 'torcedor'),
+                icon: "divida",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeA.divida_2024),
+                    formatted: verificaAssinanteFormatted(clubeA.divida_2024, clubeA.divida_2024 >= 1000 ? ' MI' : ' BI'),
+                    highlight: verificaAssinanteHigh(clubeA.divida_2024, clubeB.divida_2024, 'A', false),
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeB.divida_2024),
+                    formatted: verificaAssinanteFormatted(clubeB.divida_2024, clubeB.divida_2024 >= 1000 ? ' MI' : ' BI'),
+                    highlight: verificaAssinanteHigh(clubeA.divida_2024, clubeB.divida_2024, 'B', false),
+                },
+                ],
+            },
+            {
+                title: criaTag('Nota do Clube', 'sócio'),
+                icon: "notaClube",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeA.nota_clube),
+                    formatted: verificaAssinanteFormatted(clubeA.nota_clube, '/10'),
+                    highlight: verificaAssinanteHigh(clubeA.nota_clube, clubeB.nota_clube, 'A', true),
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeB.nota_clube),
+                    formatted: verificaAssinanteFormatted(clubeB.nota_clube, '/10'),
+                    highlight: verificaAssinanteHigh(clubeA.nota_clube, clubeB.nota_clube, 'B', true),
+                },
+                ],
+            },
+            {
+                title: criaTag('Chance de Quitar a Dívida (15 anos)', 'sócio'),  
+                icon: "chanceQuitarDivida",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeA.chance_quitar_divida),
+                    formatted: verificaAssinanteFormatted(clubeA.chance_quitar_divida, '%'),
+                    highlight: verificaAssinanteHigh(clubeA.chance_quitar_divida, clubeB.chance_quitar_divida, 'A', true),
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue(clubeB.chance_quitar_divida),
+                    formatted: verificaAssinanteFormatted(clubeB.chance_quitar_divida, '%'),
+                    highlight: verificaAssinanteHigh(clubeA.chance_quitar_divida, clubeB.chance_quitar_divida, 'B', true),
+                },
+                ],
+            },
+            {
+                title: criaTag('Projetar Receita (2026)', 'sócio'),  
+                icon: "faturamento",
+                items: [
+                {
+                    club: clubeA.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue((clubeA.faturamento + clubeA.aumento_faturamento)),
+                    formatted: verificaAssinanteFormatted((clubeA.faturamento + clubeA.aumento_faturamento), (clubeA.faturamento + clubeA.aumento_faturamento) > 1000 ? ' BI' : ' MI'),
+                    highlight: verificaAssinanteHigh((clubeA.faturamento + clubeA.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento), 'A', true),
+                },
+                {
+                    club: clubeB.nome.slice(0, 3).toUpperCase(),
+                    value: verificaAssinanteValue((clubeB.faturamento + clubeB.aumento_faturamento)),
+                    formatted: verificaAssinanteFormatted((clubeB.faturamento + clubeB.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento) > 1000 ? ' BI' : ' MI'),
+                    highlight: verificaAssinanteHigh((clubeA.faturamento + clubeA.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento), 'B', true),
                 },
                 ],
             },
         ];
 
-    }, [clubeA, clubeB]);
+    }, [clubeA, clubeB, chanceTituloA, chanceTituloB]);
 
     useEffect(() => {
         if (!clubes) return;
@@ -457,15 +630,15 @@ export default function ClubeVsClube() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15 overflow-x-hidden">
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
             <HeaderFixo/>
 
-            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2">
-                <div className="lg:flex justify-start hidden">
+            <div className="grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
+                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
 
-                <main id="main-clube-vs-clube" className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                <main id="main-clube-vs-clube" className="col-2">
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>
@@ -474,7 +647,7 @@ export default function ClubeVsClube() {
                     </p>
 
 
-                    <div className="w-full mx-auto px-6 flex items-center justify-center">
+                    <div className="w-full mx-auto px-6 flex items-center justify-center mb-12">
 
                         <div className="opacity-100 transform-none lg:max-w-250 lg:min-w-250 mt-4">
                             <div className={`border rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-slate-200 border-slate-800/20'}`}>
@@ -609,12 +782,12 @@ export default function ClubeVsClube() {
                                 </div>
 
                                 <div className="space-y-6 overflow-y-auto max-h-80 pb-6 lg:pl-6 lg:pr-8">
-                                {financialData.map((section) => {
+                                {financialData.map((section, index) => {
                                     const Icon = iconMap[section.icon];
                                     const maxValue = Math.max(...section.items.map(i => i.value));
 
                                     return (
-                                    <div key={section.title}>
+                                    <div key={index}>
                                         <div className={`flex items-center gap-2 mb-2 ${dark ? 'text-zinc-400' : 'text-zinc-600'}`}>
                                             <Icon className="w-4 h-4" />
                                             <span className="text-sm font-medium">
@@ -686,9 +859,13 @@ export default function ClubeVsClube() {
                         </div>
 
                     </div>
+
+                    <div ref={premiumRef} className="scroll-mt-20">
+                        <CardsPremium />
+                    </div>
                 </main>
 
-                <div className="lg:flex justify-end hidden">
+                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { buscaTodosClubes, buscaCoisas } from "../components/busca-clube";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Clube, Coisas } from "../components/busca-clube";
 import '../styles/comparacao-geral.css';
 import HeaderFixo from "../components/header-fixo";
@@ -7,6 +7,7 @@ import { allContext } from "../context/all-context";
 import { ClipLoader } from "react-spinners";
 import adsense from '/adsense.png';
 import FooterFixo from "../components/footer-fixo";
+import CardsPremium from "../components/cards-premium";
 
 
 interface ClubeSelecionado {
@@ -22,15 +23,17 @@ interface Porcentagem {
 }
 
 export default function CompararCoisas() {
-    const {setTopicoAtivo, setAbaEntretenimento, largura} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, largura, dark} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
+    const [assinante, setAssinante] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
     const [coisas, setCoisas] = useState<Coisas[]>();
     const [valorClubes, setValorClubes] = useState<string>('0');
     const [valorCoisas, setValorCoisas] = useState<string>('0');
-    const [porcentageCoisas, setPorcentagemCoisas] = useState<Porcentagem[]>();
+    const [porcentagemCoisas, setPorcentagemCoisas] = useState<Porcentagem[]>();
     const [porcentagemClubes, setPorcentagemClubes] = useState<Porcentagem[]>();
+    const premiumRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         setTopicoAtivo('Produto');
@@ -56,6 +59,9 @@ export default function CompararCoisas() {
             const clubesFiltrados = clubesSelecionados.filter((clube) => clube.nome !== clubeEscolhido.nome);
             setClubesSelecionados(clubesFiltrados);
         } else {
+            if (!assinante && clubesSelecionados.length === 5) {
+                return fazerScroll();
+            }
             setClubesSelecionados((prev) => [...prev, {
                 nome: clubeEscolhido.nome,
                 imagem: clubeEscolhido.imagem,
@@ -67,8 +73,16 @@ export default function CompararCoisas() {
 
     const atualizaQuantidade = (index: number, novaQuantidade: number) => {
         if (!coisas) return;
-        const novasCoisas = [...coisas];
+        if (!assinante && novaQuantidade > 5) {
+            return fazerScroll();
+        }
+
+        let novasCoisas = [...coisas];
         novasCoisas[index].quantidade = Math.max(0, novaQuantidade);
+        const novasCoisasFiltrado = novasCoisas.filter((coisa) => coisa.quantidade > 0);
+        if (!assinante && novasCoisasFiltrado.length > 5) {
+            return fazerScroll();
+        }
         setCoisas(novasCoisas);
     }
 
@@ -134,39 +148,49 @@ export default function CompararCoisas() {
         }
     }, [clubesSelecionados]);
 
+    function fazerScroll() {
+        if (!premiumRef.current) return;
+
+        premiumRef.current.scrollIntoView({
+            behavior: 'smooth',
+        })
+    }
+
+
     return (
-        <div style={{ background: "linear-gradient(to bottom right, #1d2330, #3e495e)" }}>
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #1d2330, #3e495e)" : "linear-gradient(to bottom right, #fdfbf6, #fdfbf6)"}}>
             <HeaderFixo/>
 
             <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-10 relative">
 
-                <div className="lg:flex justify-start hidden sticky left-0 top-20 self-start">
+                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
 
-                <main className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                <main className="col-span-full lg:col-2 w-full flex flex-col relative pt-2">
 
                     <div className="mt-36 rounded-lg rounded-t-none min-h-115 max-h-115 grid grid-rows-[1fr_15%]">
-                        <main id="main" className="grid grid-cols-[1fr_auto_1fr] bg-[#3e495e] relative mx-1 border border-slate-800/20 max-h-100">
+                        <main id="main" className={`grid grid-cols-[1fr_auto_1fr] relative mx-1 border max-h-100 ${dark ? 'bg-[#3e495e] border-slate-800/20' : 'border-slate-400/20 bg-slate-200'}`}>
                             <div className="absolute min-h-14 top-0 -translate-y-full min-w-full flex justify-between gap-0">
-                                <div className="min-h-full min-w-1/2 bg-yellow-500 shadow-[4px_-4px_3px_#0000002a] border border-slate-800/20 rounded-t-xl rounded-br-none -translate-x-px flex items-center justify-center">
+                                <div className="min-h-full min-w-1/2 bg-yellow-500 shadow-sm border border-slate-800/20 rounded-t-xl rounded-br-none -translate-x-px flex items-center justify-center">
                                     <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">Clubes Brasileiros</h1>
                                 </div>
                                 <div className="min-h-full min-w-1/2 bg-cyan-500 border border-slate-800/20 rounded-t-xl rounded-bl-xs translate-x-px flex items-center justify-center">
                                     <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">Coisas do Mundo</h1>
                                 </div>
                             </div>
+
                             <div id="clubes" className="pt-4 flex flex-col lg:flex-row lg:flex-wrap lg:justify-between lg:items-start lg:px-4 lg:content-start items-center gap-4 justify-start p-2 overflow-y-auto pb-4">
                                 {clubesSelecionados.map((clube, index) => {
                                     const clubeEscolhido = porcentagemClubes?.find((clubePorcentagem) => clube.nome === clubePorcentagem.nome);
                                     if (!clubeEscolhido) return;
                                     const porcentagemEscolhida = Math.round(clubeEscolhido?.porcentagem) > 100 ? 100 : Math.round(clubeEscolhido?.porcentagem) <= 0 ? 1 : Math.round(clubeEscolhido?.porcentagem);
                                     return (
-                                    <div key={index} className="flex max-h-18 items-center relative px-1 justify-evenly py-2 rounded-md bg-[#32394a] min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%]">
+                                    <div key={index} className={`flex max-h-18.5 min-h-18.5 items-center relative px-1 justify-evenly py-2 rounded-md min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%] ${dark ? 'bg-[#32394a]' : 'bg-slate-100'}`}>
                                         <img className="max-h-10 max-w-10 sm:max-w-12 sm:max-h-12" src={clube.imagem} alt={clube.nome} />
                                         <div className="flex flex-col gap-0.5 text-sm ml-2">
-                                            <h1 className="text-slate-100 font-medium">{clube.nome}</h1>
-                                            <h1 className="text-yellow-300 text-shadow-[1px_1px_1px_#0000002a]">R$ {clube.faturamento >= 2000 ? `${clube.faturamento/1000} bilhões` : clube.faturamento > 1000 ? `${clube.faturamento/1000} bilhão` : `${clube.faturamento} milhões`}</h1>
+                                            <h1 className={`font-medium ${dark ? 'text-slate-100' : 'text-zinc-800'}`}>{clube.nome}</h1>
+                                            <h1 className={`${dark ? 'text-yellow-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-yellow-500 font-medium'}`}>R$ {clube.faturamento >= 2000 ? `${clube.faturamento/1000} bilhões` : clube.faturamento > 1000 ? `${clube.faturamento/1000} bilhão` : `${clube.faturamento} milhões`}</h1>
                                         </div>
                                         <span className="absolute bottom-0 left-0 bg-slate-800 min-w-full max-h-2 min-h-1.5 rounded-xl">
                                             <span style={{width: `${porcentagemEscolhida}%`}} className="absolute bottom-0 left-0 min-h-1.5 z-1 bg-amber-400 rounded-xl">
@@ -177,21 +201,21 @@ export default function CompararCoisas() {
                                 })}
                             </div>
 
-                            <div className="col-2 min-h-[90%] max-h-[90%] min-w-0.5 max-w-0.5 place-self-center bg-slate-500/20">
+                            <div className={`col-2 min-h-[90%] max-h-[90%] min-w-0.5 max-w-0.5 place-self-center ${dark ? 'bg-slate-500/20' : 'bg-slate-300/20'}`}>
                             </div>
 
                             <div id="coisas" className="col-3 pt-4 flex flex-col lg:flex-row lg:flex-wrap lg:justify-between lg:items-start lg:px-4 lg:content-start items-center gap-4 justify-start p-2 relative overflow-y-auto pb-4">
                                 {coisas?.map((coisa) => {
-                                    const coisaEscolhida = porcentageCoisas?.find((coisaPorcentagem) => coisa.nome === coisaPorcentagem.nome);
+                                    const coisaEscolhida = porcentagemCoisas?.find((coisaPorcentagem) => coisa.nome === coisaPorcentagem.nome);
                                     if (!coisaEscolhida) return;
                                     const porcentagemEscolhida = Math.round(coisaEscolhida?.porcentagem) > 100 ? 100 : Math.round(coisaEscolhida?.porcentagem) <= 0 ? 1 : Math.round(coisaEscolhida?.porcentagem);
                                     return (
                                     coisa.quantidade > 0 &&
-                                    <div key={coisa.id} className="flex sm:flex-row max-h-20 min-h-20 pt-3 items-center relative pb-3 px-1 justify-between rounded-md bg-[#32394a] min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%]">
+                                    <div key={coisa.id} className={`flex sm:flex-row max-h-20 min-h-20 pt-3 items-center relative pb-3 px-1 justify-between rounded-md min-w-[90%] max-w-[90%] lg:max-w-[47.5%] lg:min-w-[47.5%] ${dark ? 'bg-[#32394a]' : 'bg-slate-100'}`}>
                                         <img className="max-h-14 max-w-[40%] pl-1 sm:pl-4" src={coisa.imagem} alt={coisa.nome} />
                                         <div className="flex flex-col gap-0.5 ml-2 min-w-[40%] max-w-[40%] text-center">
-                                            <h1 className="text-slate-100 font-medium text-xs">{coisa.nome}</h1>
-                                            <h1 className="text-sky-300 text-shadow-[1px_1px_1px_#0000002a] text-xs">R$
+                                            <h1 className={`font-medium text-xs ${dark ? 'text-slate-100' : 'text-zinc-800'}`}>{coisa.nome}</h1>
+                                            <h1 className={`text-xs ${dark ? 'text-sky-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-sky-600 font-medium'}`}>R$
                                                 {coisa.custo >= 1000000000000 ?
                                                 `${Math.round(coisa.custo/1000000000000)} tri`
                                                 :
@@ -217,16 +241,16 @@ export default function CompararCoisas() {
                             })}
                             </div>
 
-                            <div className="absolute z-1 bottom-0 translate-y-full left-0 min-h-6 min-w-[calc(100%+2px)] bg-[#3e495e] border border-slate-800/20 border-t-slate-800/90 -translate-x-px p-2 grid grid-cols-[1fr_auto_1fr] items-center">
+                            <div className={`absolute z-1 bottom-0 translate-y-full left-0 min-h-6 min-w-[calc(100%+1.5px)] border-t -translate-x-px p-2 grid grid-cols-[1fr_auto_1fr] items-center ${dark ? 'border-slate-800/20 border-t-slate-800/40 bg-[#3e495e]' : 'bg-slate-200 border-t-slate-300/50'}`}>
                                 <div className="flex flex-col items-center">
-                                    <h1 className="text-sm text-slate-200 text-shadow-[1px_1px_1px_#0000002a]">Total dos Clubes</h1>
-                                    <h2 className="text-sm text-amber-300 text-shadow-[1px_1px_1px_#0000002a]">R$ {valorClubes}</h2>
+                                    <h1 className={`text-sm ${dark ? 'text-slate-200 text-shadow-[1px_1px_1px_#0000002a]' : 'text-[#222222] font-medium'}`}>Total dos Clubes</h1>
+                                    <h2 className={`text-sm ${dark ? 'text-amber-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-amber-500 font-medium'}`}>R$ {valorClubes}</h2>
                                 </div>
                                 <span className="min-h-full min-w-px bg-slate-500/40">
                                 </span>
                                 <div className="col-3 flex flex-col items-center">
-                                    <h1 className="text-sm text-slate-200 text-shadow-[1px_1px_1px_#0000002a]">Total das Coisas</h1>
-                                    <h2 className="text-sm text-sky-300 text-shadow-[1px_1px_1px_#0000002a]">R$ {valorCoisas}</h2>
+                                    <h1 className={`text-sm ${dark ? 'text-slate-200 text-shadow-[1px_1px_1px_#0000002a]' : 'text-[#222222] font-medium'}`}>Total das Coisas</h1>
+                                    <h2 className={`text-sm ${dark ? 'text-sky-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-sky-500 font-medium'}`}>R$ {valorCoisas}</h2>
                                 </div>
                             </div>
                         </main>
@@ -234,7 +258,7 @@ export default function CompararCoisas() {
 
                     <section className="max-w-full min-w-full mt-8 grid grid-cols-2 items-start relative">
                         <article className="col-1">
-                            <h1 className="font-medium text-lg text-slate-100 text-center">Clubes Brasileiros</h1>
+                            <h1 className={`font-medium text-lg text-center ${dark ? 'text-slate-100' : 'text-slate-800'}`}>Clubes Brasileiros</h1>
                             <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 justify-items-center px-4">
                             {loading ?
                                 <div className="flex-1 flex items-center justify-center">
@@ -274,11 +298,11 @@ export default function CompararCoisas() {
                             </div>
                         </article>
 
-                        <span className="min-h-[calc(100%-24px)] absolute top-8 left-1/2 -translate-x-1/2 min-w-0.5 bg-slate-500/60">
+                        <span className={`min-h-[calc(100%-24px)] absolute top-8 left-1/2 -translate-x-1/2 min-w-0.5 ${dark ? 'bg-slate-600/50' : 'bg-slate-300/30'}`}>
                         </span>
 
                         <article id="article-coisas" className="col-2 overflow-hidden">
-                            <h1 className="text-center font-medium text-lg text-slate-100">Coisas do Mundo</h1>
+                            <h1 className={`font-medium text-lg text-center ${dark ? 'text-slate-100' : 'text-slate-800'}`}>Coisas do Mundo</h1>
                             <div className="w-full h-full mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 justify-items-center px-4">
                             {loading ?
                                 <div className="flex-1 flex items-center justify-center">
@@ -341,9 +365,13 @@ export default function CompararCoisas() {
                             </div>
                         </article>
                     </section>
+
+                    <div ref={premiumRef} className="scroll-mt-10">
+                        <CardsPremium />
+                    </div>
                 </main>
 
-                <div className="lg:flex justify-end hidden sticky left-0 top-20 self-start">
+                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
             </div>

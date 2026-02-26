@@ -61,8 +61,8 @@ export interface Medias {
     mediaTorcedores: number;
     chanceQuitarDivida: number;
     mediaChanceTitulo?: number;
-    divida_2024?: number;
-    faturamento_2024?: number;
+    divida_2024: number;
+    faturamento_2024: number;
     projetarFaturamento: number;
     aumento_faturamento: number;
     valor_estimado: number
@@ -253,6 +253,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
     let media: Medias = {
         faturamento: 0,
         divida: 0,
+        faturamento_2024: 0,
+        divida_2024: 0,
         lucro: 0,
         folha_salarial: 0,
         contratacoes: 0,
@@ -274,6 +276,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
     if (data) {
         const mediaFaturamento: number[] = [];
         const mediaDivida: number[] = [];
+        const mediaFaturamento2024: number[] = [];
+        const mediaDivida2024: number[] = [];
         const mediaLucro: number[] = [];
         const mediaContratacoes: number[] = [];
         const mediaFolhaSalarial: number[] = [];
@@ -295,6 +299,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
         clubes.forEach((clube) => {
             mediaFaturamento.push(clube.faturamento);
             mediaDivida.push(clube.divida);
+            mediaFaturamento2024.push(clube.faturamento_2024);
+            mediaDivida2024.push(clube.divida_2024);
             mediaLucro.push(clube.lucro);
             mediaContratacoes.push(clube.valor_contratacoes);
             mediaMaiorContratacao.push(Number((clube.maior_contratacao).split(' - ')[1].split(' ')[0]) * 6);
@@ -317,6 +323,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
         media = {
             faturamento: calcularMedia(mediaFaturamento),
             divida: calcularMedia(mediaDivida),
+            faturamento_2024: calcularMedia(mediaFaturamento2024),
+            divida_2024: calcularMedia(mediaFaturamento2024),
             lucro: calcularMedia(mediaLucro),
             contratacoes: calcularMedia(mediaContratacoes),
             folha_salarial: calcularMedia(mediaFolhaSalarial),
@@ -355,6 +363,8 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
         imagem: '',
         faturamento: 0,
         divida: 0,
+        faturamento_2024: 0,
+        divida_2024: 0,
         lucro: 0,
         folha_salarial: 0,
         contratacoes: 0,
@@ -499,7 +509,11 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
 
                 mediaTorcedores: Number(clubeEscolhido.numero_torcedores.toFixed(2)),
 
-                valor_estimado: clubeEscolhido.valor_estimado
+                valor_estimado: clubeEscolhido.valor_estimado,
+
+                faturamento_2024: clubeEscolhido.faturamento_2024,
+
+                divida_2024: clubeEscolhido.divida_2024
             }
 
             return {clube: mediaClubeEscolhido, success: true};

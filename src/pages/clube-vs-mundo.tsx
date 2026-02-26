@@ -18,6 +18,7 @@ import {
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
 import adsense from '/adsense.png';
+import CardsPremium from "../components/cards-premium";
 
 
 type TopicoComparacao = {
@@ -314,13 +315,13 @@ export default function ClubeVsMundo() {
         <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
             <HeaderFixo/>
 
-            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2">
+            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
 
-                <div className="lg:flex justify-start hidden">
+                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
 
-                <main id="main-clube-vs-clube" className="col-span-full lg:col-2 w-full flex flex-col relative mx-1 pt-2">
+                <main id="main-clube-vs-clube" className="col-2">
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Além do Futebol
                     </h2>
@@ -527,7 +528,7 @@ export default function ClubeVsMundo() {
                                         <p className={`text-3xl font-bold mt-1 ${dark ? 'text-[#DAFF01]' : 'text-orange-400'}`}>
                                             {card.quantity}
                                             <span className={`text-base font-medium ml-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-[#222222]'}`}>
-                                            {card.title === '1 ano de Netflix' ? 'anos' : 'unidades'}
+                                            {card.title === '1 ano de Netflix' ? 'anos' :(card.quantity === 0 || card.quantity > 1) ? 'unidades' : 'unidade'}
                                             </span>
                                         </p>
                                         </div>
@@ -541,12 +542,13 @@ export default function ClubeVsMundo() {
                         </div>
 
                     </div>
+
+                    <CardsPremium />
                 </main>
 
-                <div className="lg:flex justify-end hidden">
+                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
                     <img className="max-w-[90%]" src={adsense} alt="" />
                 </div>
-
             </div>
 
             <FooterFixo />

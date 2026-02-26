@@ -13,7 +13,7 @@ import type { Topico, DadosClube } from "../pages/comparador-de-clubes";
 
 interface Props {
   clubesSelecionados: Medias[];
-  topico: 'Faturamento' | 'Dívida' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento' | 'Valor Estimado';
+  topico: 'Faturamento' | 'Dívida' | 'Faturamento (2024)' | 'Dívida (2024)' | 'Lucro' | 'Folha Salarial' | 'Contratações' | 'Maior Contratação' | 'Custo por Gol' | 'Custo por Ponto' | 'Custo por Vitória' | 'Custo por Jogador' | 'Faturamento/Dívida' | 'Lucro/Faturamento' | 'Nota do Clube' | 'Chance de Quitar a Dívida' | 'Projetar Faturamento' | 'Valor Estimado';
 }
 
 type DadoGrafico = {
@@ -24,10 +24,12 @@ type DadoGrafico = {
 };
 
 export default function GraficoComparativo({ clubesSelecionados, topico }: Props) {
-    const {largura} = allContext();
+    const {largura, dark} = allContext();
     const correlacaoTopicoCampo: Record<Topico, keyof DadosClube> = {
     'Faturamento': 'faturamento',
     'Dívida': 'divida',
+    'Faturamento (2024)':'faturamento_2024',
+    'Dívida (2024)':'divida_2024',
     'Lucro': 'lucro',
     'Folha Salarial': 'folha_salarial',
     'Contratações': 'contratacoes',
@@ -54,7 +56,7 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
     .sort((a, b) => b.valor - a.valor);
 
   return (
-    <div className="row-2 w-full overflow-x-auto overflow-y-hidden min-h-100 bg-slate-900 pl-6 relative pt-3">
+    <div className={`row-2 w-full overflow-x-auto overflow-y-hidden min-h-100 pl-6 relative pt-3 ${dark ? 'bg-slate-900' : 'bg-slate-100'}`}>
 
     {clubesSelecionados.length > 0 ? 
     <>
@@ -133,7 +135,7 @@ export default function GraficoComparativo({ clubesSelecionados, topico }: Props
     </>
     :
     <>
-    <h1 className="absolute left-0 top-1/2 text-white w-full text-center font-semibold text-sm">
+    <h1 className={`absolute left-0 top-1/2 w-full text-center font-semibold text-sm ${dark ? 'text-white' : 'text-zinc-800'}`}>
         Selecione ao menos um clube.
     </h1>
     
