@@ -130,12 +130,12 @@ export default function CardsPremium() {
             </p>
             </div>
 
-            <div className="grid gap-2 md:grid-cols-2 max-w-5xl mx-auto">
+            <div className="grid gap-0 sm:gap-2 md:grid-cols-2 max-w-5xl mx-auto">
                 <span className="contents">
                     {planos.map((plano: Plano) => (
                         <div
                         key={plano.id}
-                        className={`rounded-xl scale-95 grid max-h-186 min-h-186 lg:min-h-172 lg:max-h-172 grid-rows-[1fr_10%] bg-card text-card-foreground shadow relative border-2 hover:shadow-2xl transition-all duration-300 overflow-hidden group ${plano.id === 2 ? dark ? 'border-red-500 hover:border-red-600 bg-[rgb(26,28,30)]' : 'border-red-400 hover:border-red-500 bg-white' : dark ? 'border-amber-300 hover:border-amber-400 bg-[rgb(26,28,30)]' : 'border-yellow-200 hover:border-yellow-400 bg-white'}`}
+                        className={`rounded-xl sm:scale-95 scale-90 grid max-h-186 min-h-186 lg:min-h-172 lg:max-h-172 grid-rows-[1fr_10%] bg-card text-card-foreground shadow relative border-2 hover:shadow-2xl transition-all duration-300 overflow-hidden group ${plano.id === 2 ? dark ? 'border-red-500 hover:border-red-600 bg-[rgb(26,28,30)]' : 'border-red-400 hover:border-red-500 bg-white' : dark ? 'border-amber-300 hover:border-amber-400 bg-[rgb(26,28,30)]' : 'border-yellow-200 hover:border-yellow-400 bg-white'}`}
                         >
                             <div>
                                 <div className={`absolute top-0 right-0 w-32 h-32 rounded-bl-full transition-opacity ${plano.id === 2 ? dark ? 'bg-red-200 opacity-90 group-hover:opacity-100' : 'bg-red-200 opacity-90 group-hover:opacity-100' : dark ? ' bg-amber-100 opacity-90 group-hover:opacity-100' : 'bg-yellow-100  opacity-50 group-hover:opacity-70'}`}></div>

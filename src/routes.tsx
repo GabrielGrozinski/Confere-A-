@@ -30,6 +30,9 @@ import TelaCadastro from "./pages/login/cadastro";
 import Preco from "./pages/preco";
 import ClubeVsClube from "./pages/clube-vs-clube";
 import ClubeVsMundo from "./pages/clube-vs-mundo";
+import TermosDeUso from "./pages/termos-de-uso";
+import PoliticaDePrivacidade from "./pages/termos-de-privacidade";
+import Metodologia from "./pages/metodologia";
 
 
 export default function Rotas() {
@@ -49,6 +52,10 @@ export default function Rotas() {
                     <Route index element={<TelaLogin/>} />
                     <Route path="cadastro" element={<TelaCadastro/>} />
                 </Route>
+
+                <Route path="termos-de-uso" element={<TermosDeUso/>} />
+                <Route path="politica-de-privacidade" element={<PoliticaDePrivacidade/>} />
+                <Route path="metodologia" element={<Metodologia/>} />
 
                 <Route path="clube-vs-clube" element={<ClubeVsClube/>} />
                 <Route path="clube-vs-mundo" element={<ClubeVsMundo/>} />

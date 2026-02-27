@@ -14,7 +14,7 @@ export default function Produtos() {
     {
         id: 1,
         navigate: '/clube-vs-clube',
-        tag: "Flamengo vs Palmeiras",
+        tag: "Clube vs Clube",
         title: "Comparação Direta",
         description: (
         <>

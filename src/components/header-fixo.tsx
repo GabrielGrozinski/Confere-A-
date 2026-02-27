@@ -14,6 +14,7 @@ export default function HeaderFixo() {
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [ativarPesquisa, setAtivarPesquisa] = useState(false);
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const [mostrarMenuUser, setMostrarMenuUser] = useState<boolean>(false);
     const [mostrarBorder, setMostrarBorder] = useState<boolean>(false);
@@ -98,7 +99,7 @@ export default function HeaderFixo() {
                 menuAberto || mostrarBorder
                     ? dark
                     ? 'border-b border-neutral-400/10'
-                    : 'border-b border-neutral-800/10'
+                    : 'border-b border-neutral-500/10'
                     : 'border-b border-transparent'
                 }`}>
 
@@ -136,7 +137,7 @@ export default function HeaderFixo() {
                                     <div className="relative min-w-10 max-w-26 sm:min-w-[50%] sm:max-w-[50%]">
                                         <input 
                                         className={`
-                                        -translate-y-[2.5%] text-xs max-w-26 sm:max-w-full sm:min-w-full sm:ml-2 py-2 pl-3 pr-1 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
+                                        -translate-y-[2.5%] text-xs sm:ml-2 ${ativarPesquisa ? 'max-w-30 sm:max-w-full sm:min-w-full opacity-100 relative' : 'max-w-0 min-w-0 opacity-0 pointer-events-none absolute'} transition-all duration-500 py-2 pl-3 pr-1 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
                                         placeholder="Buscar clube" 
                                         type="search"
                                         value={busca}
@@ -146,6 +147,10 @@ export default function HeaderFixo() {
                                         }}
                                         name="buscar-topico" 
                                         id="buscar-topico" />
+                                        
+                                        {!ativarPesquisa &&
+                                            <i onClick={() => setAtivarPesquisa(true)} className={`fa-brands fa-sistrix text-xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
+                                        }
 
                                         {busca &&
                                         <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-20 max-h-120 sm:ml-2 overflow-y-auto pb-2 max-w-26 min-w-26 sm:max-w-full sm:min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
@@ -271,9 +276,10 @@ export default function HeaderFixo() {
 
                                 {abaEntretenimento &&
                                     <div className="relative">
+                                        
                                         <input 
                                         className={`
-                                        -translate-y-[2.5%] min-w-70 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
+                                        -translate-y-[2.5%] ${ativarPesquisa ? 'max-w-70 min-w-70 opacity-100 relative' : 'max-w-0 min-w-0 opacity-0 pointer-events-none absolute'} transition-all duration-500 py-2 pr-4 pl-4 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
                                         placeholder="Buscar clube" 
                                         type="search"
                                         value={busca}
@@ -283,6 +289,10 @@ export default function HeaderFixo() {
                                         }}
                                         name="buscar-topico" 
                                         id="buscar-topico" />
+                                        
+                                        {!ativarPesquisa &&
+                                            <i onClick={() => setAtivarPesquisa(true)} className={`fa-brands fa-sistrix text-2xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
+                                        }
 
                                     {busca &&
                                     <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-20 max-h-120 overflow-y-auto pb-2 min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>

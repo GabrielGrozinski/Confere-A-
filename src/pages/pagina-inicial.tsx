@@ -7,6 +7,7 @@ import { relacaoClubes, type Clube } from "../components/busca-clube";
 import { useNavigate } from "react-router-dom";
 import HeaderFixo from "../components/header-fixo";
 import FooterFixo from "../components/footer-fixo";
+import Cookies from "../components/cookies";
 
 
 export default function PaginaInicial() {
@@ -333,52 +334,22 @@ export default function PaginaInicial() {
                         </span>
                     </h1>
 
-                    <p className={`text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed ${dark ? 'text-white/40' : 'text-black/60'}`} x-file-name="HeroSection" x-line-number="97" x-component="p" x-id="HeroSection_97" x-dynamic="false">
+                    <p className={`text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed ${dark ? 'text-white/40' : 'text-black/60'}`}>
                         Faturamento, dívidas, custo por vitória e comparações detalhadas. Tudo o que você precisa para entender a saúde financeira dos clubes.
                     </p>
                 </div>
 
                 <div
                     className="relative w-[90%] translate-x-[5%] lg:max-w-1/2 lg:translate-x-1/2 mb-10 z-10"
-                    x-file-name="HeroSection"
-                    x-line-number="104"
-                    x-component="div"
-                    x-id="HeroSection_104"
-                    x-dynamic="false"
                 >
                     <div
                         className="relative flex items-center"
-                        x-file-name="HeroSection"
-                        x-line-number="105"
-                        x-component="div"
-                        x-id="HeroSection_105"
-                        x-dynamic="false"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className={`lucide lucide-search absolute left-5 w-5 h-5 ${dark ? 'text-white/30' : 'text-black/50'}`}
-                            aria-hidden="true"
-                        >
-                            <path d="m21 21-4.34-4.34"></path>
-                            <circle cx="11" cy="11" r="8"></circle>
-                        </svg>
+                        <i className={`fa-brands fa-sistrix left-8 -translate-x-1/2 absolute text-2xl top-1/2 -translate-y-1/2 ${dark ? 'text-zinc-500' : 'text-zinc-700'}`}></i>
 
                         <input
                             placeholder="Pesquise um clube... ex: Flamengo, Palmeiras"
-                            className={`w-full pl-14 pr-5 py-4 sm:py-5 border rounded-2xl  focus:outline-none transition-all duration-300 text-base sm:text-lg backdrop-blur-sm ${dark ? 'bg-white/4 border-white/8 text-white placeholder:text-white/25 focus:border-amber-400/30 focus:bg-white/6' : 'bg-black/4 border-black/8 text-black placeholder:text-black/35 focus:border-amber-500/70 focus:bg-black/6'}`}
-                            x-file-name="HeroSection"
-                            x-line-number="107"
-                            x-component="input"
-                            x-id="HeroSection_107"
-                            x-dynamic="false"
+                            className={`w-full pl-14 pr-5 py-4 sm:py-5 border rounded-2xl focus:outline-none transition-all duration-300 text-base sm:text-lg ${dark ? 'bg-white/4 border-white/8 text-white placeholder:text-white/25 focus:border-amber-400/30 focus:bg-white/6' : 'bg-black/4 border-black/8 text-black placeholder:text-black/35 focus:border-amber-500/70 focus:bg-black/6'}`}
                             type="search"
                             value={busca}
                             onChange={(e) => {
@@ -884,6 +855,10 @@ export default function PaginaInicial() {
 
                 </div>
             </section>
+
+            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-999 animacao-entrada min-w-[80%]">
+                <Cookies />
+            </div>
 
             <FooterFixo />
 

@@ -1,11 +1,11 @@
-import { useNavigate, useHref } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { allContext } from "../context/all-context";
 
 
 
 export default function FooterFixo() {
     const navigate = useNavigate();
-    const {setMostrarClubes} = allContext();
+    const {setMostrarClubes, largura} = allContext();
 
 
     const handleNavegar = (rota: string) => {
@@ -17,7 +17,7 @@ export default function FooterFixo() {
         <footer className="relative bg-[#060911] border-t border-white/4">
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 sm:py-20">
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
+                <div className={`grid grid-cols-1 ${(largura >= 820 && largura < 1024) && 'grid-cols-[35%_1fr]'} lg:grid-cols-5 gap-12 lg:gap-8`}>
 
                     <div className="lg:col-span-2">
 
@@ -53,68 +53,60 @@ export default function FooterFixo() {
                             Dados transparentes para decisões inteligentes.
                         </p>
 
-                        <div className="flex items-center gap-3">
-
-                            <a href="#" className="w-9 h-9 rounded-lg bg-white/4 border border-white/6 flex items-center justify-center text-white/30 hover:text-white/60 hover:border-white/12 transition-all duration-200">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-twitter w-4 h-4"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                                </svg>
-                            </a>
-
-                            <a href="#" className="w-9 h-9 rounded-lg bg-white/4 border border-white/6 flex items-center justify-center text-white/30 hover:text-white/60 hover:border-white/12 transition-all duration-200">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-github w-4 h-4"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
-                                    <path d="M9 18c-4.51 2-5-2-7-2"></path>
-                                </svg>
-                            </a>
-
-                            <a href="#" className="w-9 h-9 rounded-lg bg-white/4 border border-white/6 flex items-center justify-center text-white/30 hover:text-white/60 hover:border-white/12 transition-all duration-200">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-mail w-4 h-4"
-                                    aria-hidden="true"
-                                >
-                                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
-                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                                </svg>
-                            </a>
-
-                        </div>
                     </div>
 
-                    <div>
+                    {largura >= 820 && largura < 1024 ?
+                    <div className="flex justify-between">
+                        <div className="">
+                            <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Análises</h4>
+                            <ul className="space-y-3">
+
+                                <li onClick={() => {
+                                    navigate('/produtos');
+                                    setMostrarClubes(true);
+                                    }}
+                                    ><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Análise Individual</a>
+                                </li>
+
+                                <li onClick={() => navigate('/clube-vs-clube')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Clube VS Clube</a></li>
+
+                                <li onClick={() => navigate('/clube-vs-mundo')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Clube VS Mundo</a></li>
+
+                                <li onClick={() => navigate('/comparador-de-clubes')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Comparação Geral</a></li>
+                            </ul>
+                        </div>
+
+                        <div className="">
+                            <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Sobre</h4>
+                            <ul className="space-y-3">
+                                <li onClick={() => handleNavegar('metodologia')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Metodologia</a></li>
+
+                                <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Fontes dos Dados</a></li>
+
+                                <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Preço</a></li>
+                                
+                                <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">FAQ</a></li>
+                            </ul>
+                        </div>
+
+                        <div className="">
+                            <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Contato</h4>
+                            <ul className="space-y-3">
+                                <li className="flex justify-start items-center" onClick={() => handleNavegar('metodologia')}>
+                                    <i className="fa-brands fa-square-instagram text-3xl -ml-1.25 text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
+
+                                    <i className="fa-brands fa-square-x-twitter text-3xl text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
+
+                                    <i className="fa-brands fa-square-facebook text-3xl text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
+                                </li>
+                                
+                                <li><a className="cursor-text text-sm text-white/45 hover:text-white/60 transition-colors duration-200">contato@confereae.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    :
+                    <>
+                    <div className="">
                         <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Análises</h4>
                         <ul className="space-y-3">
 
@@ -133,18 +125,35 @@ export default function FooterFixo() {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className="">
                         <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Sobre</h4>
                         <ul className="space-y-3">
-                            <li onClick={() => handleNavegar('clube-vs-mundo')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Metodologia</a></li>
+                            <li onClick={() => handleNavegar('metodologia')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Metodologia</a></li>
 
                             <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Fontes dos Dados</a></li>
 
-                            <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Contato</a></li>
+                            <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Preço</a></li>
                             
                             <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">FAQ</a></li>
                         </ul>
                     </div>
+
+                    <div className="">
+                        <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Contato</h4>
+                        <ul className="space-y-3">
+                            <li className="flex justify-start items-center" onClick={() => handleNavegar('metodologia')}>
+                                <i className="fa-brands fa-square-instagram text-3xl -ml-1.25 text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
+
+                                <i className="fa-brands fa-square-x-twitter text-3xl text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
+
+                                <i className="fa-brands fa-square-facebook text-3xl text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
+                            </li>
+                            
+                            <li><a className="cursor-text text-sm text-white/45 hover:text-white/60 transition-colors duration-200">contato@confereae.com</a></li>
+                        </ul>
+                    </div>
+                    </>
+                    }
 
                 </div>
 
@@ -156,9 +165,8 @@ export default function FooterFixo() {
                     </p>
 
                     <div className="flex items-center gap-6">
-                        <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Termos de Uso</a>
-                        <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Privacidade</a>
-                        <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Cookies</a>
+                        <a onClick={() => handleNavegar('termos-de-uso')} className="text-xs text-white/20 hover:text-white/40 transition-colors cursor-pointer">Termos de Uso</a>
+                        <a onClick={() => handleNavegar('politica-de-privacidade')} className="text-xs text-white/20 hover:text-white/40 transition-colors cursor-pointer">Privacidade</a>
                     </div>
                 </div>
 
