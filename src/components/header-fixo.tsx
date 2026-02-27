@@ -338,7 +338,7 @@ export default function HeaderFixo() {
                                                 onClick={() => {
                                                     setMostrarMenuUser(false);
                                                     navigate('/produtos');
-                                                    setMostrarClubes(true)
+                                                    setMostrarClubes(true);
                                                 }}
                                                 className={`flex w-[94%] justify-between mb-3 items-center translate-x-[3%] p-1 px-2 transition-all duration-150 cursor-pointer rounded-md ${dark ? 'hover:bg-zinc-700 text-neutral-400 hover:text-neutral-200' : 'hover:bg-zinc-300 text-neutral-600 hover:text-neutral-800'}`}>
                                                     Analisar Clube

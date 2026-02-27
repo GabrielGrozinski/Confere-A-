@@ -1,4 +1,18 @@
+import { useNavigate, useHref } from "react-router-dom"
+import { allContext } from "../context/all-context";
+
+
+
 export default function FooterFixo() {
+    const navigate = useNavigate();
+    const {setMostrarClubes} = allContext();
+
+
+    const handleNavegar = (rota: string) => {
+        const url = `${window.location.origin}/#/${rota}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
     return (
         <footer className="relative bg-[#060911] border-t border-white/4">
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 sm:py-20">
@@ -103,30 +117,32 @@ export default function FooterFixo() {
                     <div>
                         <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Análises</h4>
                         <ul className="space-y-3">
-                            <li><a href="#revenue" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Faturamento</a></li>
-                            <li><a href="#debt" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Dívidas</a></li>
-                            <li><a href="#cost" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Custo da Vitória</a></li>
-                            <li><a href="#compare" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Comparar Clubes</a></li>
-                        </ul>
-                    </div>
 
-                    <div>
-                        <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Clubes</h4>
-                        <ul className="space-y-3">
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Série A</a></li>
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Série B</a></li>
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Ranking</a></li>
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Histórico</a></li>
+                            <li onClick={() => {
+                                navigate('/produtos');
+                                setMostrarClubes(true);
+                                }}
+                                ><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Análise Individual</a>
+                            </li>
+
+                            <li onClick={() => navigate('/clube-vs-clube')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Clube VS Clube</a></li>
+
+                            <li onClick={() => navigate('/clube-vs-mundo')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Clube VS Mundo</a></li>
+
+                            <li onClick={() => navigate('/comparador-de-clubes')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Comparação Geral</a></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Sobre</h4>
                         <ul className="space-y-3">
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Metodologia</a></li>
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Fontes dos Dados</a></li>
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Contato</a></li>
-                            <li><a href="#" className="text-sm text-white/45 hover:text-white/60 transition-colors duration-200">FAQ</a></li>
+                            <li onClick={() => handleNavegar('clube-vs-mundo')}><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Metodologia</a></li>
+
+                            <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Fontes dos Dados</a></li>
+
+                            <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">Contato</a></li>
+                            
+                            <li><a className="cursor-pointer text-sm text-white/45 hover:text-white/60 transition-colors duration-200">FAQ</a></li>
                         </ul>
                     </div>
 

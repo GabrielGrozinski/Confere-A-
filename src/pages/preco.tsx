@@ -153,7 +153,7 @@ export default function Preco() {
                                     ))}
                                     </div>
                                         {plano.id === 2 &&
-                                        <p className={`mt-6 ${dark ? 'text-white' : 'text-zinc-900'}`}>
+                                        <p className={`mt-6 ${dark ? 'text-slate-100' : 'text-zinc-900'}`}>
                                                 <i className={`fa-solid fa-bolt ml-1 ${plano.id === 2 ? 'text-red-400' : dark ? 'text-amber-200' : 'text-amber-400'}`}></i>
                                                 : Ferramentas exclusivas do Confere Aê. 
                                         </p>
