@@ -39,6 +39,12 @@ export default async function handler(req, res) {
       if (payment.status === "approved") {
         console.log("Pagamento aprovado!");
 
+        const {data, error} = await supabase
+            .from('planos_teste')
+            .insert({
+                teste:"teste-1"
+            });
+
         if (error) {
             console.error('Houve um erro ao inserir o plano', error)
         }
