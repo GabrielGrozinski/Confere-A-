@@ -14,7 +14,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { type, data } = req.body;
+    const body = typeof req.body === "string"
+      ? JSON.parse(req.body)
+      : req.body;
+
+    const { type, data } = body;
 
     // Mercado Pago envia vários tipos de evento
     if (type === "payment") {
