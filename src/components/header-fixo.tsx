@@ -15,6 +15,7 @@ export default function HeaderFixo() {
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [ativarPesquisa, setAtivarPesquisa] = useState(false);
+    const [ativarPesquisaMobile, setAtivarPesquisaMobile] = useState(false);
     const [mostrarIcone, setMostrarIcone] = useState<boolean>(false);
     const [mostrarMenuUser, setMostrarMenuUser] = useState<boolean>(false);
     const [mostrarBorder, setMostrarBorder] = useState<boolean>(false);
@@ -93,9 +94,23 @@ export default function HeaderFixo() {
 
     }
 
+    useEffect(() => {
+    if (ativarPesquisaMobile) {
+        window.scrollTo({
+            top: 0
+        });
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+    }
+    }, [ativarPesquisaMobile]);
+
     return (
+        <>
                 <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
-                className={`fixed top-0 w-full max-w-full left-0 z-999 flex pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[6%] box-border ${
+                className={`fixed top-0 w-full max-w-full left-0 z-999 flex pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[2%] xl:px-[4%] box-border ${
                 menuAberto || mostrarBorder
                     ? dark
                     ? 'border-b border-neutral-400/10'
@@ -133,55 +148,10 @@ export default function HeaderFixo() {
                     {largura < 1024 ? (
                         abaEntretenimento ?
                             <div className="w-full flex items-center justify-end px-2">
-                                <div className="flex-1 flex justify-start ml-2">
-                                    <div className="relative min-w-10 max-w-26 sm:min-w-[50%] sm:max-w-[50%]">
-                                        <input 
-                                        className={`
-                                        -translate-y-[2.5%] text-xs sm:ml-2 ${ativarPesquisa ? 'max-w-30 sm:max-w-full sm:min-w-full opacity-100 relative' : 'max-w-0 min-w-0 opacity-0 pointer-events-none absolute'} transition-all duration-500 py-2 pl-3 pr-1 border rounded-full ${dark ? 'placeholder:text-neutral-400 border-slate-200/20 text-slate-100' : 'placeholder:text-neutral-500 border-slate-800/30'}`} 
-                                        placeholder="Buscar clube" 
-                                        type="search"
-                                        value={busca}
-                                        onChange={(e) => {
-                                            setBusca(e.currentTarget.value);
-                                            buscaClube(e.currentTarget.value);
-                                        }}
-                                        name="buscar-topico" 
-                                        id="buscar-topico" />
-                                        
-                                        {!ativarPesquisa &&
-                                            <i onClick={() => setAtivarPesquisa(true)} className={`fa-brands fa-sistrix text-xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
-                                        }
+                                <div className="flex-1 flex justify-end ml-2">
+                                    <div className="relative min-w-10 max-w-26">
 
-                                        {busca &&
-                                        <section className={`absolute p-2 bottom-0 translate-y-[101%] min-h-20 max-h-120 sm:ml-2 overflow-y-auto pb-2 max-w-26 min-w-26 sm:max-w-full sm:min-w-full rounded-lg ${dark ? 'bg-[#0b1f33] shadow-[0px_0px_3px_#1e40af4a]' : 'shadow-[0px_0px_3px_#0000004a] bg-[#f7fbff]'}`}>
-                                            {loading ?
-                                            <div className="w-full flex items-center justify-center">
-                                                <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
-                                            </div>
-                                            :
-                                            clubes &&
-                                            clubes.length > 0 ?
-                                            <div className="flex flex-col gap-4 justify-center py-2">
-                                                {clubes.map((clube, index) => (
-                                                    <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-2 sm:gap-6 items-center w-full flex sm:flex-row flex-col text-center sm:text-start sm:pl-2 ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
-                                                        <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
-                                                        <div>
-                                                            <h1 className={`${dark ? 'text-slate-50 font-medium' : 'text-[#222222] font-medium'}`}>{clube.nome}</h1>
-                                                            <h2 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>Série A</h2>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            :
-                                            <div className="min-w-full text-center translate-y-1/5 flex items-center justify-center">
-                                                <h1 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-                                                    Nenhum clube encontrado para "{busca}"
-                                                </h1>
-                                            </div>
-                                            }
-                                            
-                                        </section>
-                                        }
+                                        <i onClick={() => setAtivarPesquisaMobile(true)} className={`fa-brands fa-sistrix text-xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
                                     </div>
                                 </div>
 
@@ -433,5 +403,64 @@ export default function HeaderFixo() {
                     }
 
                 </div>
+
+                {ativarPesquisaMobile &&
+                    <div className="bg-black/80 backdrop-blur-lg absolute inset-0 z-999 flex flex-col p-4 min-h-screen">
+                        <h1 className={`absolute left-1/2 -translate-x-1/2 top-6 text-neutral-200/90`}>
+                            Toque fora para fechar
+                        </h1>
+                        <div onClick={() => setAtivarPesquisaMobile(false)} className={`min-h-10 min-w-10 max-h-10 max-w-10 flex items-center justify-center rounded-full mb-4 cursor-pointer ${dark ? 'bg-gray-800 text-white' : 'bg-gray-50 text-zinc-900'}`}>
+                            <i className="fa-solid fa-xmark"></i>
+                        </div>
+                        <div className="relative flex items-center">
+                            <i className={`fa-brands fa-sistrix left-8 -translate-x-1/2 absolute text-2xl top-1/2 -translate-y-1/2 ${dark ? 'text-zinc-500' : 'text-zinc-700'}`}></i>
+                            <input
+                                placeholder="Pesquise um clube... ex: Flamengo, Palmeiras"
+                                className={`w-full pl-14 pr-5 py-4 sm:py-5 border-2 rounded-2xl focus:outline-none transition-all duration-300 text-base sm:text-lg ${dark ? 'bg-gray-800 border-white/8 text-white placeholder:text-white/25 focus:border-amber-500/50' : 'bg-gray-50 border-black/8 text-black placeholder:text-black/35 focus:border-amber-500/70'}`}
+                                type="search"
+                                value={busca}
+                                onChange={(e) => {
+                                    setBusca(e.currentTarget.value);
+                                    buscaClube(e.currentTarget.value);
+                                }}
+                            />
+                        </div>
+
+                        {busca && clubes &&
+                        <section className={`p-2 min-h-20 mt-2 z-10 max-h-[50vh] overflow-y-auto pb-2 min-w-full border rounded-lg ${dark ? 'bg-slate-900 border-slate-700/20' : 'bg-[#f7fbff] border-slate-500/30'}`}>
+
+                            {loading ?
+                                <div className="flex justify-center">
+                                    <ClipLoader color={dark ? "#fff" : "#000"} size={34} className="self-center mt-4" />
+                                </div>
+                                :
+                                clubes.length > 0 ?
+                                    <div className="flex flex-col gap-4 justify-center py-2">
+                                        {clubes.map((clube, index) => (
+                                            <div onClick={() => navegar(clube.nome)} className={`cursor-pointer gap-6 items-center w-full flex pl-2 relative ${index !== clubes.length - 1 ? dark ? 'border-b pb-4 border-b-slate-300/20' : 'border-b pb-4 border-b-slate-800/20' : ''}`} key={index}>
+                                                <img className="max-w-10 max-h-10" src={clube.imagem} alt="" />
+                                                <div className="relative w-full text-start">
+                                                    <h1 className={`${dark ? 'text-slate-50 font-medium' : 'text-[#222222] font-medium'}`}>{clube.nome}</h1>
+                                                    <h2 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>Série A</h2>
+                                                    <i className={`fa-solid fa-angle-right absolute top-1/2 right-4 -translate-y-1/2 ${dark ? 'text-slate-400' : ''}`}></i>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    :
+                                    <div className="min-w-full translate-y-[calc(50%+4px)] flex items-center justify-center">
+                                        <h1 className={`${dark ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                                            Nenhum clube encontrado para "{busca}"
+                                        </h1>
+                                    </div>
+                            }
+
+                        </section>
+                        }
+
+                        <div onClick={() => setAtivarPesquisaMobile(false)} className="flex-1" />
+                    </div>
+                }
+        </>
     );
 }

@@ -130,7 +130,7 @@ export default function CardsPremium() {
             </p>
             </div>
 
-            <div className="grid gap-0 sm:gap-2 md:grid-cols-2 max-w-5xl mx-auto">
+            <div className="grid gap-0 sm:gap-2 xl:grid-cols-2 max-w-5xl mx-auto">
                 <span className="contents">
                     {planos.map((plano: Plano) => (
                         <div

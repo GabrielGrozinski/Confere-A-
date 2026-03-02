@@ -688,19 +688,19 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                         <img className="max-h-40 max-w-40 self-center" src={clubeEscolhido.imagem} alt="" />
                         <h1 className={`text-4xl text-center ${clubeEscolhido.nome === 'Santos' ? 'text-zinc-800 text-shadow-[1px_1px_1px_#FFF0002a]' : 'text-slate-50 text-shadow-[1px_1px_1px_#0000002a]'} font-[mono]`}>{clubeEscolhido.nome}</h1>
                     </div>
-                    <div className="flex flex-col pl-2 min-h-full max-h-full justify-evenly gap-1">
+                    <div className="flex flex-col pl-2 min-h-full max-h-full justify-evenly gap-1 min-w-[45%] sm:min-w-auto">
                         <p
-                            style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }} className={`font-manrope rounded-md p-2 text-sm sm:text-base scale-90 sm:scale-100 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
-                            <i className={`fa-solid fa-sack-dollar ${clubeEscolhido.nome === 'Santos' ? 'text-sky-400' : 'text-sky-900'} mr-1`}></i> {rank_do_clube.faturamento}° em Faturamento
+                            style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }} className={`font-manrope rounded-md p-2 text-sm min-h-12 max-h-12 sm:min-h-auto sm:max-h-auto sm:text-base scale-90 sm:scale-100 border flex flex-col sm:flex-row items-center ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                            <i className={`fa-solid fa-sack-dollar ${clubeEscolhido.nome === 'Santos' ? 'text-sky-400' : 'text-sky-900'} mr-1`}></i> {rank_do_clube.faturamento}° em Receita
                         </p>
                         <p
                             style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
-                            className={`font-manrope rounded-md p-2 text-sm sm:text-base scale-90 sm:scale-100 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                            className={`font-manrope rounded-md p-2 text-sm min-h-12 max-h-12 sm:min-h-auto sm:max-h-auto sm:text-base scale-90 sm:scale-100 border flex flex-col sm:flex-row items-center ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
                             <i className="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> {rank_do_clube.divida}° em Dívida
                         </p>
                         <p
                             style={{ background: clubeEscolhido.nome === 'Santos' ? 'linear-gradient(135deg, #27272a 0%, #222222 100%)' : 'linear-gradient(135deg, #f8fafc 0%, white 100%)' }}
-                            className={`font-manrope rounded-md p-2 text-sm sm:text-base scale-90 sm:scale-100 border ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
+                            className={`font-manrope rounded-md p-2 text-sm min-h-12 max-h-12 sm:min-h-auto sm:max-h-auto sm:text-base scale-90 sm:scale-100 border flex flex-col sm:flex-row items-center ${clubeEscolhido.nome === 'Santos' ? 'border-slate-900 text-zinc-50 text-shadow-[1px_1px_1px_#0000002a] shadow-[2px_2px_2px_#0000002a]' : 'border-white text-zinc-900 shadow-[2px_2px_2px_#0000006a]'} text-start font-medium`}>
                             <i className="fa-solid fa-users text-blue-600 mr-1"></i> {rank_do_clube.salario}° em Salário
                         </p>
                     </div>
@@ -713,7 +713,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     </div>
 
                     <div className="col-2 flex flex-col items-center">
-                        <section className={`w-full gap-6 ${largura >= 1444 ? 'grid grid-cols-2' : largura >= 1024 ? 'flex flex-col px-4' : largura > 768 ? 'grid grid-cols-2' : 'flex flex-col px-4'} pb-10`}>
+                        <section className={`w-full px-4 gap-6 ${largura >= 1444 ? 'grid grid-cols-2' : largura >= 1024 ? 'flex flex-col' : largura > 768 ? 'grid grid-cols-2' : 'flex flex-col'} pb-10`}>
                             {loading ?
                             <div className="flex-1 flex items-center justify-center">
                                 <ClipLoader size={30} color={dark ? '#fff' : '#000'}/>
