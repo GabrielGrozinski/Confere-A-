@@ -294,6 +294,8 @@ export default function PaginaInicial() {
         };   
     }, []);
 
+    
+
     return (
         <div id="body" style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
 

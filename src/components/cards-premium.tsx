@@ -1,5 +1,5 @@
 import { allContext } from "../context/all-context";
-
+import axios from 'axios';
 
 
 export default function CardsPremium() {
@@ -57,6 +57,18 @@ export default function CardsPremium() {
         botao: "Desbloquear Acesso",
     },
     ];
+
+    const handlePagamento = async () => {
+    try {
+        const response = await axios.post('/api/create-preference');
+
+        const data = response.data;
+
+        window.location.href = data.init_point;
+    } catch (error) {
+        console.error('Erro ao criar pagamento:', error);
+    }
+    };
 
 
     return (
@@ -208,7 +220,7 @@ export default function CardsPremium() {
                                 </div>
                             </div>
                             
-                            <div className="flex items-center p-6 pt-4">
+                            <div onClick={() => handlePagamento} className="flex items-center p-6 pt-4">
                                 <button className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${plano.id === 0 ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
                                 {plano.botao}
                                 </button>
