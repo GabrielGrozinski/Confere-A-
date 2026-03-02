@@ -59,10 +59,10 @@ export default function CardsPremium() {
     ];
 
     const handlePagamento = async () => {
+        console.log('oi')
     try {
-        const response = await axios.post('../api/create-preference');
-
-        const data = response.data;
+        console.log('ola')
+        const { data } = await axios.post('/api/create-preference');
 
         window.location.href = data.init_point;
     } catch (error) {
@@ -99,7 +99,7 @@ export default function CardsPremium() {
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
                 className="lucide lucide-sparkles h-4 w-4"
                 aria-hidden="true"
                 x-file-name="PremiumSection"
@@ -189,7 +189,7 @@ export default function CardsPremium() {
                                             stroke="currentColor"
                                             stroke-width="2"
                                             stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                            strokeLinejoin="round"
                                             className={`lucide lucide-circle-check h-5 w-5 shrink-0 mt-0.5 ${plano.id === 2 ? 'text-red-600' : 'text-yellow-600'}`}
                                             aria-hidden="true"
                                         >
@@ -220,7 +220,7 @@ export default function CardsPremium() {
                                 </div>
                             </div>
                             
-                            <div onClick={() => handlePagamento} className="flex items-center p-6 pt-4">
+                            <div onClick={handlePagamento} className="flex items-center p-6 pt-4">
                                 <button className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${plano.id === 0 ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
                                 {plano.botao}
                                 </button>
@@ -230,7 +230,7 @@ export default function CardsPremium() {
                 </span>
             </div>
 
-            <h1 className="bg-red-400 min-h-20 min-w-20">TESTE</h1>
+            <h1 className="bg-green-400 min-h-20 min-w-20">TESTE2</h1>
             
         </div>
     )
