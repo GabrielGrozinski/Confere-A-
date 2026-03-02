@@ -570,18 +570,3 @@ export function relacaoClubes(nome: string) {
     );
     return nomeEscolhido;
 }
-
-export async function adicionaPlano(teste: string, ) {
-    console.log('abriu');
-    const {data, error} = 
-        await supabase
-            .from('planos_teste')
-            .insert({
-                teste: teste
-            });
-
-    if (error) {
-        console.error('Houve um erro ao inserir o plano', error)
-    }
-        
-}

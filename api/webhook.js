@@ -1,9 +1,11 @@
-import adicionaPlano from '../src/components/busca-clube';
-import allContext from '../src/context/all-context';
+import { createClient } from "@supabase/supabase-js";
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 export default async function handler(req, res) {
-    const { user } = allContext();  
 
   console.log("Webhook recebido:", req.method);
 
@@ -37,7 +39,16 @@ export default async function handler(req, res) {
       if (payment.status === "approved") {
         console.log("Pagamento aprovado!");
 
-        adicionaPlano('teste-1');
+        const {data, error} = 
+            await supabase
+                .from('planos_teste')
+                .insert({
+                    teste: "teste-1"
+                });
+
+        if (error) {
+            console.error('Houve um erro ao inserir o plano', error)
+        }
 
       }
     }
