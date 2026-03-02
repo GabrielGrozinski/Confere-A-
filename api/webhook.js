@@ -1,4 +1,10 @@
+import adicionaPlano from '../src/components/busca-clube';
+import allContext from '../src/context/all-context';
+
+
 export default async function handler(req, res) {
+    const { user } = allContext();  
+
   console.log("Webhook recebido:", req.method);
 
   if (req.method !== "POST") {
@@ -31,7 +37,7 @@ export default async function handler(req, res) {
       if (payment.status === "approved") {
         console.log("Pagamento aprovado!");
 
-        console.log('pronto pra ir pro supabase')
+        adicionaPlano('teste-1');
 
       }
     }
