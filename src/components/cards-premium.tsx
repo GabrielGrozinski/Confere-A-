@@ -60,7 +60,7 @@ export default function CardsPremium() {
 
     const handlePagamento = async () => {
     try {
-        const response = await axios.post('/api/create-preference');
+        const response = await axios.post('../api/create-preference');
 
         const data = response.data;
 
@@ -229,6 +229,8 @@ export default function CardsPremium() {
                     ))}
                 </span>
             </div>
+
+            <h1 className="bg-red-400 min-h-20 min-w-20">TESTE</h1>
             
         </div>
     )
