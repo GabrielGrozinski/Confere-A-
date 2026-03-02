@@ -59,9 +59,7 @@ export default function CardsPremium() {
     ];
 
     const handlePagamento = async () => {
-        console.log('oi')
     try {
-        console.log('ola')
         const { data } = await axios.post('/api/create-preference');
 
         window.location.href = data.init_point;
