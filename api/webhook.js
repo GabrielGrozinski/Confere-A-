@@ -46,9 +46,11 @@ export default async function handler(req, res) {
         console.log("Pagamento aprovado!");
 
         const {data, error} = await supabase
-            .from('planos_teste')
+            .from('planos')
             .insert({
-                teste: `${paymentId}, sócio, ${userId}`,
+                user_id: userId,
+                payment_id: paymentId,
+                plan_id: 'Sócio'
             });
 
         if (error) {
