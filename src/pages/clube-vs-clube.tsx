@@ -1,5 +1,5 @@
 import { buscaTodosClubes, buscaAssinante } from "../components/busca-clube";
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import type { Clube } from "../components/busca-clube";
 import '../styles/comparacao-unica.css';
 import HeaderFixo from "../components/header-fixo";
@@ -201,13 +201,13 @@ export default function ClubeVsClube() {
         )
     }
 
-    function verificaAssinanteValue(topico: number) {
+    const verificaAssinanteValue = useCallback((topico: number) => {
         return (
             assinante ? topico : 0
         )
-    }
+    }, [assinante]);
 
-    function verificaAssinanteFormatted(value: number, formato: string) {
+    const verificaAssinanteFormatted = useCallback((value: number, formato: string) => {
         return (
             assinante ?
                 `${value}${formato}`
@@ -216,9 +216,9 @@ export default function ClubeVsClube() {
                     <i className="fa-solid fa-lock"></i>
                 </>
         )
-    }
+    }, [assinante]);
 
-    function verificaAssinanteHigh(topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) {
+    const verificaAssinanteHigh = useCallback((topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) => {
         return (
             assinante ?
                 direcaoClube === 'A' ?
@@ -234,15 +234,15 @@ export default function ClubeVsClube() {
             :
             false
         )
-    }
+    }, [assinante]);
 
-    function verificaAssinanteValueSocio(topico: number) {
+    const verificaAssinanteValueSocio = useCallback((topico: number) => {
         return (
             assinanteSocio ? topico : 0
         )
-    }
+    }, [assinanteSocio]);
 
-    function verificaAssinanteFormattedSocio(value: number, formato: string) {
+    const verificaAssinanteFormattedSocio = useCallback((value: number, formato: string) => {
         return (
             assinanteSocio ?
                 `${value}${formato}`
@@ -251,9 +251,9 @@ export default function ClubeVsClube() {
                     <i className="fa-solid fa-lock"></i>
                 </>
         )
-    }
+    }, [assinanteSocio]);
 
-    function verificaAssinanteHighSocio(topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) {
+    const verificaAssinanteHighSocio = useCallback((topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) => {
         return (
             assinanteSocio ?
                 direcaoClube === 'A' ?
@@ -269,7 +269,7 @@ export default function ClubeVsClube() {
             :
             false
         )
-    }
+    }, [assinanteSocio]);
 
     const financialData: FinancialSection[] = useMemo(() => {
         if (!clubeA || !clubeB) return [];
