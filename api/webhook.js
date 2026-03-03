@@ -38,12 +38,11 @@ export default async function handler(req, res) {
 
       if (payment.status === "approved") {
         console.log("Pagamento aprovado!");
-        const user = await supabase.auth.getUser();
 
         const {data, error} = await supabase
             .from('planos_teste')
             .insert({
-                teste: `${user.data.user.id}, ${paymentId}, sócio`,
+                teste: `${paymentId}, sócio`,
             });
 
         if (error) {
