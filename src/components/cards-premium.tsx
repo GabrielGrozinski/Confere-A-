@@ -62,7 +62,11 @@ export default function CardsPremium() {
         const userId = user.id;
         try {
             console.log('Iniciando', userId)
-            const { data } = await axios.post("/api/preference", userId);
+            const { data } = await axios.post("/api/preference", {
+                headers: {
+                    "Authorization": `Bearer ${userId}`
+                }
+            });
 
             window.location.href = data.init_point;
         } catch (error) {
@@ -230,6 +234,7 @@ export default function CardsPremium() {
                 </span>
             </div>
             
+            <h1 className="bg-red-400 minh-30 min-w-30">teste</h1>
         </div>
     )
 }
