@@ -49,7 +49,7 @@ export default async function handler(req, res) {
             .from('planos')
             .insert({
                 user_id: userId,
-                payment_id: paymentId,
+                payment_id: `${paymentId}`,
                 plan_id: 'Sócio'
             });
 
