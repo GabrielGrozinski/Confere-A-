@@ -125,7 +125,7 @@ export function AllContext({children}: Props) {
             const {data, error} = await supabase.auth.signInWithOAuth({
                 provider: "google",
                 options: {
-                    redirectTo: "https://confere-ae-psi.vercel.app/#"
+                    redirectTo: "https://confere-ae-psi.vercel.app"
                 }
             });
             
