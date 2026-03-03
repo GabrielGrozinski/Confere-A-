@@ -40,6 +40,15 @@ export default async function handler(req, res) {
         userId = payment.order.external_reference;
       }
 
+      let teste = 'teste';
+      const session = await supabase.auth.getUser();
+      if (!session) {
+        teste = 'session'
+      } else {
+        teste = (session.data.user.id) ?? 'user';
+      }
+      
+
       console.log("Status do pagamento:", payment.status);
 
       if (payment.status === "approved") {
@@ -48,7 +57,7 @@ export default async function handler(req, res) {
         const {data, error} = await supabase
             .from('planos_teste')
             .insert({
-                teste: `${paymentId}, sócio, ${userId}`,
+                teste: `${paymentId}, ${teste}, sócio, ${userId}`,
             });
 
         if (error) {
