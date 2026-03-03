@@ -670,7 +670,12 @@ export default function ClubeVsClube() {
             <HeaderFixo/>
 
             <div className="grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
-<AdsenseLeft />
+
+                {(assinanteAtual === 'Sócio' || assinanteAtual === 'Torcedor') ?
+                    <div></div>
+                    :
+                    <AdsenseLeft />
+                }
 
                 <main id="main-clube-vs-clube" className="col-2">
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
@@ -899,7 +904,12 @@ export default function ClubeVsClube() {
                     </div>
                 </main>
 
-<AdsenseRight />
+                {(assinanteAtual === 'Sócio' || assinanteAtual === 'Torcedor') ?
+                    <div></div>
+                    :
+                    <AdsenseRight />
+                }
+
             </div>
 
             <FooterFixo />
