@@ -41,11 +41,9 @@ export default async function handler(req, res) {
         const user = await supabase.auth.getUser();
 
         const {data, error} = await supabase
-            .from('planos')
+            .from('planos_teste')
             .insert({
-                user_id: user.data.user.id,
-                payment_id: paymentId,
-                plan_id: 'Sócio'
+                teste: `${user.data.user.id}, ${paymentId}, sócio`,
             });
 
         if (error) {
