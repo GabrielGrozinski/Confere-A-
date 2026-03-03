@@ -2,10 +2,11 @@ import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import { useEffect, useState } from "react";
 import FooterFixo from "../components/footer-fixo";
+import axios from "axios";
 
 
 export default function Preco() {
-    const {setTopicoAtivo, dark, assinanteAtual} = allContext();
+    const {setTopicoAtivo, dark, assinanteAtual, user} = allContext();
     const [planoAtivo, setPlanoAtivo] = useState<'Gratuíto' | 'Torcedor' | 'Sócio' | string>('Gratuito');
 
     useEffect(() => {
@@ -81,6 +82,26 @@ export default function Preco() {
         botao: "Desbloquear Acesso",
     },
     ];
+
+    const handlePagamento = async (plano: string) => {
+        if (!user) return;
+        const userId = user.id;
+        try {
+            console.log('Iniciando', userId)
+            const { data } = await axios.post(
+                "/api/preference", 
+                {plano: plano}, 
+                {
+                headers: {
+                    "Authorization": `Bearer ${userId}`
+                }
+            });
+
+            window.location.href = data.init_point;
+        } catch (error) {
+            console.error("Erro ao criar pagamento:", error);
+        }
+    };
 
     return (
         <div style={{background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
@@ -170,7 +191,7 @@ export default function Preco() {
                             </div>
                             
                             <div className="flex items-center p-6 pt-6">
-                                <button className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
+                                <button onClick={() => plano.id === 1 ? handlePagamento('torcedor') : handlePagamento('socio')} className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
                                 {(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'Plano Atual' : plano.botao}
                                 </button>
                             </div>

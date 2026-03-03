@@ -1,4 +1,4 @@
-import { buscaTodosClubes, buscaAssinante } from "../components/busca-clube";
+import { buscaTodosClubes } from "../components/busca-clube";
 import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import type { Clube } from "../components/busca-clube";
 import '../styles/comparacao-unica.css';
@@ -30,6 +30,8 @@ import FooterFixo from "../components/footer-fixo";
 import adsense from '/adsense.png';
 import CardsPremium from "../components/cards-premium";
 import { calcularChanceTitulo } from "../components/busca-clube";
+import AdsenseLeft from "../components/adsense-left";
+import AdsenseRight from "../components/adsense-right";
 
 
 type TopicoComparacao = {
@@ -66,23 +68,12 @@ export default function ClubeVsClube() {
     const [popoverAberto2, setPopoverAberto2] = useState(false);
     const [chanceTituloA, setChanceTituloA] = useState<number>(0);
     const [chanceTituloB, setChanceTituloB] = useState<number>(0);
-    const [assinante, setAssinante] = useState(false);
-    const [assinanteSocio, setAssinanteSocio] = useState(false);
     const [clubes, setClubes] = useState<Clube[]>();
     const [clubeA, setClubeA] = useState<Clube | undefined>();
     const [clubeANome, setClubeANome] = useState<Topico>('Flamengo');
     const [clubeB, setClubeB] = useState<Clube | undefined>();
     const [clubeBNome, setClubeBNome] = useState<Topico>('Palmeiras');
     const premiumRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        if (assinanteAtual === 'Sócio') {
-            setAssinante(true);
-            setAssinanteSocio(true);
-        } else if (assinanteAtual === 'Torcedor') {
-            setAssinante(true);
-        }
-    }, [assinanteAtual]);
 
     useEffect(() => {
         if (!clubeA || !clubeB) return;
@@ -195,24 +186,24 @@ export default function ClubeVsClube() {
 
     const verificaAssinanteValue = useCallback((topico: number) => {
         return (
-            assinante ? topico : 0
+            (assinanteAtual === 'Torcedor' || assinanteAtual === 'Sócio') ? topico : 0
         )
-    }, [assinante]);
+    }, [assinanteAtual]);
 
     const verificaAssinanteFormatted = useCallback((value: number, formato: string) => {
         return (
-            assinante ?
+            (assinanteAtual === 'Torcedor' || assinanteAtual === 'Sócio') ?
                 `${value}${formato}`
             :
                 <>
                     <i className="fa-solid fa-lock"></i>
                 </>
         )
-    }, [assinante]);
+    }, [assinanteAtual]);
 
     const verificaAssinanteHigh = useCallback((topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) => {
         return (
-            assinante ?
+            (assinanteAtual === 'Torcedor' || assinanteAtual === 'Sócio') ?
                 direcaoClube === 'A' ?
                     direcao ?
                         topicoA >= topicoB
@@ -226,28 +217,28 @@ export default function ClubeVsClube() {
             :
             false
         )
-    }, [assinante]);
+    }, [assinanteAtual]);
 
     const verificaAssinanteValueSocio = useCallback((topico: number) => {
         return (
-            assinanteSocio ? topico : 0
+            (assinanteAtual === 'Sócio') ? topico : 0
         )
-    }, [assinanteSocio]);
+    }, [assinanteAtual]);
 
     const verificaAssinanteFormattedSocio = useCallback((value: number, formato: string) => {
         return (
-            assinanteSocio ?
+            (assinanteAtual === 'Sócio') ?
                 `${value}${formato}`
             :
                 <>
                     <i className="fa-solid fa-lock"></i>
                 </>
         )
-    }, [assinanteSocio]);
+    }, [assinanteAtual]);
 
     const verificaAssinanteHighSocio = useCallback((topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) => {
         return (
-            assinanteSocio ?
+            (assinanteAtual === 'Sócio') ?
                 direcaoClube === 'A' ?
                     direcao ?
                         topicoA >= topicoB
@@ -261,7 +252,7 @@ export default function ClubeVsClube() {
             :
             false
         )
-    }, [assinanteSocio]);
+    }, [assinanteAtual]);
 
     const financialData: FinancialSection[] = useMemo(() => {
         if (!clubeA || !clubeB) return [];
@@ -679,9 +670,7 @@ export default function ClubeVsClube() {
             <HeaderFixo/>
 
             <div className="grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
-                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
-                    <img className="max-w-[90%]" src={adsense} alt="" />
-                </div>
+<AdsenseLeft />
 
                 <main id="main-clube-vs-clube" className="col-2">
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
@@ -910,9 +899,7 @@ export default function ClubeVsClube() {
                     </div>
                 </main>
 
-                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
-                    <img className="max-w-[90%]" src={adsense} alt="" />
-                </div>
+<AdsenseRight />
             </div>
 
             <FooterFixo />
