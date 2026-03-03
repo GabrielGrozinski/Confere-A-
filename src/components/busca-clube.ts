@@ -570,3 +570,20 @@ export function relacaoClubes(nome: string) {
     );
     return nomeEscolhido;
 }
+
+export async function buscaAssinante(userId: string): Promise<string> {
+    if (!userId) return '';
+
+    const { data, error } = await
+        supabase
+            .from('planos')
+            .select('plan_id')
+            .eq('user_id', userId);
+    
+    if (error) {
+        console.error('Houve um erro ao buscar assinante', error);
+        return '';
+    }
+
+    return data[0].plan_id;
+}

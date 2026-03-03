@@ -1,4 +1,4 @@
-import { buscaTodosClubes } from "../components/busca-clube";
+import { buscaTodosClubes, buscaAssinante } from "../components/busca-clube";
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import type { Clube } from "../components/busca-clube";
 import '../styles/comparacao-unica.css';
@@ -61,18 +61,27 @@ export type DadosClube = {
 
 
 export default function ClubeVsClube() {
-    const {setTopicoAtivo, setAbaEntretenimento, dark} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, dark, user} = allContext();
     const [popoverAberto1, setPopoverAberto1] = useState(false);
     const [popoverAberto2, setPopoverAberto2] = useState(false);
     const [chanceTituloA, setChanceTituloA] = useState<number>(0);
     const [chanceTituloB, setChanceTituloB] = useState<number>(0);
-    const [assinante, setAssinante] = useState(true);
+    const [assinante, setAssinante] = useState(false);
+    const [assinanteSocio, setAssinanteSocio] = useState(false);
     const [clubes, setClubes] = useState<Clube[]>();
     const [clubeA, setClubeA] = useState<Clube | undefined>();
     const [clubeANome, setClubeANome] = useState<Topico>('Flamengo');
     const [clubeB, setClubeB] = useState<Clube | undefined>();
     const [clubeBNome, setClubeBNome] = useState<Topico>('Palmeiras');
     const premiumRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const valor = buscaAssinante(user.id);
+        console.log('valor', valor)
+
+    }, [user]);
 
     useEffect(() => {
         if (!clubeA || !clubeB) return;
@@ -203,6 +212,41 @@ export default function ClubeVsClube() {
     function verificaAssinanteHigh(topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) {
         return (
             assinante ?
+                direcaoClube === 'A' ?
+                    direcao ?
+                        topicoA >= topicoB
+                    :
+                        topicoA <= topicoB
+                :
+                    direcao ?
+                        topicoA <= topicoB
+                    :
+                        topicoA >= topicoB
+            :
+            false
+        )
+    }
+
+    function verificaAssinanteValueSocio(topico: number) {
+        return (
+            assinanteSocio ? topico : 0
+        )
+    }
+
+    function verificaAssinanteFormattedSocio(value: number, formato: string) {
+        return (
+            assinanteSocio ?
+                `${value}${formato}`
+            :
+                <>
+                    <i className="fa-solid fa-lock"></i>
+                </>
+        )
+    }
+
+    function verificaAssinanteHighSocio(topicoA: number, topicoB: number, direcaoClube: string, direcao: boolean) {
+        return (
+            assinanteSocio ?
                 direcaoClube === 'A' ?
                     direcao ?
                         topicoA >= topicoB
@@ -534,15 +578,15 @@ export default function ClubeVsClube() {
                 items: [
                 {
                     club: clubeA.nome.slice(0, 3).toUpperCase(),
-                    value: verificaAssinanteValue(clubeA.nota_clube),
-                    formatted: verificaAssinanteFormatted(clubeA.nota_clube, '/10'),
-                    highlight: verificaAssinanteHigh(clubeA.nota_clube, clubeB.nota_clube, 'A', true),
+                    value: verificaAssinanteValueSocio(clubeA.nota_clube),
+                    formatted: verificaAssinanteFormattedSocio(clubeA.nota_clube, '/10'),
+                    highlight: verificaAssinanteHighSocio(clubeA.nota_clube, clubeB.nota_clube, 'A', true),
                 },
                 {
                     club: clubeB.nome.slice(0, 3).toUpperCase(),
-                    value: verificaAssinanteValue(clubeB.nota_clube),
-                    formatted: verificaAssinanteFormatted(clubeB.nota_clube, '/10'),
-                    highlight: verificaAssinanteHigh(clubeA.nota_clube, clubeB.nota_clube, 'B', true),
+                    value: verificaAssinanteValueSocio(clubeB.nota_clube),
+                    formatted: verificaAssinanteFormattedSocio(clubeB.nota_clube, '/10'),
+                    highlight: verificaAssinanteHighSocio(clubeA.nota_clube, clubeB.nota_clube, 'B', true),
                 },
                 ],
             },
@@ -552,15 +596,15 @@ export default function ClubeVsClube() {
                 items: [
                 {
                     club: clubeA.nome.slice(0, 3).toUpperCase(),
-                    value: verificaAssinanteValue(clubeA.chance_quitar_divida),
-                    formatted: verificaAssinanteFormatted(clubeA.chance_quitar_divida, '%'),
-                    highlight: verificaAssinanteHigh(clubeA.chance_quitar_divida, clubeB.chance_quitar_divida, 'A', true),
+                    value: verificaAssinanteValueSocio(clubeA.chance_quitar_divida),
+                    formatted: verificaAssinanteFormattedSocio(clubeA.chance_quitar_divida, '%'),
+                    highlight: verificaAssinanteHighSocio(clubeA.chance_quitar_divida, clubeB.chance_quitar_divida, 'A', true),
                 },
                 {
                     club: clubeB.nome.slice(0, 3).toUpperCase(),
-                    value: verificaAssinanteValue(clubeB.chance_quitar_divida),
-                    formatted: verificaAssinanteFormatted(clubeB.chance_quitar_divida, '%'),
-                    highlight: verificaAssinanteHigh(clubeA.chance_quitar_divida, clubeB.chance_quitar_divida, 'B', true),
+                    value: verificaAssinanteValueSocio(clubeB.chance_quitar_divida),
+                    formatted: verificaAssinanteFormattedSocio(clubeB.chance_quitar_divida, '%'),
+                    highlight: verificaAssinanteHighSocio(clubeA.chance_quitar_divida, clubeB.chance_quitar_divida, 'B', true),
                 },
                 ],
             },
@@ -570,15 +614,15 @@ export default function ClubeVsClube() {
                 items: [
                 {
                     club: clubeA.nome.slice(0, 3).toUpperCase(),
-                    value: verificaAssinanteValue((clubeA.faturamento + clubeA.aumento_faturamento)),
-                    formatted: verificaAssinanteFormatted((clubeA.faturamento + clubeA.aumento_faturamento), (clubeA.faturamento + clubeA.aumento_faturamento) > 1000 ? ' BI' : ' MI'),
-                    highlight: verificaAssinanteHigh((clubeA.faturamento + clubeA.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento), 'A', true),
+                    value: verificaAssinanteValueSocio((clubeA.faturamento + clubeA.aumento_faturamento)),
+                    formatted: verificaAssinanteFormattedSocio((clubeA.faturamento + clubeA.aumento_faturamento), (clubeA.faturamento + clubeA.aumento_faturamento) > 1000 ? ' BI' : ' MI'),
+                    highlight: verificaAssinanteHighSocio((clubeA.faturamento + clubeA.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento), 'A', true),
                 },
                 {
                     club: clubeB.nome.slice(0, 3).toUpperCase(),
-                    value: verificaAssinanteValue((clubeB.faturamento + clubeB.aumento_faturamento)),
-                    formatted: verificaAssinanteFormatted((clubeB.faturamento + clubeB.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento) > 1000 ? ' BI' : ' MI'),
-                    highlight: verificaAssinanteHigh((clubeA.faturamento + clubeA.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento), 'B', true),
+                    value: verificaAssinanteValueSocio((clubeB.faturamento + clubeB.aumento_faturamento)),
+                    formatted: verificaAssinanteFormattedSocio((clubeB.faturamento + clubeB.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento) > 1000 ? ' BI' : ' MI'),
+                    highlight: verificaAssinanteHighSocio((clubeA.faturamento + clubeA.aumento_faturamento), (clubeB.faturamento + clubeB.aumento_faturamento), 'B', true),
                 },
                 ],
             },
