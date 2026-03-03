@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
-import adsense from '/adsense.png';
 import CardsPremium from "../components/cards-premium";
 import { calcularChanceTitulo } from "../components/busca-clube";
 import AdsenseLeft from "../components/adsense-left";
@@ -671,13 +670,11 @@ export default function ClubeVsClube() {
 
             <div className="grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
 
-                {(assinanteAtual === 'Sócio' || assinanteAtual === 'Torcedor') ?
-                    <div></div>
-                    :
+                {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
                     <AdsenseLeft />
                 }
 
-                <main id="main-clube-vs-clube" className="col-2">
+                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%]'}`}>
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>
@@ -686,9 +683,9 @@ export default function ClubeVsClube() {
                     </p>
 
 
-                    <div className="w-full mx-auto px-6 flex items-center justify-center mb-12">
+                    <div className="w-full mx-auto flex items-center justify-center mb-12">
 
-                        <div className="opacity-100 transform-none lg:max-w-250 lg:min-w-250 mt-4">
+                        <div className="opacity-100 transform-none mt-4 min-w-full">
                             <div className={`border rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-slate-200 border-slate-800/20'}`}>
                             
                                 <div className="grid grid-cols-2 gap-6 mb-10 lg:pl-6 lg:pr-8">
@@ -904,9 +901,7 @@ export default function ClubeVsClube() {
                     </div>
                 </main>
 
-                {(assinanteAtual === 'Sócio' || assinanteAtual === 'Torcedor') ?
-                    <div></div>
-                    :
+                {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
                     <AdsenseRight />
                 }
 

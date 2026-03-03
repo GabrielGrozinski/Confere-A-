@@ -17,7 +17,8 @@ import {
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import FooterFixo from "../components/footer-fixo";
-import adsense from '/adsense.png';
+import AdsenseLeft from "../components/adsense-left";
+import AdsenseRight from "../components/adsense-right";
 import CardsPremium from "../components/cards-premium";
 
 
@@ -53,7 +54,7 @@ export type DadosClube = {
 
 
 export default function ClubeVsMundo() {
-    const {setTopicoAtivo, setAbaEntretenimento, dark, largura} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, dark, largura, assinanteAtual} = allContext();
     const [popoverAberto1, setPopoverAberto1] = useState(false);
     const [popoverAberto2, setPopoverAberto2] = useState(false);
     const [clubes, setClubes] = useState<Clube[]>();
@@ -317,11 +318,11 @@ export default function ClubeVsMundo() {
 
             <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
 
-                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
-                    <img className="max-w-[90%]" src={adsense} alt="" />
-                </div>
+                {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
+                    <AdsenseLeft />
+                }
 
-                <main id="main-clube-vs-clube" className="col-2">
+                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%]'}`}>
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Além do Futebol
                     </h2>
@@ -330,9 +331,9 @@ export default function ClubeVsMundo() {
                     </p>
 
 
-                    <div className="w-full mx-auto px-6 flex items-center justify-center">
+                    <div className="w-full mx-auto flex items-center justify-center">
 
-                        <div className="opacity-100 transform-none lg:max-w-250 lg:min-w-250 mt-4 mb-20">
+                        <div className="opacity-100 transform-none min-w-full mt-4 mb-20">
                             <div className={`border rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-slate-200 border-slate-800/20'}`}>
                             
                                 <div className="grid grid-cols-2 gap-6 mb-10 lg:pl-6 lg:pr-8">
@@ -546,9 +547,9 @@ export default function ClubeVsMundo() {
                     <CardsPremium />
                 </main>
 
-                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
-                    <img className="max-w-[90%]" src={adsense} alt="" />
-                </div>
+                {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
+                    <AdsenseRight />
+                }
             </div>
 
             <FooterFixo />

@@ -7,7 +7,8 @@ import CardProduto from "./card-produtos";
 import { ClipLoader } from "react-spinners";
 import { calcularChanceTitulo } from "./busca-clube";
 import FooterFixo from "./footer-fixo";
-import adsense from '/adsense.png';
+import AdsenseLeft from "../components/adsense-left";
+import AdsenseRight from "../components/adsense-right";
 import CardsPremium from "./cards-premium";
 
 
@@ -345,7 +346,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     const [assinante, setAssinante] = useState<boolean>(false);
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
-    const { largura, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento } = allContext();
+    const { largura, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento, assinanteAtual } = allContext();
 
     useEffect(() => {
         setTopicoAtivo('Produto');
@@ -706,13 +707,13 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     </div>
                 </article>
 
-                <main className="grid grid-cols-[auto_1fr_auto] items-center row-2">
+                <main className="grid grid-cols-[auto_1fr_auto] items-center row-2 lg:px-4">
 
-                    <div className="lg:flex justify-start hidden sticky left-0 top-20 self-start">
-                        <img className="max-w-[90%]" src={adsense} alt="" />
-                    </div>
+                    {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
+                        <AdsenseLeft />
+                    }
 
-                    <div className="col-2 flex flex-col items-center">
+                    <div className={`col-2 flex flex-col items-center ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%]'}`}>
                         <section className={`w-full px-4 gap-6 ${largura >= 1444 ? 'grid grid-cols-2' : largura >= 1024 ? 'flex flex-col' : largura > 768 ? 'grid grid-cols-2' : 'flex flex-col'} pb-10`}>
                             {loading ?
                             <div className="flex-1 flex items-center justify-center">
@@ -742,9 +743,9 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                         }
                     </div>
 
-                    <div className="lg:flex justify-end hidden sticky left-0 top-20 self-start">
-                        <img className="max-w-[90%]" src={adsense} alt="" />
-                    </div>
+                    {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
+                        <AdsenseRight />
+                    }
 
                 </main>
             </main>

@@ -7,7 +7,8 @@ import { allContext } from "../context/all-context";
 import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
 import { ClipLoader } from "react-spinners";
-import adsense from '/adsense.png';
+import AdsenseLeft from "../components/adsense-left";
+import AdsenseRight from "../components/adsense-right";
 import FooterFixo from "../components/footer-fixo";
 import CardsPremium from "../components/cards-premium";
 
@@ -62,7 +63,7 @@ export type DadosClube = {
 
 
 export default function ComparadorDeClubes() {
-    const {setTopicoAtivo, setAbaEntretenimento, largura, dark} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [assinante, setAssinante] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -294,17 +295,17 @@ export default function ComparadorDeClubes() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #1d2330, #3e495e)" : "linear-gradient(to bottom right, #fdfbf6, #fdfbf6)"}} className="mt-15">
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
 
             <HeaderFixo/>
 
             <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-10 relative">
 
-                <div className="lg:flex justify-start hidden sticky left-0 top-25 self-start">
-                    <img className="max-w-[90%]" src={adsense} alt="" />
-                </div>
+                {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
+                    <AdsenseLeft />
+                }
 
-                <main className="col-span-full lg:col-2 w-full flex flex-col relative pt-2">
+                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%]'}`}>
                     <div className="min-h-10 w-full flex justify-center">
                         <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
                         <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
@@ -479,9 +480,9 @@ export default function ComparadorDeClubes() {
                     </div>
                 </main>
 
-                <div className="lg:flex justify-end hidden sticky left-0 top-25 self-start">
-                    <img className="max-w-[90%]" src={adsense} alt="" />
-                </div>
+                {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
+                    <AdsenseRight />
+                }
 
             </div>
 
