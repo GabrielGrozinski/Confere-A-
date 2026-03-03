@@ -2,9 +2,9 @@ export async function POST(req: Request) {
   console.log("API EXECUTOU");
 
   try {
-    const body = await req.json();
+    const body_teste = await req.json();
 
-    const userId = body.userId ?? 'falhou_preference';
+    const {userId} = body_teste ?? req.body;
     console.log('user', userId)
 
     const mpResponse = await fetch(

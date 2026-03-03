@@ -61,7 +61,7 @@ export default function CardsPremium() {
         if (!user) return;
         const userId = user.id;
         try {
-            console.log('Iniciando', user.id)
+            console.log('Iniciando', userId)
             const { data } = await axios.post("/api/preference", userId);
 
             window.location.href = data.init_point;
