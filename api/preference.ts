@@ -4,7 +4,19 @@ export async function POST(req: Request) {
   try {
 
     const userId = (req.headers.get('authorization')?.split(' ')[1]) ?? 'falhou_conference';
-    console.log('user', userId);
+
+    const { plano } = await req.json();
+
+    const precos: Record<string, number> = {
+      torcedor: 5,
+      socio: 9.9
+    }
+
+    const amount = precos[plano];
+
+    if (!amount) {
+      return Response.json({ error: "Plano inválido" }, { status: 400 });
+    }
 
     const mpResponse = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
@@ -19,12 +31,12 @@ export async function POST(req: Request) {
             {
               title: "Plano",
               quantity: 1,
-              unit_price: 10,
+              unit_price: amount,
               currency_id: "BRL",
             },
           ],
           notification_url: "https://confere-ae-psi.vercel.app/api/webhook",
-          external_reference: userId
+          external_reference: `${userId}|${amount}`
         }),
       }
     );

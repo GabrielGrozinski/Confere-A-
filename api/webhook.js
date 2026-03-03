@@ -33,11 +33,12 @@ export default async function handler(req, res) {
       );
 
       const payment = await mpResponse.json();
+      let plano = 'indefinido';
       let userId = 'indefinido';
       if (payment.external_reference) {
-        userId = payment.external_reference;
+        [userId, plano] = payment.external_reference.split('|');
       } else if (payment.order && payment.order.external_reference) {
-        userId = payment.order.external_reference;
+        [userId, plano] = payment.order.external_reference.split('|');
       }
       
       console.log("Status do pagamento:", payment.status);
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
             .insert({
                 user_id: userId,
                 payment_id: `${paymentId}`,
-                plan_id: 'Sócio'
+                plan_id: plano == '5' ? 'Torcedor' : 'Sócio'
             });
 
         if (error) {
