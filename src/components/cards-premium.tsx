@@ -58,9 +58,10 @@ export default function CardsPremium() {
     ];
 
     const handlePagamento = async (amount: number) => {
-        console.log(user?.id);
+        if (!user) return;
         try {
-            const { data } = await axios.post("/api/preference", user?.id);
+            console.log('Iniciando', user.id)
+            const { data } = await axios.post("/api/preference", user.id);
 
             window.location.href = data.init_point;
         } catch (error) {

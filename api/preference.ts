@@ -5,6 +5,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const userId = body.userId ?? 'falhou_preference';
+    console.log('user', userId)
 
     const mpResponse = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
