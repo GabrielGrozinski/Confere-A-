@@ -585,5 +585,7 @@ export async function buscaAssinante(userId: string): Promise<string> {
         return '';
     }
 
+    console.log('data', data);
+
     return data[0].plan_id;
 }

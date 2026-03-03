@@ -76,10 +76,19 @@ export default function ClubeVsClube() {
     const premiumRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (!user) return;
+        if (!user) return console.log('sem usuario');
 
-        const valor = buscaAssinante(user.id);
-        console.log('valor', valor)
+        buscaAssinante(user.id)
+            .then((assinanteAtivo) => {
+                console.log('valor', assinanteAtivo)
+                if (assinanteAtivo === 'Sócio') {
+                    setAssinante(true);
+                    setAssinanteSocio(true);
+                } else if (assinanteAtivo === 'Torcedor') {
+                    setAssinante(true);
+                }
+            })
+            .catch(() => console.log('erro'));
 
     }, [user]);
 
