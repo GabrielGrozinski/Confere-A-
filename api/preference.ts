@@ -3,7 +3,7 @@ export async function POST(req: Request) {
 
   try {
 
-    const userId = (req.headers.get('authorization')?.replace('Bearer ', '')) ?? 'falhou_conference';
+    const userId = (req.headers.get('authorization')?.split(' ')[1]) ?? 'falhou_conference';
     console.log('user', userId);
 
     const mpResponse = await fetch(

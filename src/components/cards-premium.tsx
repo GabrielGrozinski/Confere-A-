@@ -62,7 +62,10 @@ export default function CardsPremium() {
         const userId = user.id;
         try {
             console.log('Iniciando', userId)
-            const { data } = await axios.post("/api/preference", {
+            const { data } = await axios.post(
+                "/api/preference", 
+                {}, 
+                {
                 headers: {
                     "Authorization": `Bearer ${userId}`
                 }
