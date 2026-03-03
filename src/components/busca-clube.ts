@@ -571,7 +571,7 @@ export function relacaoClubes(nome: string) {
     return nomeEscolhido;
 }
 
-export async function buscaAssinante(userId: string): Promise<string> {
+export async function buscaAssinante(userId: string): Promise<'Sócio' | 'Torcedor' | ''> {
     if (!userId) return '';
 
     const { data, error } = await

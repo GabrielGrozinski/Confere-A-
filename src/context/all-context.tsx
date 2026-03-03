@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "../auth/supabase-client";
 import type { User, Session } from "@supabase/supabase-js";
+import { buscaAssinante } from "../components/busca-clube";
 
 
 interface Props {
@@ -27,6 +28,8 @@ type TopicoAtivoType = 'Explorar Dados' | 'Produto' | 'Preço';
 
 
 interface all_context_type {
+    assinanteAtual: 'Sócio' | 'Torcedor' | '';
+    setAssinanteAtual: (value: ('Sócio' | 'Torcedor' | '')) => void;
     mostrarCard: boolean;
     setMostrarCard: (value: boolean) => void;
     anoEscolhido: number;
@@ -65,6 +68,7 @@ export function AllContext({children}: Props) {
             return tema;
         }
     });
+    const [assinanteAtual, setAssinanteAtual] = useState<'Sócio' | 'Torcedor' | ''>('');
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [mostrarClubes, setMostrarClubes] = useState<boolean>(false);
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
@@ -187,9 +191,20 @@ export function AllContext({children}: Props) {
         localStorage.setItem("tema", dark ? "escuro" : "claro");
     }, [dark]);
 
+    useEffect(() => {
+        if (!user) return console.error('Sem usuário');
+
+        buscaAssinante(user.id)
+            .then((assinanteAtivo) => setAssinanteAtual(assinanteAtivo))
+            .catch(() => console.log('Houve um erro ao buscar o assinante'));
+
+    }, [user]);
+
     return (
         <all_context.Provider
             value={{
+                assinanteAtual,
+                setAssinanteAtual,
                 dark,
                 setDark,
                 cadastroUser,

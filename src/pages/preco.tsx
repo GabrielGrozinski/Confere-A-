@@ -5,8 +5,8 @@ import FooterFixo from "../components/footer-fixo";
 
 
 export default function Preco() {
-    const {setTopicoAtivo, dark} = allContext();
-    const [planoAtivo, setPlanoAtivo] = useState<'Gratuito' | 'Torcedor' | 'Sócio' | string>('Gratuito');
+    const {setTopicoAtivo, dark, assinanteAtual} = allContext();
+    const [planoAtivo, setPlanoAtivo] = useState<'Gratuíto' | 'Torcedor' | 'Sócio' | string>('Gratuito');
 
     useEffect(() => {
         setTopicoAtivo('Preço');
@@ -14,6 +14,14 @@ export default function Preco() {
             top: 0
         })
     }, []);
+
+    useEffect(() => {
+        if (assinanteAtual === 'Sócio') {
+            setPlanoAtivo('Sócio');
+        } else if (assinanteAtual === 'Torcedor') {
+            setPlanoAtivo('Torcedor');
+        }
+    }, [assinanteAtual]);
 
     const planos = [
     {
@@ -162,8 +170,8 @@ export default function Preco() {
                             </div>
                             
                             <div className="flex items-center p-6 pt-6">
-                                <button className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${plano.id === 0 ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
-                                {plano.botao}
+                                <button className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
+                                {(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'Plano Atual' : plano.botao}
                                 </button>
                             </div>
                         </div>

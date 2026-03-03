@@ -10,7 +10,7 @@ import MenuAberto from "./menu-aberto";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
-    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes } = allContext();
+    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes, assinanteAtual } = allContext();
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -373,7 +373,15 @@ export default function HeaderFixo() {
                                             </div>
 
                                             <div className={`py-3 w-full border-t ${dark ? 'border-t-slate-200/30' : 'border-t-slate-600/20'}`}>
-                                                <button onClick={() => navigate('/preco')} className={`w-[92%] translate-x-[4%] bg-amber-500 p-0.75 pb-1 text-white text-sm text-shadow-[1px_1px_1px_#0000002a] shadow-[1px_1px_1px_#0000002a] cursor-pointer font-medium rounded-md`}>Fazer Upgrade</button>
+                                                {assinanteAtual === 'Sócio' ?
+                                                <div className="p-4 rounded-2xl text-white shadow-lg group-hover:scale-110 transition-transform bg-red-500">
+                                                    <i className="fa-brands fa-web-awesome text-shadow-[1px_1px_1px_#0000002a]"></i>
+                                                </div>
+                                                :
+                                                <button onClick={() => navigate('/preco')} className={`w-[92%] translate-x-[4%] p-0.75 pb-1 text-white text-sm text-shadow-[1px_1px_1px_#0000002a] shadow-[1px_1px_1px_#0000002a] cursor-pointer font-medium rounded-md ${assinanteAtual === 'Torcedor' ? 'bg-red-500' : 'bg-amber-500'}`}>
+                                                    Fazer Upgrade
+                                                </button>
+                                                }
                                             </div>
                                         </div>
                                     }

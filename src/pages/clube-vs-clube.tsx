@@ -61,7 +61,7 @@ export type DadosClube = {
 
 
 export default function ClubeVsClube() {
-    const {setTopicoAtivo, setAbaEntretenimento, dark, user} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, dark, assinanteAtual} = allContext();
     const [popoverAberto1, setPopoverAberto1] = useState(false);
     const [popoverAberto2, setPopoverAberto2] = useState(false);
     const [chanceTituloA, setChanceTituloA] = useState<number>(0);
@@ -76,21 +76,13 @@ export default function ClubeVsClube() {
     const premiumRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (!user) return console.log('sem usuario');
-
-        buscaAssinante(user.id)
-            .then((assinanteAtivo) => {
-                console.log('valor', assinanteAtivo)
-                if (assinanteAtivo === 'Sócio') {
-                    setAssinante(true);
-                    setAssinanteSocio(true);
-                } else if (assinanteAtivo === 'Torcedor') {
-                    setAssinante(true);
-                }
-            })
-            .catch(() => console.log('erro'));
-
-    }, [user]);
+        if (assinanteAtual === 'Sócio') {
+            setAssinante(true);
+            setAssinanteSocio(true);
+        } else if (assinanteAtual === 'Torcedor') {
+            setAssinante(true);
+        }
+    }, [assinanteAtual]);
 
     useEffect(() => {
         if (!clubeA || !clubeB) return;
