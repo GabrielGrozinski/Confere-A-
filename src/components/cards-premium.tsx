@@ -58,17 +58,14 @@ export default function CardsPremium() {
     ];
 
     const handlePagamento = async (amount: number) => {
-    try {
-        const { data } = await axios.post("/api/preference", {
-            headers: {
-                "Authorization": `Bearer ${user?.id}`,
-            }
-        });
+        console.log(user?.id);
+        try {
+            const { data } = await axios.post("/api/preference", user?.id);
 
-        window.location.href = data.init_point;
-    } catch (error) {
-        console.error("Erro ao criar pagamento:", error);
-    }
+            window.location.href = data.init_point;
+        } catch (error) {
+            console.error("Erro ao criar pagamento:", error);
+        }
     };
 
 

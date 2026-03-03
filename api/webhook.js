@@ -33,7 +33,12 @@ export default async function handler(req, res) {
       );
 
       const payment = await mpResponse.json();
-      const userId = payment.external_reference ?? 'indefinido';
+      let userId = 'indefinido';
+      if (payment.external_reference) {
+        userId = payment.external_reference;
+      } else if (payment.order && payment.order.external_reference) {
+        userId = payment.order.external_reference;
+      }
 
       console.log("Status do pagamento:", payment.status);
 

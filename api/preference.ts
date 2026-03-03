@@ -2,7 +2,10 @@ export async function POST(req: Request) {
   console.log("API EXECUTOU");
 
   try {
-    const userId = req.headers.get('authorization')?.replace('Bearer ', '');
+    const body = await req.json();
+
+    const userId = body.userId ?? 'falhou_preference';
+
     const mpResponse = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
       {
