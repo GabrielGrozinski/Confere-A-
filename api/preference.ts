@@ -2,6 +2,7 @@ export async function POST(req: Request) {
   console.log("API EXECUTOU");
 
   try {
+    const userId = req.headers.get('authorization')?.replace('Bearer ', '');
     const mpResponse = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
       {
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
             },
           ],
           notification_url: "https://confere-ae-psi.vercel.app/api/webhook",
+          external_reference: userId
         }),
       }
     );

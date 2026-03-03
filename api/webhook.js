@@ -33,6 +33,7 @@ export default async function handler(req, res) {
       );
 
       const payment = await mpResponse.json();
+      const userId = payment.external_reference ?? 'indefinido';
 
       console.log("Status do pagamento:", payment.status);
 
@@ -42,7 +43,7 @@ export default async function handler(req, res) {
         const {data, error} = await supabase
             .from('planos_teste')
             .insert({
-                teste: `${paymentId}, sócio`,
+                teste: `${paymentId}, sócio, ${userId}`,
             });
 
         if (error) {

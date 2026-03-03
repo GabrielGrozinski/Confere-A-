@@ -2,7 +2,7 @@ import { allContext } from "../context/all-context";
 import axios from 'axios';
 
 export default function CardsPremium() {
-    const { dark } = allContext();
+    const { dark, user } = allContext();
 
 
     interface Plano {
@@ -59,7 +59,11 @@ export default function CardsPremium() {
 
     const handlePagamento = async (amount: number) => {
     try {
-        const { data } = await axios.post("/api/preference");
+        const { data } = await axios.post("/api/preference", {
+            headers: {
+                "Authorization": `Bearer ${user?.id}`,
+            }
+        });
 
         window.location.href = data.init_point;
     } catch (error) {
