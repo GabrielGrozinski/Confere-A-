@@ -226,8 +226,6 @@ export default function CardsPremium() {
                     ))}
                 </span>
             </div>
-
-            <h1 className="bg-red-400 min-h-20 min-w-20">TESTE2</h1>
             
         </div>
     )
