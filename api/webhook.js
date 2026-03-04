@@ -46,17 +46,41 @@ export default async function handler(req, res) {
       if (payment.status === "approved") {
         console.log("Pagamento aprovado!");
 
-        const {data, error} = await supabase
+      const {data: planoAtivo, error: errorVerificacao} =
+        await supabase
+          .from('planos')
+          .select('*')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (errorVerificacao) {
+        return Response.json({ error: "Houve um erro ao validar os planos do usuário" }, { status: 400 });
+      }
+
+      if (planoAtivo) {
+        const {error} = await supabase
             .from('planos')
-            .insert({
-                user_id: userId,
-                payment_id: `${paymentId}`,
-                plan_id: plano == '5' ? 'Torcedor' : 'Sócio'
+            .upsert({
+                payment_id: `${planoAtivo.payment_Id} | ${paymentId}`,
+                plan_id: 'Sócio'
             });
 
         if (error) {
-            console.error('Houve um erro ao inserir o plano', error)
+            console.error('Houve um erro ao alterar o plano', error)
         }
+      } else {
+          const {error} = await supabase
+              .from('planos')
+              .insert({
+                  user_id: userId,
+                  payment_id: `${paymentId}`,
+                  plan_id: plano == '5' ? 'Torcedor' : 'Sócio'
+              });
+
+          if (error) {
+              console.error('Houve um erro ao inserir o plano', error)
+          }
+      }
 
       }
     }
