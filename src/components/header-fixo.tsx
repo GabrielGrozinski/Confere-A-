@@ -146,43 +146,67 @@ export default function HeaderFixo() {
                             </span>
                     </h1>
                     {largura < 1024 ? (
-                        abaEntretenimento ?
-                            <div className="w-full flex items-center justify-end px-2">
-                                <div className="flex-1 flex justify-end ml-2">
-                                    <div className="relative min-w-10 max-w-26">
+                        abaEntretenimento ? 
+                                <div className="w-full flex items-center justify-end px-2">
+                                    <div className="flex-1 flex justify-end ml-2">
+                                        <div className="relative min-w-10 max-w-26">
 
-                                        <i onClick={() => setAtivarPesquisaMobile(true)} className={`fa-brands fa-sistrix text-xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
+                                            <i onClick={() => setAtivarPesquisaMobile(true)} className={`fa-brands fa-sistrix text-xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
+                                        </div>
                                     </div>
-                                </div>
-                                {(session && user) ?
-                                    user.user_metadata.avatar_url ? 
-                                        <img src={user.user_metadata.avatar_url} className="min-h-9 max-h-9 min-w-9 max-w-9 rounded-full cursor-pointer shadow-[0px_0px_2px_#0000002a]" alt="" />
-                                    :   
-                                        <i className={`fa-solid fa-circle-user text-xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}>
+                                    {(session && user) 
+                                        ?
+                                            user.user_metadata.avatar_url ? 
+                                                <img onClick={() => {
+                                                    setMenuAberto(!menuAberto);
+                                                    setBusca('');
+                                            }} src={user.user_metadata.avatar_url} className="min-h-9 max-h-9 min-w-9 max-w-9 rounded-full cursor-pointer shadow-[0px_0px_2px_#0000002a]" alt="" />
+                                        :   
+                                                <i onClick={() => {
+                                                    setMenuAberto(!menuAberto);
+                                                    setBusca('');
+                                            }} className={`fa-solid fa-circle-user text-xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}>
 
+                                                </i>
+                                    
+                                    :
+                                        <i 
+                                            onClick={() => {
+                                            setMenuAberto(!menuAberto);
+                                            setBusca('');
+                                            }} 
+                                            className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
                                         </i>
-                                :
-                                <i 
-                                    onClick={() => {
-                                    setMenuAberto(!menuAberto);
-                                    setBusca('');
-                                    }} 
-                                    className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-red-200' : 'text-red-900'}`}>
-                                </i>
-                                }
-                            </div>
-                            :
+                                    }
+                                </div>
+                        :
                             <div className="w-full flex items-center justify-end pr-4">
-                                <i 
-                                    onClick={() => {
-                                    setMenuAberto(!menuAberto);
-                                    setBusca('');
-                                    }} 
-                                    className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
-                                </i>
+                                    {(session && user) 
+                                        ?
+                                            user.user_metadata.avatar_url ? 
+                                                <img onClick={() => {
+                                                    setMenuAberto(!menuAberto);
+                                                    setBusca('');
+                                            }} src={user.user_metadata.avatar_url} className="min-h-9 max-h-9 min-w-9 max-w-9 rounded-full cursor-pointer shadow-[0px_0px_2px_#0000002a]" alt="" />
+                                        :   
+                                                <i onClick={() => {
+                                                    setMenuAberto(!menuAberto);
+                                                    setBusca('');
+                                            }} className={`fa-solid fa-circle-user text-xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}>
+
+                                                </i>
+                                    
+                                    :
+                                        <i 
+                                            onClick={() => {
+                                            setMenuAberto(!menuAberto);
+                                            setBusca('');
+                                            }} 
+                                            className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
+                                        </i>
+                                    }
                             </div>
                                     
-                             
                     ) : (
                         <section className="flex w-full justify-between">
                             <div className="flex ml-10 items-center gap-12 flex-1 mr-10">
