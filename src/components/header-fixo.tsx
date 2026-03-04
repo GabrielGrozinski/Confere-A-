@@ -167,7 +167,7 @@ export default function HeaderFixo() {
                                     setMenuAberto(!menuAberto);
                                     setBusca('');
                                     }} 
-                                    className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
+                                    className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-red-200' : 'text-red-900'}`}>
                                 </i>
                                 }
                             </div>
