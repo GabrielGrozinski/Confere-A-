@@ -139,7 +139,7 @@ export default function ComparadorDeClubes() {
         if (intervalRef.current) return;
 
         intervalRef.current = setInterval(() => {
-            setAnoEscolhido((prev) => prev === 0 ? 0 : prev - 1);
+            setAnoEscolhido((prev) => prev === 0 ? 0 : (topico === 'Chance de Quitar a Dívida' && prev === 1) ? 1 : prev - 1);
         }, 50);
     };
 
@@ -314,12 +314,12 @@ export default function ComparadorDeClubes() {
                                 <button className="text-stone-800 font-medium flex items-center w-full justify-center">
                                     Comparar por: 
                                         <strong>
-                                                <span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} 
-                                                    <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]">
-                                                    
-                                                    </i>
-                                                </span>
-                                            </strong>
+                                            <span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} 
+                                                <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]">
+                                                
+                                                </i>
+                                            </span>
+                                        </strong>
                                 </button>
                             </Popover.Trigger>
 
@@ -338,6 +338,7 @@ export default function ComparadorDeClubes() {
                                         onMouseLeave={stopPress}
                                         >
                                         </i>
+
                                         <i
                                         onTouchStart={() => downPress}
                                         className="fa-solid fa-sort-down cursor-pointer"
