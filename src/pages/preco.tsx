@@ -191,7 +191,7 @@ export default function Preco() {
                             </div>
                             
                             <div className="flex items-center p-6 pt-6">
-                                <button onClick={() => plano.id === 1 ? handlePagamento('torcedor') : handlePagamento('socio')} className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
+                                <button disabled={assinanteAtual === "Sócio" || plano.id === 0 || (plano.id === 1 && assinanteAtual === 'Torcedor')} onClick={() => plano.id === 1 ? handlePagamento('torcedor') : handlePagamento('socio')} className={`inline-flex items-center justify-center gap-2 text-sm h-10 rounded-md px-8 w-full text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all group ${plano.id === 2 ? 'bg-red-500' : 'bg-yellow-500'} ${(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'opacity-60 cursor-not-allowed' : plano.id === 2 ? 'hover:bg-red-500/90 cursor-pointer' : dark ? 'hover:bg-yellow-500/90 cursor-pointer' : 'hover:bg-yellow-600 cursor-pointer'}`}>
                                 {(planoAtivo === 'Sócio' || plano.titulo === planoAtivo || plano.id === 0) ? 'Plano Atual' : plano.botao}
                                 </button>
                             </div>
