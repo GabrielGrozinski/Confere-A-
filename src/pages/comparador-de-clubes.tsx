@@ -305,7 +305,7 @@ export default function ComparadorDeClubes() {
                     <AdsenseLeft />
                 }
 
-                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%]'}`}>
+                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%]'}`}>
                     <div className="min-h-10 w-full flex justify-center">
                         <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
                         <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
