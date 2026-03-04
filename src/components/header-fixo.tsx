@@ -311,8 +311,8 @@ export default function HeaderFixo() {
                                     }
 
                                     {mostrarMenuUser &&
-                                        <div className={`absolute bottom-0 translate-y-[101%] min-w-[500%] -translate-x-[calc(100%-44px)] border min-h-80 rounded-xl flex flex-col justify-between ${dark ? 'bg-[rgb(26,28,30)] border-slate-200/20' : 'bg-white border-slate-800/28'}`}>
-                                            <div className="w-full flex-1 pt-3 flex flex-col justify-end gap-1 pb-3">
+                                        <div className={`absolute bottom-0 translate-y-[101%] min-w-[500%] -translate-x-[calc(100%-44px)] border rounded-xl flex flex-col justify-between ${assinanteAtual === 'Sócio' ? 'min-h-70' : 'min-h-80'} ${dark ? 'bg-[rgb(26,28,30)] border-slate-200/20' : 'bg-white border-slate-800/28'}`}>
+                                            <div className={`w-full flex-1 pt-3 flex flex-col ${assinanteAtual === 'Sócio' ? 'start' : 'justify-end'} gap-1 pb-3`}>
 
                                                 <button 
                                                 onClick={() => {
