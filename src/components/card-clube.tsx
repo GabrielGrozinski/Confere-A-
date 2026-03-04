@@ -29,7 +29,7 @@ interface InfoCardProps {
     icon?: string;
     mediaData: MediaCardData[];
     largura: number;
-    assinante: boolean | undefined;
+    assinante: "" | "Torcedor" | "Sócio" | undefined;
     dark: boolean;
 }
 
@@ -155,7 +155,8 @@ export function InfoCard(
     const {setMostrarCard} = allContext();
     
     return (
-        (assinante === undefined || assinante) &&
+        (assinante === undefined || assinante === 'Sócio' || ((titulo === 'Chance de Título (2026)' || titulo === 'Faturamento (2024)' || titulo === 'Dívida (2024)' || titulo === 'Valor Estimado') && assinante === 'Torcedor')) &&
+
 
         <div
         onClick={() => setMostrarCard(true)} 
@@ -343,7 +344,6 @@ export function InfoCard(
 
 export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFundo }: props) {
     const [loading, setLoading] = useState<boolean>(true);
-    const [assinante, setAssinante] = useState<boolean>(false);
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
     const { largura, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento, assinanteAtual } = allContext();
@@ -610,7 +610,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Nota do Clube",
-            assinante,
+            assinanteAtual,
             icon: `fa-solid fa-star ${dark ? "text-yellow-400" : "text-yellow-500"}`,
             valor: clubeEscolhido.nota_clube,
             sufixo: clubeEscolhido.nota_clube > 7 ?
@@ -624,7 +624,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Chance de Quitar a Dívida",
-            assinante,
+            assinanteAtual,
             icon: `fa-solid fa-scale-balanced ${dark ? "text-purple-400" : "text-purple-700"}`,
             valor: clubeEscolhido.chance_quitar_divida,
             sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
@@ -640,7 +640,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Chance de Título (2026)",
-            assinante,
+            assinanteAtual,
             icon: `fa-solid fa-trophy ${dark ? "text-orange-400" : "text-orange-500"}`,
             valor: chanceTitulo,
             sufixo: chanceTitulo > 75 ?
@@ -656,21 +656,21 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         },
         {
             titulo: "Faturamento (2024)",
-            assinante,
+            assinanteAtual,
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.faturamento_2024 >= 1000 ? clubeEscolhido.faturamento_2024/1000 : clubeEscolhido.faturamento_2024}`,
             sufixo: clubeEscolhido.faturamento_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Dívida (2024)",
-            assinante,
+            assinanteAtual,
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.divida_2024 >= 1000 ? clubeEscolhido.divida_2024/1000 : clubeEscolhido.divida_2024}`,
             sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Valor Estimado",
-            assinante,
+            assinanteAtual,
             icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
             valor: `R$ ${clubeEscolhido.valor_estimado >= 1000 ? clubeEscolhido.valor_estimado/1000 : clubeEscolhido.valor_estimado}`,
             sufixo: clubeEscolhido.valor_estimado < 1000 ? "mi" : "bi",
@@ -732,15 +732,13 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                     sufixo={card.sufixo}
                                     mediaData={mediaData}
                                     largura={largura}
-                                    assinante={card.assinante}
+                                    assinante={card.assinanteAtual}
                                     dark={dark}
                                 />
                             ))}
                         </section>
 
-                        {!assinante &&
-                            <CardsPremium />
-                        }
+                        <CardsPremium />
                     </div>
 
                     {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
