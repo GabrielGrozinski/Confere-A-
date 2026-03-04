@@ -33,7 +33,7 @@ export default function TelaCadastro() {
     return (
         <div 
         style={{background: "linear-gradient(180deg,#f2f4fa 0%,#b3c4f9 100%)", boxShadow: "0 25px 60px #0000004a"}}
-        className='absolute top-1/2 left-1/2 -translate-1/2 p-6 pt-2 rounded-2xl flex flex-col items-center justify-center outline-5 outline-white/70 min-w-[90%] max-h-[85%] sm:max-h-auto sm:min-w-auto'>
+        className='absolute top-1/2 left-1/2 -translate-1/2 p-6 pt-2 rounded-2xl flex flex-col items-center justify-center outline-5 outline-white/70 scale-90 lg:scale-100'>
             <h1 className="font-[MONELOS] flex items-center text-xl lg:text-3xl whitespace-nowrap scale-125 translate-y-1 -translate-x-3">
                 <div className="relative translate-y-1.25 mx-auto px-3 text-center">
                     <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/15 mb-4">
