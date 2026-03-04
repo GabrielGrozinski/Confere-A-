@@ -154,15 +154,22 @@ export default function HeaderFixo() {
                                         <i onClick={() => setAtivarPesquisaMobile(true)} className={`fa-brands fa-sistrix text-xl translate-y-px transition-all duration-200 ease-in-out hover:scale-110 hover:-rotate-6 ${dark ? 'hover:text-amber-400 text-zinc-400' : 'hover:text-amber-500 text-zinc-600'}`}></i>
                                     </div>
                                 </div>
+                                {(session && user) ?
+                                    user.user_metadata.avatar_url ? 
+                                        <img src={user.user_metadata.avatar_url} className="min-h-9 max-h-9 min-w-9 max-w-9 rounded-full cursor-pointer shadow-[0px_0px_2px_#0000002a]" alt="" />
+                                    :   
+                                        <i className={`fa-solid fa-circle-user text-xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}>
 
+                                        </i>
+                                :
                                 <i 
                                     onClick={() => {
                                     setMenuAberto(!menuAberto);
                                     setBusca('');
                                     }} 
                                     className={`fa-solid ${menuAberto ? "fa-xmark" : "fa-bars"} cursor-pointer text-xl ${dark ? 'text-zinc-200' : 'text-zinc-900'}`}>
-
                                 </i>
+                                }
                             </div>
                             :
                             <div className="w-full flex items-center justify-end pr-4">
