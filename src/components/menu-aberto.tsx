@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function MenuAberto() {
     const navigate = useNavigate();
-    const {dark, setTopicoAtivo, setMenuAberto, user, deslogarUser, session, setSession} = allContext();
+    const {dark, setTopicoAtivo, setMenuAberto, user, deslogarUser, session, setSession, assinanteAtual} = allContext();
 
     return (
         <main className={`flex fixed top-16 ${(session && user) ? 'min-h-80' : 'min-h-70'} w-full left-0 z-999 flex-col pt-4 gap-4 border-b ${dark ? 'bg-[#0d1015] border-b-slate-600/40' : 'bg-[#f7fbff] border-b-slate-800/20'}`}>
@@ -83,16 +83,18 @@ export default function MenuAberto() {
                             <i className="fa-solid fa-angle-right"></i>
                         </article>
 
-                        <article 
-                        onClick={() => {
-                            deslogarUser();
-                            setSession(undefined);
-                            navigate('/login');
-                            setMenuAberto(false);
-                        }}
-                        className="flex justify-center items-center ml-8 pl-2 mr-10 cursor-pointer bg-amber-500 py-1 rounded-md">
-                            <h1 className="text-zinc-100/97 font-medium">Fazer Upgrade</h1>
-                        </article>
+                        {assinanteAtual !== 'Sócio' &&
+                            <article 
+                            onClick={() => {
+                                deslogarUser();
+                                setSession(undefined);
+                                navigate('/login');
+                                setMenuAberto(false);
+                            }}
+                            className={`flex justify-center items-center ml-8 pl-2 mr-10 cursor-pointer py-1 rounded-md ${assinanteAtual === 'Torcedor' ? 'bg-red-500' : 'bg-amber-500'}`}>
+                                <h1 className="text-zinc-100/97 font-medium">Fazer Upgrade</h1>
+                            </article>
+                        }
                     </>
 
 
