@@ -26,7 +26,7 @@ interface InfoCardProps {
     imagemAlt?: string;
     valor: string | number;
     sufixo?: string | React.ReactNode;
-    icon?: string;
+    icon?: string | React.ReactNode;
     mediaData: MediaCardData[];
     largura: number;
     assinante: "" | "Torcedor" | "Sócio" | undefined;
@@ -162,7 +162,12 @@ export function InfoCard(
         onClick={() => setMostrarCard(true)} 
         className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-sky-50'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} lg:min-w-1/2 overflow-hidden`}>
             <h2 className={`${dark ? 'text-slate-200' : 'text-slate-700'} font-mono`}>
-                <i className={`${icon}`}></i>{" "}
+                {(titulo === 'Chance de Título (2026)' || titulo === 'Faturamento (2024)' || titulo === 'Dívida (2024)' || titulo === 'Valor Estimado' || titulo === 'Nota do Clube' || titulo === 'Chance de Quitar a Dívida') ? 
+                icon
+                :
+                <i className={`${icon}`}></i>
+                }
+                {" "}
                 <span>{titulo}</span>
             </h2>
             {subtitulo &&
@@ -609,39 +614,14 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             sufixo: "mi/jogador",
         },
         {
-            titulo: "Nota do Clube",
-            assinanteAtual,
-            icon: `fa-solid fa-star ${dark ? "text-yellow-400" : "text-yellow-500"}`,
-            valor: clubeEscolhido.nota_clube,
-            sufixo: clubeEscolhido.nota_clube > 7 ?
-                <> <span className="inline ml-1"> - <span className="font-normal">Muito bom</span></span> </>
-                :
-                clubeEscolhido.nota_clube > 5 ? <> <span className="inline ml-1"> - <span className="font-normal">Bom</span> </span> </>
-                :
-                clubeEscolhido.nota_clube > 3 ? <> <span className="inline ml-1"> - <span className="font-normal">Fraco</span> </span> </>
-                :
-                <> <span className="inline ml-1"> - <span className="font-normal">Ruim</span></span> </>
-        },
-        {
-            titulo: "Chance de Quitar a Dívida",
-            assinanteAtual,
-            icon: `fa-solid fa-scale-balanced ${dark ? "text-purple-400" : "text-purple-700"}`,
-            valor: clubeEscolhido.chance_quitar_divida,
-            sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
-                <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
-                :
-                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline ml-1"> - <span className="font-normal">Alta</span></span> </>
-                :
-                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline ml-1"> - <span className="font-normal">Moderada</span></span> </>
-                :
-                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline ml-1"> - <span className="font-normal">Baixa</span></span> </>
-                :
-                <> <span className="inline ml-1"> - <span className="font-normal">Quase Impossível</span></span> </>
-        },
-        {
             titulo: "Chance de Título (2026)",
             assinanteAtual,
-            icon: `fa-solid fa-trophy ${dark ? "text-orange-400" : "text-orange-500"}`,
+            icon: 
+            <>
+                <div className="rounded-md text-white shadow-lg inline p-1.25 bg-yellow-500">
+                    <i className="fa-solid fa-trophy text-xs text-shadow-[1px_1px_1px_#0000002a]"></i>
+                </div>
+            </>,
             valor: chanceTitulo,
             sufixo: chanceTitulo > 75 ?
                 <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
@@ -657,25 +637,79 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
         {
             titulo: "Faturamento (2024)",
             assinanteAtual,
-            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
+            icon: 
+            <>
+                <div className="rounded-md text-white shadow-lg inline p-1.25 bg-yellow-500">
+                    <i className="fa-solid fa-trophy text-xs text-shadow-[1px_1px_1px_#0000002a]"></i>
+                </div>
+            </>,
             valor: `R$ ${clubeEscolhido.faturamento_2024 >= 1000 ? clubeEscolhido.faturamento_2024/1000 : clubeEscolhido.faturamento_2024}`,
             sufixo: clubeEscolhido.faturamento_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Dívida (2024)",
             assinanteAtual,
-            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
+            icon: 
+            <>
+                <div className="rounded-md text-white shadow-lg inline p-1.25 bg-yellow-500">
+                    <i className="fa-solid fa-trophy text-xs text-shadow-[1px_1px_1px_#0000002a]"></i>
+                </div>
+            </>,
             valor: `R$ ${clubeEscolhido.divida_2024 >= 1000 ? clubeEscolhido.divida_2024/1000 : clubeEscolhido.divida_2024}`,
             sufixo: clubeEscolhido.divida_2024 < 1000 ? "mi" : "bi",
         },
         {
             titulo: "Valor Estimado",
             assinanteAtual,
-            icon: `fa-solid fa-sack-dollar ${dark ? "text-sky-300" : "text-sky-900"}`,
+            icon: 
+            <>
+                <div className="rounded-md text-white shadow-lg inline p-1.25 bg-yellow-500">
+                    <i className="fa-solid fa-trophy text-xs text-shadow-[1px_1px_1px_#0000002a]"></i>
+                </div>
+            </>,
             valor: `R$ ${clubeEscolhido.valor_estimado >= 1000 ? clubeEscolhido.valor_estimado/1000 : clubeEscolhido.valor_estimado}`,
             sufixo: clubeEscolhido.valor_estimado < 1000 ? "mi" : "bi",
         },
-
+        {
+            titulo: "Nota do Clube",
+            assinanteAtual,
+            icon: 
+            <>
+                <div className="rounded-md text-white shadow-lg inline p-1.25 bg-red-500">
+                    <i className="fa-brands fa-web-awesome text-xs text-shadow-[1px_1px_1px_#0000002a]"></i>
+                </div>
+            </>,
+            valor: clubeEscolhido.nota_clube,
+            sufixo: clubeEscolhido.nota_clube > 7 ?
+                <> <span className="inline ml-1"> - <span className="font-normal">Muito bom</span></span> </>
+                :
+                clubeEscolhido.nota_clube > 5 ? <> <span className="inline ml-1"> - <span className="font-normal">Bom</span> </span> </>
+                :
+                clubeEscolhido.nota_clube > 3 ? <> <span className="inline ml-1"> - <span className="font-normal">Fraco</span> </span> </>
+                :
+                <> <span className="inline ml-1"> - <span className="font-normal">Ruim</span></span> </>
+        },
+        {
+            titulo: "Chance de Quitar a Dívida",
+            assinanteAtual,
+            icon: 
+            <>
+                <div className="rounded-md text-white shadow-lg inline p-1.25 bg-red-500">
+                    <i className="fa-brands fa-web-awesome text-xs text-shadow-[1px_1px_1px_#0000002a]"></i>
+                </div>
+            </>,
+            valor: clubeEscolhido.chance_quitar_divida,
+            sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
+                <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
+                :
+                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline ml-1"> - <span className="font-normal">Alta</span></span> </>
+                :
+                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline ml-1"> - <span className="font-normal">Moderada</span></span> </>
+                :
+                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline ml-1"> - <span className="font-normal">Baixa</span></span> </>
+                :
+                <> <span className="inline ml-1"> - <span className="font-normal">Quase Impossível</span></span> </>
+        },
     ];
 
 
@@ -732,7 +766,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                     sufixo={card.sufixo}
                                     mediaData={mediaData}
                                     largura={largura}
-                                    assinante={card.assinanteAtual}
+                                    assinante={"Sócio"}
                                     dark={dark}
                                 />
                             ))}
