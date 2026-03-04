@@ -371,14 +371,15 @@ export default function HeaderFixo() {
                                                 </div>
 
                                             </div>
+                                            {assinanteAtual !== 'Sócio' &&
+                                                <div className={`py-3 w-full border-t ${dark ? 'border-t-slate-200/30' : 'border-t-slate-600/20'}`}>
 
-                                            <div className={`py-3 w-full border-t ${dark ? 'border-t-slate-200/30' : 'border-t-slate-600/20'}`}>
-                                                {assinanteAtual !== 'Sócio' &&
-                                                <button onClick={() => navigate('/preco')} className={`w-[92%] translate-x-[4%] p-0.75 pb-1 text-white text-sm text-shadow-[1px_1px_1px_#0000002a] shadow-[1px_1px_1px_#0000002a] cursor-pointer font-medium rounded-md ${assinanteAtual === 'Torcedor' ? 'bg-red-500' : 'bg-amber-500'}`}>
-                                                    Fazer Upgrade
-                                                </button>
-                                                }
-                                            </div>
+                                                    <button onClick={() => navigate('/preco')} className={`w-[92%] translate-x-[4%] p-0.75 pb-1 text-white text-sm text-shadow-[1px_1px_1px_#0000002a] shadow-[1px_1px_1px_#0000002a] cursor-pointer font-medium rounded-md ${assinanteAtual === 'Torcedor' ? 'bg-red-500' : 'bg-amber-500'}`}>
+                                                        Fazer Upgrade
+                                                    </button>
+
+                                                </div>
+                                            }
                                         </div>
                                     }
                                 </div>
