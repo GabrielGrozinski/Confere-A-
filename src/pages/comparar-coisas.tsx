@@ -26,7 +26,6 @@ interface Porcentagem {
 export default function CompararCoisas() {
     const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
-    const [assinante, setAssinante] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
     const [coisas, setCoisas] = useState<Coisas[]>();
@@ -60,7 +59,7 @@ export default function CompararCoisas() {
             const clubesFiltrados = clubesSelecionados.filter((clube) => clube.nome !== clubeEscolhido.nome);
             setClubesSelecionados(clubesFiltrados);
         } else {
-            if (!assinante && clubesSelecionados.length === 5) {
+            if ((assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && clubesSelecionados.length === 5) {
                 return fazerScroll();
             }
             setClubesSelecionados((prev) => [...prev, {
@@ -74,14 +73,14 @@ export default function CompararCoisas() {
 
     const atualizaQuantidade = (index: number, novaQuantidade: number) => {
         if (!coisas) return;
-        if (!assinante && novaQuantidade > 5) {
+        if ((assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && novaQuantidade > 5) {
             return fazerScroll();
         }
 
         let novasCoisas = [...coisas];
         novasCoisas[index].quantidade = Math.max(0, novaQuantidade);
         const novasCoisasFiltrado = novasCoisas.filter((coisa) => coisa.quantidade > 0);
-        if (!assinante && novasCoisasFiltrado.length > 5) {
+        if ((assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && novasCoisasFiltrado.length > 5) {
             return fazerScroll();
         }
         setCoisas(novasCoisas);
