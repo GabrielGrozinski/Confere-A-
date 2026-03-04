@@ -242,7 +242,7 @@ export default function CompararCoisas() {
                             })}
                             </div>
 
-                            <div className={`absolute z-1 bottom-0 translate-y-full left-0 min-h-6 min-w-[calc(100%+1.85px)] border-t -translate-x-px p-2 grid grid-cols-[1fr_auto_1fr] items-center ${dark ? 'border-slate-800/20 border-t-slate-800/40 bg-[#3e495e]' : 'bg-slate-100 border-t-slate-300/50'}`}>
+                            <div className={`absolute z-1 bottom-0 translate-y-full left-0 min-h-6 min-w-[calc(100%+1.85px)] border -translate-x-px p-2 grid grid-cols-[1fr_auto_1fr] items-center ${dark ? 'border-slate-800/20 border-slate-800/40 bg-[#3e495e]' : 'bg-slate-100 border-slate-400/20'}`}>
                                 <div className="flex flex-col items-center">
                                     <h1 className={`text-sm ${dark ? 'text-slate-200 text-shadow-[1px_1px_1px_#0000002a]' : 'text-[#222222] font-medium'}`}>Total dos Clubes</h1>
                                     <h2 className={`text-sm ${dark ? 'text-amber-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-amber-500 font-medium'}`}>R$ {valorClubes}</h2>
