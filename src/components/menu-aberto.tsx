@@ -8,7 +8,7 @@ export default function MenuAberto() {
     const {dark, setTopicoAtivo, setMenuAberto, user, deslogarUser, session, setSession, assinanteAtual} = allContext();
 
     return (
-        <main className={`flex fixed top-16 ${(session && user) ? 'min-h-80' : assinanteAtual === 'Sócio' ? 'min-h-70' : 'min-h-80'} w-full left-0 z-999 flex-col pt-4 gap-4 border-b ${dark ? 'bg-[#0d1015] border-b-slate-600/40' : 'bg-[#f7fbff] border-b-slate-800/20'}`}>
+        <main className={`flex fixed top-16 ${(session && user) ? assinanteAtual === 'Sócio' ? 'min-h-70' : 'min-h-80' : 'min-h-80'} w-full left-0 z-999 flex-col pt-4 gap-4 border-b ${dark ? 'bg-[#0d1015] border-b-slate-600/40' : 'bg-[#f7fbff] border-b-slate-800/20'}`}>
                 <article 
                 onClick={() => {
                     navigate('/');
