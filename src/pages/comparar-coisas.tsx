@@ -193,7 +193,7 @@ export default function CompararCoisas() {
                                             <h1 className={`font-medium ${dark ? 'text-slate-100' : 'text-zinc-800'}`}>{clube.nome}</h1>
                                             <h1 className={`${dark ? 'text-yellow-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-yellow-500 font-medium'}`}>R$ {clube.faturamento >= 2000 ? `${clube.faturamento/1000} bilhões` : clube.faturamento > 1000 ? `${clube.faturamento/1000} bilhão` : `${clube.faturamento} milhões`}</h1>
                                         </div>
-                                        <span className="absolute bottom-0 left-0 bg-slate-800 min-w-full max-h-2 min-h-1.5 rounded-xl">
+                                        <span className={`absolute bottom-0 left-0 min-w-full max-h-2 min-h-1.5 rounded-xl ${dark ? 'bg-slate-800' : 'bg-slate-300'}`}>
                                             <span style={{width: `${porcentagemEscolhida}%`}} className="absolute bottom-0 left-0 min-h-1.5 z-1 bg-amber-400 rounded-xl">
                                             </span>
                                         </span>
@@ -230,7 +230,7 @@ export default function CompararCoisas() {
                                                 }
                                             </h1>
                                         </div>
-                                        <span className="absolute bottom-0 left-0 bg-slate-800 min-w-[75%] max-h-2 min-h-1.5 rounded-xl">
+                                        <span className={`absolute bottom-0 left-0 min-w-[75%] max-h-2 min-h-1.5 rounded-xl ${dark ? 'bg-slate-800' : 'bg-slate-300'}`}>
                                             <span style={{width: `${porcentagemEscolhida}%`}} className='absolute bottom-0 left-0 min-h-1.5 z-1 bg-sky-400 rounded-xl'>
                                             </span>
                                             <span className="absolute bottom-0 -right-[25%] text-sky-100  text-shadow-[1px_1px_1px_#000002a] text-[10px] translate-x-1/5">
@@ -242,7 +242,7 @@ export default function CompararCoisas() {
                             })}
                             </div>
 
-                            <div className={`absolute z-1 bottom-0 translate-y-full left-0 min-h-6 min-w-[calc(100%+1.85px)] border-t -translate-x-[1px] p-2 grid grid-cols-[1fr_auto_1fr] items-center ${dark ? 'border-slate-800/20 border-t-slate-800/40 bg-[#3e495e]' : 'bg-slate-100 border-t-slate-300/50'}`}>
+                            <div className={`absolute z-1 bottom-0 translate-y-full left-0 min-h-6 min-w-[calc(100%+1.85px)] border-t -translate-x-px p-2 grid grid-cols-[1fr_auto_1fr] items-center ${dark ? 'border-slate-800/20 border-t-slate-800/40 bg-[#3e495e]' : 'bg-slate-100 border-t-slate-300/50'}`}>
                                 <div className="flex flex-col items-center">
                                     <h1 className={`text-sm ${dark ? 'text-slate-200 text-shadow-[1px_1px_1px_#0000002a]' : 'text-[#222222] font-medium'}`}>Total dos Clubes</h1>
                                     <h2 className={`text-sm ${dark ? 'text-amber-300 text-shadow-[1px_1px_1px_#0000002a]' : 'text-amber-500 font-medium'}`}>R$ {valorClubes}</h2>
@@ -276,7 +276,9 @@ export default function CompararCoisas() {
                                         <h1 className="text-center text-sky-950">{clube.nome}</h1>
                                     </div>
 
-                                        {
+                                    {
+                                        (assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && 
+                                        (
                                             largura >= 1280 ?
                                                 (index - 5 === 0 || index - 11 === 0 || index - 17 === 0) &&
                                                     <div className="min-h-34 col-span-full min-w-full px-4">
@@ -292,8 +294,9 @@ export default function CompararCoisas() {
 
                                                         </div>
                                                     </div>
+                                        )
                                             
-                                        }
+                                    }
                                     </>
                                 ))}
                             </div>
@@ -343,7 +346,9 @@ export default function CompararCoisas() {
                                             </div>
                                         </div>
 
-                                        {
+                                    {
+                                        (assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && 
+                                        (
                                             largura >= 1280 ?
                                                 (index - 5 === 0 || index - 11 === 0 || index - 17 === 0) &&
                                                     <div className="min-h-34 col-span-full min-w-full px-4">
@@ -359,8 +364,8 @@ export default function CompararCoisas() {
 
                                                         </div>
                                                     </div>
-                                            
-                                        }
+                                        )
+                                    }
                                     </>
                                 ))}
                             </div>
