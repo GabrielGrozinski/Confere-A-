@@ -1,5 +1,5 @@
 import type { Clube, rankings, Medias } from "./busca-clube";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AreaChart, Area } from "recharts";
 import { allContext } from "../context/all-context";
 import HeaderFixo from "./header-fixo";
@@ -31,6 +31,7 @@ interface InfoCardProps {
     largura: number;
     assinante: "" | "Torcedor" | "Sócio" | undefined;
     dark: boolean;
+    premiumRef: HTMLDivElement | null;
 }
 
 interface MediaCardData {
@@ -145,7 +146,8 @@ export function InfoCard(
         subtitulo,
         imagemSubtitulo,
         imagemAlt,
-        sufixo, 
+        sufixo,
+        premiumRef,
         icon, 
         mediaData, 
         largura, 
@@ -153,14 +155,32 @@ export function InfoCard(
         dark 
     }: InfoCardProps) {
     const {setMostrarCard} = allContext();
+
+
+    function fazerScroll() {
+        if (!premiumRef) return;
+
+        premiumRef.scrollIntoView({
+            behavior: 'smooth',
+        })
+    }
     
     return (
-        (assinante === undefined || assinante === 'Sócio' || ((titulo === 'Chance de Título (2026)' || titulo === 'Faturamento (2024)' || titulo === 'Dívida (2024)' || titulo === 'Valor Estimado') && assinante === 'Torcedor')) &&
-
-
+        <>
+        {(
+            (assinante === 'Sócio' || assinante === undefined) ||
+                (assinante === "Torcedor" &&
+                    (
+                        titulo !== "Nota do Clube" &&
+                        titulo !== "Chance de Quitar a Dívida"
+                    )
+                )
+        )
+        ?
         <div
         onClick={() => setMostrarCard(true)} 
         className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-sky-50'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center pl-4 pr-2 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} lg:min-w-1/2 overflow-hidden`}>
+
             <h2 className={`${dark ? 'text-slate-200' : 'text-slate-700'} font-mono`}>
                 {(titulo === 'Chance de Título (2026)' || titulo === 'Faturamento (2024)' || titulo === 'Dívida (2024)' || titulo === 'Valor Estimado' || titulo === 'Nota do Clube' || titulo === 'Chance de Quitar a Dívida') ? 
                 icon
@@ -170,6 +190,7 @@ export function InfoCard(
                 {" "}
                 <span>{titulo}</span>
             </h2>
+
             {subtitulo &&
             <p className={`font-medium ${dark ? 'text-zinc-100' : 'text-zinc-800'} flex items-center`}>
                 <img
@@ -179,19 +200,27 @@ export function InfoCard(
                 {subtitulo}
             </p>
             }
+            
+            <p
+            className={`text-xl font-[manrope] font-semibold ${
+                dark ? 'text-stone-50' : 'text-[#222222]'
+            } flex items-center`}
+            >
+            {(() => {
+            const media = mediaData.find(m => m.titulo === titulo);
 
-            <p className={`text-xl font-[manrope] font-semibold ${dark ? 'text-stone-50' : 'text-[#222222]'} flex items-center 
-                ${!assinante && (titulo === 'Chance de Quitar a Dívida' || titulo === 'Nota do Clube') && 'blur-[6px]'}
-                `}>
-                {(() => {
-                    const media = mediaData.find(m => m.titulo === titulo);
+            if (!media) return valor;
 
-                    if (!media) return valor;
+            if (
+                media.titulo === 'Lucro/Faturamento' ||
+                media.titulo === 'Faturamento/Dívida' ||
+                media.titulo === 'Chance de Quitar a Dívida' ||
+                media.titulo === 'Chance de Título (2026)'
+            ) return `${valor}%`;
 
-                    if (media.titulo === 'Lucro/Faturamento' || media.titulo === 'Faturamento/Dívida' || media.titulo === 'Chance de Quitar a Dívida' || media.titulo === 'Chance de Título (2026)') return `${valor}%`;
-
-                    return valor;
-                })()} {sufixo} <i className="fa-solid fa-angle-right text-sm translate-y-[10%]"></i>
+            return `${valor} `;
+            })()}
+            {sufixo}
             </p>
 
             <div className="absolute -right-1.5 -bottom-2 pointer-events-none max-w-1/3">
@@ -296,53 +325,96 @@ export function InfoCard(
                 </AreaChart>
             </div>
 
-            <p className={
-                `
-                ${(() => {
+            <p
+            className={`
+                ${
+                (() => {
                     const media = mediaData.find(m => m.titulo === titulo);
+                    if (!media) return '';
 
-                    if (!media) return;
+                    const titulosFinanceiros = [
+                    'Dívida Bruta',
+                    'Folha Salarial',
+                    'Custo por Vitória',
+                    'Custo por Gol',
+                    'Custo por Ponto',
+                    'Custo por Jogador',
+                    'Dívida (2024)',
+                    ];
 
-                    if (media.titulo === 'Dívida Bruta' || media.titulo === 'Folha Salarial' || media.titulo === 'Custo por Vitória' || media.titulo === 'Custo por Gol' || media.titulo === 'Custo por Ponto' || media.titulo === 'Custo por Jogador' || media.titulo === 'Dívida (2024)') {
-                        if (media.valor < 0) return dark ? 'text-green-400' : 'text-green-600';
-                        return dark ? 'text-red-400' : 'text-red-600';
+                    if (titulosFinanceiros.includes(media.titulo)) {
+                    return media.valor < 0
+                        ? dark ? 'text-green-400' : 'text-green-600'
+                        : dark ? 'text-red-400' : 'text-red-600';
                     }
 
-                    if (!assinante && (titulo === 'Chance de Quitar a Dívida' || titulo === 'Nota do Clube')) return 'text-[#222222]';
+                    if (
+                    !assinante &&
+                    (titulo === 'Chance de Quitar a Dívida' ||
+                        titulo === 'Nota do Clube')
+                    ) {
+                    return 'text-[#222222]';
+                    }
 
-                    if (media.valor < 0) return dark ? 'text-red-400' : 'text-red-600';
+                    if (media.valor < 0) {
+                    return dark ? 'text-red-400' : 'text-red-600';
+                    }
 
                     return dark ? 'text-green-400' : 'text-green-600';
-                })()}
-                 text-[12px] font-semibold font-[manrope]
-                 ${!assinante && (titulo === 'Chance de Quitar a Dívida' || titulo === 'Nota do Clube') && 'blur-[6px]'}
-                `
-            }>
-                {(() => {
-                    const media = mediaData.find(m => m.titulo === titulo);
+                })()
+                }
+                text-[12px] font-semibold font-[manrope]
+            `}
+            >
+            {(() => {
+                const media = mediaData.find(m => m.titulo === titulo);
+                if (!media) return null;
 
-                    if (!media) return;
+                return (
+                <>
+                    {media.valor < 0
+                    ? `-${Math.round(-media.valor)}% `
+                    : `+${Math.round(media.valor)}% `}
 
-                    if (media.valor < 0) return `-${Math.round(-media.valor)}% `;
-
-                    return `+${Math.round(media.valor)}% `;
-                })()}
-
-                <span className={`font-normal ${dark ? 'text-slate-100' : 'text-slate-900'}`}>
+                    <span
+                    className={`font-normal ${
+                        dark ? 'text-slate-100' : 'text-slate-900'
+                    }`}
+                    >
                     {(() => {
-                        const media = mediaData.find(m => m.titulo === titulo);
+                        if (
+                        media.titulo === 'Dívida (2024)' ||
+                        media.titulo === 'Faturamento (2024)'
+                        ) {
+                        return media.valor < 0 ? 'de queda' : 'de aumento';
+                        }
 
-                        if (!media) return;
-
-                        if (media.titulo === 'Dívida (2024)' || media.titulo === 'Faturamento (2024)') return media.valor < 0 ? 'de queda' : 'de aumento'
-
-                        if (media.valor < 0) return 'abaixo da média';
-
-                        return 'acima da média';
+                        return media.valor < 0
+                        ? 'abaixo da média'
+                        : 'acima da média';
                     })()}
-                </span>
+                    </span>
+                </>
+                );
+            })()}
             </p>
+
         </div>
+        :
+        <div
+        onClick={() => fazerScroll()}
+        className={`cursor-pointer relative ${dark ? 'bg-[#1a1625]' : 'bg-sky-50'} shadow-[1px_1px_3px_#0000002a] rounded-2xl flex flex-col justify-center items-center pl-4 pr-2 space-y-4 py-2 gap-1 ${largura > 768 ? 'min-h-32 max-h-32' : 'min-h-30 max-h-30'} lg:min-w-1/2 overflow-hidden`}>
+            <h2 className={`${dark ? 'text-slate-200' : 'text-slate-700'} font-mono`}>
+                {titulo}
+            </h2>
+            <i className={`fa-solid fa-lock ${dark ? 'text-slate-100' : 'text-slate-800'}`}></i>
+
+        </div>
+
+
+
+        }
+        </>
     );
 }
 
@@ -352,6 +424,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
     const [chanceTitulo, setChanceTitulo] = useState<number>(0);
     const [mediaData, setMediaData] = useState<MediaCardData[]>();
     const { largura, setTopicoAtivo, dark, setMostrarCard, mostrarCard, setAbaEntretenimento, assinanteAtual } = allContext();
+    const premiumRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         setTopicoAtivo('Produto');
@@ -624,15 +697,15 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             </>,
             valor: chanceTitulo,
             sufixo: chanceTitulo > 75 ?
-                <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-medium">Muito Alta</span></span> </>
                 :
-                chanceTitulo > 60 ? <> <span className="inline ml-1"> - <span className="font-normal">Alta</span></span> </>
+                chanceTitulo > 60 ? <> <span className="inline ml-1"> - <span className="font-medium">Alta</span></span> </>
                 :
-                chanceTitulo > 30 ? <> <span className="inline ml-1"> - <span className="font-normal">Moderada</span></span> </>
+                chanceTitulo > 30 ? <> <span className="inline ml-1"> - <span className="font-medium">Moderada</span></span> </>
                 :
-                chanceTitulo > 15 ? <> <span className="inline ml-1"> - <span className="font-normal">Baixa</span></span> </>
+                chanceTitulo > 15 ? <> <span className="inline ml-1"> - <span className="font-medium">Baixa</span></span> </>
                 :
-                <> <span className="inline ml-1"> - <span className="font-normal">Quase Impossível</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-medium">Quase Impossível</span></span> </>
         },
         {
             titulo: "Faturamento (2024)",
@@ -681,13 +754,13 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             </>,
             valor: clubeEscolhido.nota_clube,
             sufixo: clubeEscolhido.nota_clube > 7 ?
-                <> <span className="inline ml-1"> - <span className="font-normal">Muito bom</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-medium">Muito bom</span></span> </>
                 :
-                clubeEscolhido.nota_clube > 5 ? <> <span className="inline ml-1"> - <span className="font-normal">Bom</span> </span> </>
+                clubeEscolhido.nota_clube > 5 ? <> <span className="inline ml-1"> - <span className="font-medium">Bom</span> </span> </>
                 :
-                clubeEscolhido.nota_clube > 3 ? <> <span className="inline ml-1"> - <span className="font-normal">Fraco</span> </span> </>
+                clubeEscolhido.nota_clube > 3 ? <> <span className="inline ml-1"> - <span className="font-medium">Fraco</span> </span> </>
                 :
-                <> <span className="inline ml-1"> - <span className="font-normal">Ruim</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-medium">Ruim</span></span> </>
         },
         {
             titulo: "Chance de Quitar a Dívida",
@@ -700,15 +773,15 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
             </>,
             valor: clubeEscolhido.chance_quitar_divida,
             sufixo: clubeEscolhido.chance_quitar_divida > 75 ?
-                <> <span className="inline ml-1"> - <span className="font-normal">Muito Alta</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-medium">Muito Alta</span></span> </>
                 :
-                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline ml-1"> - <span className="font-normal">Alta</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 60 ? <> <span className="inline ml-1"> - <span className="font-medium">Alta</span></span> </>
                 :
-                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline ml-1"> - <span className="font-normal">Moderada</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 30 ? <> <span className="inline ml-1"> - <span className="font-medium">Moderada</span></span> </>
                 :
-                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline ml-1"> - <span className="font-normal">Baixa</span></span> </>
+                clubeEscolhido.chance_quitar_divida > 15 ? <> <span className="inline ml-1"> - <span className="font-medium">Baixa</span></span> </>
                 :
-                <> <span className="inline ml-1"> - <span className="font-normal">Quase Impossível</span></span> </>
+                <> <span className="inline ml-1"> - <span className="font-medium">Quase Impossível</span></span> </>
         },
     ];
 
@@ -768,11 +841,14 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                     largura={largura}
                                     assinante={card.assinanteAtual}
                                     dark={dark}
+                                    premiumRef={premiumRef.current}
                                 />
                             ))}
                         </section>
-
-                        <CardsPremium />
+                        
+                        <div ref={premiumRef} className="scroll-mt-20">
+                            <CardsPremium />
+                        </div>
                     </div>
 
                     {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
