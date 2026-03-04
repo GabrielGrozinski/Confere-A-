@@ -713,7 +713,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                         <AdsenseLeft />
                     }
 
-                    <div className={`col-2 flex flex-col items-center ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%]'}`}>
+                    <div className={`col-2 flex flex-col items-center ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
                         <section className={`w-full px-4 gap-6 ${largura >= 1444 ? 'grid grid-cols-2' : largura >= 1024 ? 'flex flex-col' : largura > 768 ? 'grid grid-cols-2' : 'flex flex-col'} pb-10`}>
                             {loading ?
                             <div className="flex-1 flex items-center justify-center">

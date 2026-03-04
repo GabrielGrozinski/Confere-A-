@@ -168,7 +168,7 @@ export default function CompararCoisas() {
                     <AdsenseLeft />
                 }
 
-                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%]'}`}>
+                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
 
                     <div className="mt-36 rounded-lg rounded-t-none min-h-115 max-h-115 grid grid-rows-[1fr_15%]">
                         <main id="main" className={`grid grid-cols-[1fr_auto_1fr] relative mx-1 border max-h-100 ${dark ? 'bg-[#3e495e] border-slate-800/20' : 'border-slate-400/20 bg-slate-100'}`}>
