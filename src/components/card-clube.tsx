@@ -766,7 +766,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                                     sufixo={card.sufixo}
                                     mediaData={mediaData}
                                     largura={largura}
-                                    assinante={"Sócio"}
+                                    assinante={card.assinanteAtual}
                                     dark={dark}
                                 />
                             ))}

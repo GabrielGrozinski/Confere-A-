@@ -159,7 +159,7 @@ export default function CompararCoisas() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
             <HeaderFixo/>
 
             <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-10 relative">
@@ -168,14 +168,7 @@ export default function CompararCoisas() {
                     <AdsenseLeft />
                 }
 
-                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
-
-                    <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-16 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
-                    Além do Futebol
-                    </h2>
-                    <p className={`text-base text-center mt-2 mb-28 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
-                    Compare o faturamento dos clubes com o que você quiser!
-                    </p>
+                <main className={`col-span-full lg:col-2 w-full flex flex-col mt-24 relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
 
                     <div className="rounded-lg rounded-t-none min-h-115 max-h-115 grid grid-rows-[1fr_15%]">
 
