@@ -61,7 +61,8 @@ export default async function handler(req, res) {
         const {error} = await supabase
             .from('planos')
             .upsert({
-                payment_id: `${planoAtivo.payment_Id} | ${paymentId}`,
+                user_id: planoAtivo.user_id,
+                payment_id: `${planoAtivo.payment_id} | ${paymentId}`,
                 plan_id: 'Sócio'
             });
 
