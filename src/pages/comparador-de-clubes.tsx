@@ -65,7 +65,6 @@ export type DadosClube = {
 export default function ComparadorDeClubes() {
     const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
-    const [assinante, setAssinante] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
     const [clubesSelecionados, setClubesSelecionados] = useState<Medias[]>([]);
@@ -169,7 +168,7 @@ export default function ComparadorDeClubes() {
             setClubesSelecionados(clubesFiltrados);
             setClubesSelecionadosOriginal(clubesFiltrados);
         } else {
-            if (!assinante && clubesSelecionados.length === 5) {
+            if ((assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && clubesSelecionados.length === 5) {
                 return fazerScroll();
             }
             const clubeNovo = await CalcularMediaClube(clubeEscolhido, anoEscolhido);
@@ -370,12 +369,18 @@ export default function ComparadorDeClubes() {
                                                 key={item.label}
                                                 onClick={() => {
                                                     setPopoverAberto(false);
-                                                    assinante ?
+                                                    assinanteAtual === 'Sócio' ?
                                                         setTopico(item.label)
                                                     :
                                                     (item.categoria === 'Premium')
                                                     ?
-                                                        fazerScroll()
+                                                        assinanteAtual === 'Torcedor' ?
+                                                            (item.label !== 'Chance de Quitar a Dívida' && item.label !== 'Nota do Clube' && item.label !== 'Projetar Faturamento') ?
+                                                                setTopico(item.label)
+                                                            :
+                                                            fazerScroll()
+                                                        :
+                                                            fazerScroll()
                                                     :
                                                         setTopico(item.label);
                                                     
@@ -393,7 +398,7 @@ export default function ComparadorDeClubes() {
                                                 {item.label}
                                                 {(item.categoria === 'Premium') &&
                                                 <div className="inline relative">
-                                                    <div onClick={() => fazerScroll()} className={`ml-2 absolute flex top-1/2 -translate-y-[45%] right-0 translate-x-[125%] items-center justify-center min-h-6 min-w-6 cursor-pointer rounded-md ${(item.label === 'Nota do Clube' || item.label === 'Chance de Quitar a Dívida') ? 'bg-red-600' : 'bg-yellow-500'}`}>
+                                                    <div onClick={() => fazerScroll()} className={`ml-2 absolute flex top-1/2 -translate-y-[45%] right-0 translate-x-[125%] items-center justify-center min-h-6 min-w-6 cursor-pointer rounded-md ${(item.label === 'Nota do Clube' || item.label === 'Chance de Quitar a Dívida' || item.label === 'Projetar Faturamento') ? 'bg-red-600' : 'bg-yellow-500'}`}>
                                                         <i className={`${(item.label === 'Nota do Clube' || item.label === 'Chance de Quitar a Dívida') ? 'fa-brands fa-web-awesome' : 'fa-solid fa-trophy'} text-slate-100 text-[10px] -translate-x-[0.63px] translate-y-px text-shadow-[0px_2px_1px_#0000002a]`}></i>
                                                     </div>
                                                 </div>
