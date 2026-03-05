@@ -8,7 +8,6 @@ import "../../styles/redefinir-senha.css";
 
 export default function RedefinirSenha() {
   const navigate = useNavigate();
-  const { user } = allContext();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -24,6 +23,7 @@ export default function RedefinirSenha() {
 
       if (error || !data.session) {
         setErrorMsg("Link inválido ou expirado.");
+        setCanReset(false)
         return;
       }
 
@@ -66,12 +66,6 @@ export default function RedefinirSenha() {
       // Redireciona após 3 segundos
       setTimeout(async () => {
         await supabase.auth.signOut();
-        {/*
-        await supabase.auth.signInWithPassword({
-          email: user?.email ?? '',
-          password
-        });
-        */}
         navigate("/login");
       }, 2000);
     }
@@ -132,9 +126,9 @@ export default function RedefinirSenha() {
 
         <button
           onClick={handleUpdatePassword}
-          disabled={loading && canReset}
+          disabled={loading || !canReset}
           style={{padding: '10px 0px'}}
-          className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
         >
           {loading ? "Atualizando..." : "Redefinir senha"}
         </button>
@@ -152,3 +146,14 @@ export default function RedefinirSenha() {
     </div>
   );
 }
+
+{/* 
+  
+  
+          <button
+          onClick={handleUpdatePassword}
+          disabled={loading || !canReset}
+          style={{padding: '10px 0px'}}
+          className={`w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition ${(loading || !canReset) ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+  */}
