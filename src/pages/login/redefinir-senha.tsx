@@ -46,12 +46,10 @@ export default function RedefinirSenha() {
       setErrorMsg("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
-
     setLoading(true);
     setErrorMsg("");
     setSuccessMsg("");
 
-    // ✅ Atualiza a senha do usuário logado temporariamente
     const { data, error } = await supabase.auth.updateUser({ password });
 
     setLoading(false);
@@ -64,16 +62,16 @@ export default function RedefinirSenha() {
       setSuccessMsg(
         "Senha redefinida com sucesso! Redirecionando para login..."
       );
-      setPassword("");
-      setConfirmPassword("");
 
       // Redireciona após 3 segundos
       setTimeout(async () => {
         await supabase.auth.signOut();
+        {/*
         await supabase.auth.signInWithPassword({
           email: user?.email ?? '',
           password
-        })
+        });
+        */}
         navigate("/login");
       }, 2000);
     }
@@ -84,7 +82,7 @@ export default function RedefinirSenha() {
     className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="w-full max-w-md bg-gray-800 rounded-2xl shadow-lg p-6">
         {(!successMsg && !errorMsg) &&
-        <h1 style={{marginBottom: 18}} className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">
+        <h1 style={{marginBottom: 18}} className="text-2xl font-bold text-gray-200 text-center">
           Redefinir Senha
         </h1>
         }

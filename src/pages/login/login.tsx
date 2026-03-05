@@ -57,13 +57,17 @@ export default function TelaLogin() {
     }
 
     async function handlePassword() {
-        const { error } = await supabase.auth.resetPasswordForEmail(email ?? '', {
+        if (!email) {
+            setAvisoErro('Digite o seu email para recuperar a senha.');
+            return;
+        }
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: 'https://confere-ae-psi.vercel.app/#/redefinir-senha'
         });
         if (error) {
             console.error('Houve um erro ao enviar o email: ', error);
             setAvisoSucesso('');
-            setAvisoErro(email ? 'Houve um erro ao redefinir sua senha.' : 'Digite o seu email para recuperar a senha.');
+            setAvisoErro('Houve um erro ao redefinir sua senha.');
         } else {
             setAvisoErro('');
             setAvisoSucesso('Link enviado ao seu email.');
