@@ -5,6 +5,7 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { supabase } from '../../auth/supabase-client';
+import { CheckCircle, XCircle } from "lucide-react";
 
 
 export default function TelaLogin() {
@@ -15,7 +16,7 @@ export default function TelaLogin() {
     const navigate = useNavigate();
     const [avisoErro, setAvisoErro] = useState<string>('');
     const [avisoSucesso, setAvisoSucesso] = useState<string>('');
-    const { loginGoogle, loginUser, dark } = allContext();
+    const { loginGoogle, loginUser } = allContext();
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
@@ -27,12 +28,21 @@ export default function TelaLogin() {
                 navigate('/principal');
             } else {
                 let erroAtual = 
-                result?.error == 'AuthApiError: missing email or phone' ? 
-                'Preencha os campos de email e senha.' 
-                : 
-                result?.error == 'AuthApiError: Invalid login credentials' ? 'Digite um email e senha válidos.' 
-                : 
+                result?.error == 'AuthApiError: missing email or phone'
+                ? 'Preencha os campos de email e senha.'
+                : result?.error == 'AuthApiError: Invalid login credentials'
+                ? 'Digite um email e senha válidos.'
+                : result?.error == 'AuthApiError: Email not confirmed'
+                ? 'Confirme seu email antes de fazer login.'
+                : result?.error == 'AuthApiError: User not found'
+                ? 'Usuário não encontrado.'
+                : result?.error == 'AuthApiError: Email rate limit exceeded'
+                ? 'Muitas tentativas. Tente novamente em alguns minutos.'
+                : result?.error == 'AuthApiError: Too many requests'
+                ? 'Muitas tentativas de login. Aguarde um pouco.'
+                : 'Erro inesperado. Tente novamente.'
                 result?.error;
+                setAvisoSucesso('');
                 setAvisoErro(erroAtual);
             }
         } catch (error) {
@@ -41,7 +51,7 @@ export default function TelaLogin() {
             setLoading(false);
             setTimeout(() => {
                 setAvisoErro('');
-            }, 3000);
+            }, 6000);
         }
     }
 
@@ -51,21 +61,23 @@ export default function TelaLogin() {
         });
         if (error) {
             console.error('Houve um erro ao enviar o email: ', error);
-            setAvisoErro(email ? 'Houve um erro ao enviar o email para redefinir sua senha. Por favor, tente de novo.' : 'Digite o seu email para recuperar a senha.');
+            setAvisoSucesso('');
+            setAvisoErro(email ? 'Houve um erro ao redefinir sua senha.' : 'Digite o seu email para recuperar a senha.');
         } else {
-            setAvisoSucesso('Um link para redefir sua senha foi enviado ao seu email.');
+            setAvisoErro('');
+            setAvisoSucesso('Link enviado ao seu email.');
         }
 
         setTimeout(() => {
         setAvisoErro('');
         setAvisoSucesso('');
-        }, 3000);
+        }, 6000);
     }
 
     return (
         <div 
             style={{background: "linear-gradient(180deg,#f2f4fa 0%,#b3c4f9 100%)", boxShadow: "0 25px 60px #0000004a"}}
-            className='absolute top-1/2 left-1/2 -translate-1/2 p-6 pt-2 rounded-2xl flex flex-col items-center justify-center outline-5 outline-white/70'>
+            className='absolute top-1/2 left-1/2 -translate-1/2 p-6 pt-2 rounded-2xl flex flex-col items-center justify-center outline-5 outline-white/70 scale-90 lg:scale-100'>
             <h1 className="font-[MONELOS] flex items-center text-xl lg:text-3xl whitespace-nowrap scale-125 translate-y-1 -translate-x-3">
                 <div className="relative translate-y-1.25 mx-auto px-3 text-center">
                     <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/15 mb-4">
@@ -95,10 +107,27 @@ export default function TelaLogin() {
             </h1>
             <div className="form-container cadastro-screen">
                 <form className="form cadastro-screen">
+
+                    <div className={`flex items-end justify-center min-w-full absolute ${(avisoErro || avisoSucesso) ? 'min-h-14' : 'min-h-8'}`}>
+                        {avisoSucesso && (
+                        <div className="flex items-center gap-2 bg-green-600 text-green-50 rounded-lg p-2">
+                            <CheckCircle size={20} />
+                            <span className='text-sm'>{avisoSucesso}</span>
+                        </div>
+                        )}
+
+                        {avisoErro && (
+                        <div className="flex items-center gap-2 bg-red-600 text-red-50 rounded-lg p-2">
+                            <XCircle size={20} />
+                            <span className='text-sm'>{avisoErro}</span>
+                        </div>
+                        )}
+                    </div>
+
                     <input
                     onChange={(e) => setEmail((e.currentTarget.value).toLocaleLowerCase())}
                     type="email"
-                    className="input cadastro-screen"
+                    className={`input cadastro-screen ${(avisoErro || avisoSucesso) ? 'mt-16' : 'mt-8'}`}
                     placeholder="Email" />
                     <input
                     onChange={(e) => setSenha((e.currentTarget.value).toLocaleLowerCase())}
@@ -108,7 +137,7 @@ export default function TelaLogin() {
                     }}
                     className="input cadastro-screen"
                     placeholder="Senha" />
-                    <a onClick={() => handlePassword()} className="page-link-label cadastro-screen">Esqueci a senha</a>
+                    <a onClick={() => handlePassword()} className="page-link-label cadastro-screen hover:underline">Esqueci a senha</a>
                     {!loading ? (
                         <input
                         onClick={(e) => handleLogin(e)}
@@ -120,6 +149,7 @@ export default function TelaLogin() {
                     )
                     }
                 </form>
+
                 <div className='min-h-6 max-h-6 grid grid-cols-[1fr_auto_1fr] max-w-110 min-w-full sm:min-w-78 my-4'>
                     <span className='col-1 max-h-px translate-y-3.5 bg-slate-800/10'>
                     </span>
@@ -173,7 +203,7 @@ export default function TelaLogin() {
                     Não possui uma conta?
                     <NavLink
                     to="cadastro"
-                    className="sign-up-link cadastro-screen">
+                    className="sign-up-link cadastro-screen hover:underline">
                         Fazer cadastro
                     </NavLink>
                 </p>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { allContext } from '../../context/all-context';
 import { useState, type FormEvent } from 'react';
 import { ClipLoader } from 'react-spinners';
+import { CheckCircle, XCircle } from "lucide-react";
 
 
 export default function TelaCadastro() {
@@ -10,6 +11,8 @@ export default function TelaCadastro() {
     const [email, setEmail] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
     const navigate = useNavigate();
+    const [avisoErro, setAvisoErro] = useState<string>('');
+    const [avisoSucesso, setAvisoSucesso] = useState<string>('');
     const { loginGoogle, cadastroUser } = allContext();
 
     const handleCadastro = async (e: FormEvent) => {
@@ -20,12 +23,45 @@ export default function TelaCadastro() {
 
             if (resultAuth?.success) {
                     navigate('/principal');
+            } else {
+                let erroAtual =
+                resultAuth?.error == 'AuthApiError: Signup disabled'
+                ? 'Cadastro desativado no momento.'
+                : resultAuth?.error == 'AuthApiError: missing email or phone'
+                ? 'Preencha os campos de email e senha.'
+                : resultAuth?.error == 'AuthApiError: Invalid login credentials'
+                ? 'Digite um email e senha válidos.'
+                : resultAuth?.error == 'AuthApiError: Email already registered'
+                ? 'Este email já está cadastrado.'
+                : resultAuth?.error == 'AuthApiError: Password should be at least 6 characters'
+                ? 'A senha deve ter pelo menos 6 caracteres.'
+                : resultAuth?.error?.message == 'User already registered'
+                ? 'Este email já está cadastrado.'
+                : resultAuth?.error?.message == 'Password should be at least 6 characters'
+                ? 'A senha deve ter pelo menos 6 caracteres.'
+                : resultAuth?.error?.message == 'Signup is disabled'
+                ? 'O cadastro está desativado no momento.'
+                : resultAuth?.error?.message == 'Email rate limit exceeded'
+                ? 'Muitas tentativas de cadastro. Tente novamente em alguns minutos.'
+                : resultAuth?.error?.message == 'Unable to validate email address: invalid format'
+                ? 'Digite um email válido.'
+                : resultAuth?.error?.message == 'Database error saving new user'
+                ? 'Erro ao criar usuário. Tente novamente.'
+                : resultAuth?.error?.message == 'Password is too weak'
+                ? 'Escolha uma senha mais forte.'
+                : 'Erro ao criar conta. Tente novamente.'
+
+                setAvisoSucesso('');
+                setAvisoErro(erroAtual);
             }
 
         } catch (error) {
             console.error(error);
         } finally {
             setLoading(false);
+            setTimeout(() => {
+                setAvisoErro('');
+            }, 6000);
         }
     }
 
@@ -63,10 +99,27 @@ export default function TelaCadastro() {
             </h1>
             <div className="form-container cadastro-screen">
                 <form className="form cadastro-screen">
+
+                    <div className={`flex items-end justify-center min-w-full absolute ${(avisoErro || avisoSucesso) ? 'min-h-14' : 'min-h-8'}`}>
+                        {avisoSucesso && (
+                        <div className="flex items-center gap-2 bg-green-600 text-green-50 rounded-lg p-2">
+                            <CheckCircle size={20} />
+                            <span>{avisoSucesso}</span>
+                        </div>
+                        )}
+
+                        {avisoErro && (
+                        <div className="flex items-center gap-2 bg-red-600 text-red-50 rounded-lg p-2">
+                            <XCircle size={20} />
+                            <span>{avisoErro}</span>
+                        </div>
+                        )}
+                    </div>
+
                     <input
                     onChange={(e) => setEmail((e.currentTarget.value).toLocaleLowerCase())} 
                     type="email" 
-                    className="input cadastro-screen" 
+                    className={`input cadastro-screen ${(avisoErro || avisoSucesso) ? 'mt-16' : 'mt-8'}`} 
                     placeholder="Email" />
                     <input
                     onChange={(e) => setSenha((e.currentTarget.value).toLocaleLowerCase())} 
@@ -149,7 +202,7 @@ export default function TelaCadastro() {
                     Já tem uma conta?
                     <span
                     onClick={() => navigate('/login')}
-                    className="sign-up-link cadastro-screen">
+                    className="sign-up-link cadastro-screen hover:underline">
                         Faça login
                     </span>
                 </p>

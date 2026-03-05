@@ -78,7 +78,7 @@ export default function Cookies() {
           </a>
         </p>
 
-        <button className="mb-2 mr-auto text-stone-200 cursor-pointer font-semibold transition-colors hover:text-[#eab789] hover:underline underline-offset-2">
+        <button onClick={() => setFechar(true)} className="mb-2 mr-auto text-stone-200 cursor-pointer font-semibold transition-colors hover:text-[#eab789] hover:underline underline-offset-2">
           Recusar
         </button>
 

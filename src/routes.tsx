@@ -33,6 +33,7 @@ import ClubeVsMundo from "./pages/clube-vs-mundo";
 import TermosDeUso from "./pages/termos-de-uso";
 import PoliticaDePrivacidade from "./pages/termos-de-privacidade";
 import Metodologia from "./pages/metodologia";
+import RedefinirSenha from "./pages/login/redefinir-senha";
 
 
 export default function Rotas() {
@@ -59,6 +60,8 @@ export default function Rotas() {
 
                 <Route path="clube-vs-clube" element={<ClubeVsClube/>} />
                 <Route path="clube-vs-mundo" element={<ClubeVsMundo/>} />
+
+                <Route path="redefinir-senha" element={<RedefinirSenha/>} />
 
                 <Route path="produtos" element={<Produtos/>} />
                 <Route path="sao-paulo" element={<SaoPaulo/>} />
