@@ -126,15 +126,15 @@ export default function TelaLogin() {
                     </div>
 
                     <input
-                    onChange={(e) => setEmail((e.currentTarget.value).toLocaleLowerCase())}
+                    onChange={(e) => setEmail((e.currentTarget.value).trim().toLocaleLowerCase())}
                     type="email"
                     className={`input cadastro-screen ${(avisoErro || avisoSucesso) ? 'mt-18' : 'mt-8'}`}
                     placeholder="Email" />
 
                     <div className="relative mb-5">
                         <input
-                        onChange={(e) => setSenha((e.currentTarget.value).toLocaleLowerCase())}
-                        type="password"
+                        onChange={(e) => setSenha((e.currentTarget.value).trim())}
+                        type={mostrarSenha ? 'text' : 'password'}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') handleLogin(e);
                         }}
