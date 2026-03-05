@@ -13,6 +13,7 @@ export default function TelaLogin() {
     const [loading, setLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
+    const [mostrarSenha, setMostrarSenha] = useState(false);
     const navigate = useNavigate();
     const [avisoErro, setAvisoErro] = useState<string>('');
     const [avisoSucesso, setAvisoSucesso] = useState<string>('');
@@ -57,7 +58,7 @@ export default function TelaLogin() {
 
     async function handlePassword() {
         const { error } = await supabase.auth.resetPasswordForEmail(email ?? '', {
-        redirectTo: 'https://gabrielgrozinski.github.io/ViaJour/#/reset-password'
+        redirectTo: 'https://confere-ae-psi.vercel.app/#/redefinir-senha'
         });
         if (error) {
             console.error('Houve um erro ao enviar o email: ', error);
@@ -127,16 +128,21 @@ export default function TelaLogin() {
                     <input
                     onChange={(e) => setEmail((e.currentTarget.value).toLocaleLowerCase())}
                     type="email"
-                    className={`input cadastro-screen ${(avisoErro || avisoSucesso) ? 'mt-16' : 'mt-8'}`}
+                    className={`input cadastro-screen ${(avisoErro || avisoSucesso) ? 'mt-18' : 'mt-8'}`}
                     placeholder="Email" />
-                    <input
-                    onChange={(e) => setSenha((e.currentTarget.value).toLocaleLowerCase())}
-                    type="password"
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') handleLogin(e);
-                    }}
-                    className="input cadastro-screen"
-                    placeholder="Senha" />
+
+                    <div className="relative mb-5">
+                        <input
+                        onChange={(e) => setSenha((e.currentTarget.value).toLocaleLowerCase())}
+                        type="password"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleLogin(e);
+                        }}
+                        className="input cadastro-screen"
+                        placeholder="Senha" />
+                        <i onClick={() => setMostrarSenha(!mostrarSenha)} className={`fa-regular ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'} text-gray-600 cursor-pointer absolute top-1/2 right-4 -translate-y-1/2`}></i>
+                    </div>
+
                     <a onClick={() => handlePassword()} className="page-link-label cadastro-screen hover:underline">Esqueci a senha</a>
                     {!loading ? (
                         <input
