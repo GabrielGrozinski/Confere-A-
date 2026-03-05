@@ -48,7 +48,7 @@ export default function Preco() {
         preco: "R$ 5,00",
         titulo: "Torcedor",
         descricao:
-        "Acesse análises avançadas e compare a evolução do seu clube com dados históricos e projeções exclusivas.",
+        "Acesse análises avançadas e compare seu clube com seus maiores rivais.",
         icone: 'fa-solid fa-trophy text-shadow-[1px_1px_1px_#0000002a]',
         beneficios: [
         "20+ clubes por comparação",

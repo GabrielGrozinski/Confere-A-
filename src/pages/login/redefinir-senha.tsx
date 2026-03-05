@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../auth/supabase-client";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle, XCircle } from "lucide-react";
-import { allContext } from "../../context/all-context";
 import "../../styles/redefinir-senha.css";
 
 

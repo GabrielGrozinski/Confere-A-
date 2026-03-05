@@ -141,14 +141,6 @@ export default function FooterFixo() {
                     <div className="">
                         <h4 className="text-sm font-medium text-slate-200/80 mb-5 uppercase tracking-wide">Contato</h4>
                         <ul className="space-y-3">
-                            <li className="flex justify-start items-center" onClick={() => handleNavegar('metodologia')}>
-                                <i className="fa-brands fa-square-instagram text-3xl -ml-1.25 text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
-
-                                <i className="fa-brands fa-square-x-twitter text-3xl text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
-
-                                <i className="fa-brands fa-square-facebook text-3xl text-neutral-200 cursor-pointer hover:text-neutral-300 transition-colors duration-200"></i>
-                            </li>
-                            
                             <li><a className="cursor-text text-sm text-white/45 hover:text-white/60 transition-colors duration-200">contato@confereae.com</a></li>
                         </ul>
                     </div>

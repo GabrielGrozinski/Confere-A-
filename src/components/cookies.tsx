@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Cookies() {
 
-    const [fechar, setFechar] = useState<boolean>(false);
+  const [fechar, setFechar] = useState<boolean>(() => localStorage.getItem('cookies') === 'fechado');
 
-    const handleNavegar = (rota: string) => {
-        const url = `${window.location.origin}/#/${rota}`;
-        window.open(url, "_blank", "noopener,noreferrer");
-    }
+  useEffect(() => {
+    localStorage.setItem('cookies', fechar ? 'fechado' : 'aberto');
+  }, [fechar]);
 
-    if (fechar) return;
+  const handleNavegar = (rota: string) => {
+      const url = `${window.location.origin}/#/${rota}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  if (fechar) return;
 
   return (
     <div className="[--shadow:rgba(60,64,67,0.3)_0_1px_2px_0,rgba(60,64,67,0.15)_0_2px_6px_2px] min-w-full transition-all duration-100 rounded-2xl bg-[#634647] [box-shadow:var(--shadow)] max-w-full">

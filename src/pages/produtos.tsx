@@ -153,7 +153,7 @@ export default function Produtos() {
         <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen mt-15">
             <HeaderFixo />
 
-            <div className="max-w-400 pt-4 mx-auto px-6">
+            <div className="max-w-400 pt-4 mx-auto px-6 pb-18">
                 <div className="opacity-100 transform-none">
                     <div className="text-center mb-16">
                     <h2 className={`text-[36px] md:text-[48px] font-bold mt-3 mb-5 tracking-[-0.015em] ${dark ? 'text-white' : 'text-zinc-900'}`}>
@@ -209,140 +209,6 @@ export default function Produtos() {
                 ))}
                 </div>
 
-                <section className="py-24 my-10 mt-36">
-                    <div className="max-w-400 mx-auto px-6">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {stats.map((item) => (
-                            <div
-                            key={item.id}
-                            className="opacity-100 transform-none"
-                            >
-                            <div className={`text-center py-8 px-4 min-h-50 max-h-50 border rounded-2xl transition-all duration-300 ${dark ? 'hover:border-[#DAFF01]/30 bg-[rgb(26,28,30)] border-white/10' : 'hover:border-amber-400 bg-stone-50 border-black/20'}`}>
-                                <p className={`text-[36px] md:text-[48px] font-bold tracking-tight ${dark ? 'text-[#DAFF01]' : 'text-amber-300 text-shadow-[0px_1px_1px_#0000001a]'}`}>
-                                {item.value}
-                                </p>
-                                <p className={`text-sm font-semibold mt-1 ${dark ? 'text-white' : 'text-zinc-800'}`}>
-                                {item.title}
-                                </p>
-                                <p className={`text-xs mt-1 ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-500'}`}>
-                                {item.subtitle}
-                                </p>
-                            </div>
-                            </div>
-                        ))}
-                        </div>
-                    </div>
-                </section>
-
-                <section className="py-24">
-                    <div className="max-w-400 mx-auto px-6">
-
-                        <div className="opacity-100 transform-none">
-                            <div className="text-center mb-16">
-                                <span className={`text-lg font- uppercase tracking-wider ${dark ? 'text-[#DAFF01]' : 'text-amber-300'}`}>
-                                    Depoimentos
-                                </span>
-                                <h2 className={`text-[32px] md:text-[40px] font-bold mt-3 tracking-[-0.015em] ${dark ? 'text-white' : 'text-zinc-800/95'}`}>
-                                    O que dizem nossos usuários
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-6">
-
-                            <div className="opacity-100 transform-none">
-                                <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
-                                        <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                                        <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                                    </svg>
-
-                                    <p className={`text-base leading-relaxed flex-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-800'}`}>
-                                        "Descobri, de uma vez por todas, se meu clube era bem administrado."
-                                    </p>
-
-                                    <div className={`mt-6 pt-5 border-t ${dark ? 'border-white/5' : 'border-black/10'}`}>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[rgb(38,40,42)] flex items-center justify-center text-sm font-bold text-[#DAFF01]">
-                                                G
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm font-semibold ${dark ? 'text-white' : 'text-zinc-800'}`}>
-                                                    Gabriel G.
-                                                </p>
-                                                <p className={`text-xs ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-500'}`}>
-                                                    Torcedor do São Paulo
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div className="opacity-100 transform-none">
-                                <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
-                                        <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                                        <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                                    </svg>
-
-                                    <p className={`text-base leading-relaxed flex-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-800'}`}>
-                                        "Descobri, de uma vez por todas, se meu clube era bem administrado."
-                                    </p>
-
-                                    <div className={`mt-6 pt-5 border-t ${dark ? 'border-white/5' : 'border-black/10'}`}>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[rgb(38,40,42)] flex items-center justify-center text-sm font-bold text-[#DAFF01]">
-                                                G
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm font-semibold ${dark ? 'text-white' : 'text-zinc-800'}`}>
-                                                    Gabriel G.
-                                                </p>
-                                                <p className={`text-xs ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-500'}`}>
-                                                    Torcedor do São Paulo
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div className="opacity-100 transform-none">
-                                <div className={`border rounded-2xl p-7 h-full flex flex-col ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-zinc-50 border-slate-800/20'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-quote w-8 h- mb-4 ${dark ? 'text-[#DAFF01]/30' : 'text-[#DAFF01]'}`} aria-hidden="true">
-                                        <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                                        <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                                    </svg>
-
-                                    <p className={`text-base leading-relaxed flex-1 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-800'}`}>
-                                        "Descobri, de uma vez por todas, se meu clube era bem administrado."
-                                    </p>
-
-                                    <div className={`mt-6 pt-5 border-t ${dark ? 'border-white/5' : 'border-black/10'}`}>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[rgb(38,40,42)] flex items-center justify-center text-sm font-bold text-[#DAFF01]">
-                                                G
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm font-semibold ${dark ? 'text-white' : 'text-zinc-800'}`}>
-                                                    Gabriel G.
-                                                </p>
-                                                <p className={`text-xs ${dark ? 'text-[rgb(161,161,170)]' : 'text-neutral-500'}`}>
-                                                    Torcedor do São Paulo
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </section>
             </div>
             
             {(mostrarClubes) &&
