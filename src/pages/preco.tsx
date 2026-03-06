@@ -104,7 +104,7 @@ export default function Preco() {
     return (
         <div style={{background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
 
-            <div className="min-h-screen pt-3 flex flex-col items-center mb-22 overflow-x-hidden">
+            <div className="min-h-screen pt-3 flex flex-col items-center pb-10 overflow-x-hidden">
 
                 <h2 className={`text-[36px] md:text-[48px] font-bold mt-3 mb-15 tracking-[-0.015em] ${dark ? 'text-white' : 'text-zinc-900'}`}>
                     Todos os Planos

@@ -39,17 +39,19 @@ export default function Botafogo() {
     const corFundo = 'linear-gradient(135deg, #222222, #222222)';
 
     useEffect(() => {
-        buscaClube('Botafogo', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Botafogo')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Botafogo', setLoadingFunction)
+        buscarRankings('Botafogo')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

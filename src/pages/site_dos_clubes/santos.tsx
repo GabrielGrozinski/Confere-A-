@@ -39,17 +39,19 @@ export default function Santos() {
     const corFundo = 'linear-gradient(135deg, #f3f4f6, #f5f5f5)';
 
     useEffect(() => {
-        buscaClube('Santos', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Santos')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Santos', setLoadingFunction)
+        buscarRankings('Santos')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

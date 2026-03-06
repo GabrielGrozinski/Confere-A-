@@ -153,7 +153,7 @@ export default function ComparadorDeClubes() {
             top: 0
         });
         
-        buscaTodosClubes(setLoadingFunction)
+        buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))
             .catch((error) => console.log('Houve um erro', error))
             .finally(() => setLoading(false));
@@ -169,10 +169,14 @@ export default function ComparadorDeClubes() {
             if ((assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && clubesSelecionados.length === 5) {
                 return fazerScroll();
             }
-            const clubeNovo = await CalcularMediaClube(clubeEscolhido, setLoadingFunction, anoEscolhido);
+
+            setLoadingFunction(true);
+            const clubeNovo = await CalcularMediaClube(clubeEscolhido, anoEscolhido);
             setClubesSelecionados((prev) => [...prev, clubeNovo.clube]);
-            const clubeOriginal = await CalcularMediaClube(clubeEscolhido, setLoadingFunction, 15);
+            
+            const clubeOriginal = await CalcularMediaClube(clubeEscolhido, 15);
             setClubesSelecionadosOriginal((prev) => [...prev, clubeOriginal.clube]);
+            setLoadingFunction(false);
         }
     }
 

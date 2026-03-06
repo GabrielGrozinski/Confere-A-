@@ -204,13 +204,14 @@ export function AllContext({children}: Props) {
     }, [dark]);
 
     useEffect(() => {
-        if (!user) return console.error('Sem usuário');
-        setLoadingAssinante(true);
+        if (user) {
+            setLoadingAssinante(true);
 
-        buscaAssinante(user.id, setLoadingFunction)
-            .then((assinanteAtivo) => setAssinanteAtual(assinanteAtivo))
-            .catch(() => console.log('Houve um erro ao buscar o assinante'))
-            .finally(() => setLoadingAssinante(false));
+            buscaAssinante(user.id)
+                .then((assinanteAtivo) => setAssinanteAtual(assinanteAtivo))
+                .catch(() => console.log('Houve um erro ao buscar o assinante'))
+                .finally(() => setLoadingAssinante(false));
+        }
 
     }, [user]);
 

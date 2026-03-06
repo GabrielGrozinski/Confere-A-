@@ -39,17 +39,19 @@ export default function Bragantino() {
     const corFundo = 'linear-gradient(135deg, #b1121a, #ff3b3b)';
 
     useEffect(() => {
-        buscaClube('Bragantino', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Bragantino')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Bragantino', setLoadingFunction)
+        buscarRankings('Bragantino')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

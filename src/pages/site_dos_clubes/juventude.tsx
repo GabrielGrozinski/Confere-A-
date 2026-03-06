@@ -39,17 +39,19 @@ export default function Juventude() {
     const corFundo = 'linear-gradient(135deg, #1f8a4c, #6fdc8c)';
 
     useEffect(() => {
-        buscaClube('Juventude', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Juventude')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Juventude', setLoadingFunction)
+        buscarRankings('Juventude')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

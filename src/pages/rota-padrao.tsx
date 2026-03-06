@@ -1,7 +1,7 @@
 import { allContext } from "../context/all-context";
 import HeaderFixo from "../components/header-fixo";
 import FooterFixo from "../components/footer-fixo";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 interface Props {
@@ -11,12 +11,18 @@ interface Props {
 
 export default function RotaPadrao({children}: Props) {
     const {menuAberto, setMenuAberto, loadingAssinante, loadingSession, loadingUser, loadingFunction} = allContext();
+    const [loadingGeral, setLoadingGeral] = useState(true);
 
     useEffect(() => {
-        setMenuAberto(false)
+        setMenuAberto(false);
+        if (loadingAssinante || loadingFunction || loadingSession || loadingUser) {
+            setLoadingGeral(true);
+        } else {
+            setLoadingGeral(false);
+        }
     }, []);
 
-    if (loadingAssinante || loadingSession || loadingUser || loadingFunction) return;
+    if (loadingGeral) return;
 
     return (
         <>
@@ -28,7 +34,7 @@ export default function RotaPadrao({children}: Props) {
                 {children}
                 <FooterFixo />
 
-                <div className="inset-0 fixed backdrop-blur-xs bg-black/60 min-h-screen">
+                <div onClick={() => setMenuAberto(false)} className="inset-0 fixed backdrop-blur-xs bg-black/60 min-h-screen">
 
                 </div>
 

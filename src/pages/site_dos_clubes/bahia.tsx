@@ -39,17 +39,19 @@ export default function Bahia() {
     const corFundo = 'linear-gradient(135deg, #0d47a1, #e53935)';
 
     useEffect(() => {
-        buscaClube('Bahia', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Bahia')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Bahia', setLoadingFunction)
+        buscarRankings('Bahia')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

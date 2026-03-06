@@ -39,17 +39,19 @@ export default function AtleticoMineiro() {
     const corFundo = 'linear-gradient(135deg, #222222, #0a0a0a)';
 
     useEffect(() => {
-        buscaClube('Atlético Mineiro', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Atlético Mineiro')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Atlético Mineiro', setLoadingFunction)
+        buscarRankings('Atlético Mineiro')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

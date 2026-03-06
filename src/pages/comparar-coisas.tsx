@@ -22,7 +22,7 @@ interface Porcentagem {
 }
 
 export default function CompararCoisas() {
-    const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual, setLoadingFunction} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubesSelecionados, setClubesSelecionados] = useState<ClubeSelecionado[]>([]);
@@ -40,12 +40,12 @@ export default function CompararCoisas() {
             top: 0
         });
         
-        buscaTodosClubes(setLoadingFunction)
+        buscaTodosClubes()
             .then((clubes) => setClubes(clubes.data))
             .catch((error) => console.log('Houve um erro', error))
             .finally(() => setLoading(false));
 
-        buscaCoisas(setLoadingFunction)
+        buscaCoisas()
             .then((todasCoisas) => setCoisas(todasCoisas.data))
             .catch((error) => console.log('Houve um erro', error))
             .finally(() => setLoading(false));

@@ -39,17 +39,19 @@ export default function Flamengo() {
     const corFundo = 'linear-gradient(135deg, #8e0e12, #e10600)';
 
     useEffect(() => {
-        buscaClube('Flamengo', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Flamengo')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Flamengo', setLoadingFunction)
+        buscarRankings('Flamengo')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

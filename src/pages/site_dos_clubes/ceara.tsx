@@ -39,17 +39,19 @@ export default function Ceara() {
     const corFundo = 'linear-gradient(135deg, #18181b, #18181b)';
 
     useEffect(() => {
-        buscaClube('Ceará', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Ceará')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Ceará', setLoadingFunction)
+        buscarRankings('Ceará')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

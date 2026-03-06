@@ -39,17 +39,19 @@ export default function Fluminense() {
     const corFundo = 'linear-gradient(135deg, #2aa06f, #c62828)';
 
     useEffect(() => {
-        buscaClube('Fluminense', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Fluminense')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Fluminense', setLoadingFunction)
+        buscarRankings('Fluminense')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(true);
     }, []);
 
     return (

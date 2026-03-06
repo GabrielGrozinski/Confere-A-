@@ -39,17 +39,19 @@ export default function Vasco() {
     const corFundo = 'linear-gradient(135deg, #171717, #171717)';
 
     useEffect(() => {
-        buscaClube('Vasco', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Vasco')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Vasco', setLoadingFunction)
+        buscarRankings('Vasco')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

@@ -39,17 +39,19 @@ export default function Cruzeiro() {
     const corFundo = 'linear-gradient(135deg, #003a8f, #1e90ff)';
 
     useEffect(() => {
-        buscaClube('Cruzeiro', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Cruzeiro')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Cruzeiro', setLoadingFunction)
+        buscarRankings('Cruzeiro')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

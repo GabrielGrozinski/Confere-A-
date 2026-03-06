@@ -39,17 +39,19 @@ export default function Sport() {
     const corFundo = 'linear-gradient(135deg, #8c1014, #ff2e2e)';
 
     useEffect(() => {
-        buscaClube('Sport', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Sport')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Sport', setLoadingFunction)
+        buscarRankings('Sport')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

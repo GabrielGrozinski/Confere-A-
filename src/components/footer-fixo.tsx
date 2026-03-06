@@ -14,7 +14,7 @@ export default function FooterFixo() {
     }
 
     return (
-        <footer className="relative bg-[#060911] border-t border-white/4">
+        <footer className="relative bg-[#060911] -mt-1">
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 sm:py-20">
 
                 <div className={`grid grid-cols-1 ${(largura >= 820 && largura < 1024) && 'grid-cols-[35%_1fr]'} lg:grid-cols-5 gap-12 lg:gap-8`}>

@@ -39,17 +39,19 @@ export default function Vitoria() {
     const corFundo = 'linear-gradient(135deg, #7a0c10, #c4161c)';
 
     useEffect(() => {
-        buscaClube('Vitória', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Vitória')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Vitória', setLoadingFunction)
+        buscarRankings('Vitória')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

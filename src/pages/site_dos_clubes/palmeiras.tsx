@@ -39,17 +39,19 @@ export default function Palmeiras() {
     const corFundo = 'linear-gradient(135deg, #145a32, #27ae60)';
 
     useEffect(() => {
-        buscaClube('Palmeiras', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Palmeiras')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Palmeiras', setLoadingFunction)
+        buscarRankings('Palmeiras')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

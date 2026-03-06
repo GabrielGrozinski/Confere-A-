@@ -436,8 +436,9 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
     useEffect(() => {
         if (!media || !clubeEscolhido) return;
-
-        const chance = calcularChanceTitulo(clubeEscolhido.folha_salarial, clubeEscolhido.valor_contratacoes, clubeEscolhido.pontos, clubeEscolhido.vitorias, setLoadingFunction);
+        setLoadingFunction(true);
+        const chance = calcularChanceTitulo(clubeEscolhido.folha_salarial, clubeEscolhido.valor_contratacoes, clubeEscolhido.pontos, clubeEscolhido.vitorias);
+        setLoadingFunction(false);
 
         const novaChance = Number((chance * clubeEscolhido.nota_clube/10).toFixed(2));
         setChanceTitulo(novaChance);

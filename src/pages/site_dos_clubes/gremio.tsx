@@ -39,17 +39,19 @@ export default function Gremio() {
     const corFundo = 'linear-gradient(135deg, #0a3a6a, #1e88e5)';
 
     useEffect(() => {
-        buscaClube('Grêmio', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('Grêmio')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Grêmio', setLoadingFunction)
+        buscarRankings('Grêmio')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (

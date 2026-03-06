@@ -16,7 +16,7 @@ export default function PaginaInicial() {
     const [loading, setLoading] = useState<boolean>(false);
     const [mostrarTopicos, setMostrarTopicos] = useState<boolean>(false);
     const [mostrarTopicos2, setMostrarTopicos2] = useState<boolean>(false);
-    const { setTopicoAtivo, dark, setAbaEntretenimento, setLoadingFunction } = allContext();
+    const { setTopicoAtivo, dark, setAbaEntretenimento } = allContext();
     const [topicoEscolhido, setTopicoEscolhido] = useState<'faturamento' | 'dividas' | 'custo' | 'comparacao' | string>('faturamento')
     const sectionRef = useRef<HTMLDivElement | null>(null)
     const sectionRef2 = useRef<HTMLDivElement | null>(null)
@@ -248,7 +248,7 @@ export default function PaginaInicial() {
     }
 
     function navegar(nomeClube: string) {
-        const nomeRota = relacaoClubes(nomeClube, setLoadingFunction);
+        const nomeRota = relacaoClubes(nomeClube);
         navigate(`/${nomeRota}`);
     }
 

@@ -75,15 +75,19 @@ export default function ClubeVsClube() {
     useEffect(() => {
         if (!clubeA || !clubeB) return;
 
-        const chanceA = calcularChanceTitulo(clubeA.folha_salarial, clubeA.valor_contratacoes, clubeA.pontos, clubeA.vitorias, setLoadingFunction);
+        setLoadingFunction(true);
+
+        const chanceA = calcularChanceTitulo(clubeA.folha_salarial, clubeA.valor_contratacoes, clubeA.pontos, clubeA.vitorias);
 
         const novaChanceA = Number((chanceA * clubeA.nota_clube/10).toFixed(2));
         setChanceTituloA(novaChanceA);
 
-        const chanceB = calcularChanceTitulo(clubeB.folha_salarial, clubeB.valor_contratacoes, clubeB.pontos, clubeB.vitorias, setLoadingFunction);
+        const chanceB = calcularChanceTitulo(clubeB.folha_salarial, clubeB.valor_contratacoes, clubeB.pontos, clubeB.vitorias);
 
         const novaChanceB = Number((chanceB * clubeB.nota_clube/10).toFixed(2));
         setChanceTituloB(novaChanceB);
+
+        setLoadingFunction(false);
 
     }, [clubeA, clubeB]);
 
@@ -638,7 +642,9 @@ export default function ClubeVsClube() {
             top: 0
         });
         
-        buscaTodosClubes(setLoadingFunction)
+        setLoadingFunction(true);
+
+        buscaTodosClubes()
             .then((clubes) => {
                 setClubes(clubes.data);
                 const todosClubes = clubes.data;
@@ -649,7 +655,8 @@ export default function ClubeVsClube() {
                     setClubeB(palmeiras[0])
                 }
             })
-            .catch((error) => console.log('Houve um erro', error));
+            .catch((error) => console.log('Houve um erro', error))
+            .finally(() => setLoadingFunction(false));
     }, []);
 
     const agrupadosPorCategoria = topicosComparacao.reduce((acc, topico) => {

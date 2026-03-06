@@ -39,17 +39,19 @@ export default function SaoPaulo() {
     const corFundo = 'linear-gradient(135deg, #c4161c, #ff2e2e)';
 
     useEffect(() => {
-        buscaClube('São Paulo', setLoadingFunction)
+        setLoadingFunction(true);
+        buscaClube('São Paulo')
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('São Paulo', setLoadingFunction)
+        buscarRankings('São Paulo')
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia(setLoadingFunction)
+        buscarMedia()
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
+        setLoadingFunction(false);
     }, []);
 
     return (
