@@ -2,7 +2,6 @@ import { buscaTodosClubes } from "../components/busca-clube";
 import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import type { Clube } from "../components/busca-clube";
 import '../styles/comparacao-unica.css';
-import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import {
   DollarSign,
@@ -26,7 +25,6 @@ import {
   TrendingUp
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
-import FooterFixo from "../components/footer-fixo";
 import CardsPremium from "../components/cards-premium";
 import { calcularChanceTitulo } from "../components/busca-clube";
 import AdsenseLeft from "../components/adsense-left";
@@ -62,7 +60,7 @@ export type DadosClube = {
 
 
 export default function ClubeVsClube() {
-    const {setTopicoAtivo, setAbaEntretenimento, dark, assinanteAtual} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, dark, assinanteAtual, setLoadingFunction} = allContext();
     const [popoverAberto1, setPopoverAberto1] = useState(false);
     const [popoverAberto2, setPopoverAberto2] = useState(false);
     const [chanceTituloA, setChanceTituloA] = useState<number>(0);
@@ -77,12 +75,12 @@ export default function ClubeVsClube() {
     useEffect(() => {
         if (!clubeA || !clubeB) return;
 
-        const chanceA = calcularChanceTitulo(clubeA.folha_salarial, clubeA.valor_contratacoes, clubeA.pontos, clubeA.vitorias);
+        const chanceA = calcularChanceTitulo(clubeA.folha_salarial, clubeA.valor_contratacoes, clubeA.pontos, clubeA.vitorias, setLoadingFunction);
 
         const novaChanceA = Number((chanceA * clubeA.nota_clube/10).toFixed(2));
         setChanceTituloA(novaChanceA);
 
-        const chanceB = calcularChanceTitulo(clubeB.folha_salarial, clubeB.valor_contratacoes, clubeB.pontos, clubeB.vitorias);
+        const chanceB = calcularChanceTitulo(clubeB.folha_salarial, clubeB.valor_contratacoes, clubeB.pontos, clubeB.vitorias, setLoadingFunction);
 
         const novaChanceB = Number((chanceB * clubeB.nota_clube/10).toFixed(2));
         setChanceTituloB(novaChanceB);
@@ -174,7 +172,7 @@ export default function ClubeVsClube() {
                 <> 
                     <div className="inline relative">
                         {titulo}
-                        <div onClick={() => fazerScroll()} className={`ml-2 absolute flex top-1/2 -translate-y-[45%] right-0 translate-x-[125%] items-center justify-center min-h-6 min-w-6 cursor-pointer rounded-md ${socio === 'sócio' ? 'bg-red-600' : 'bg-yellow-500'}`}>
+                        <div onClick={() => fazerScroll()} className={`ml-2 absolute flex top-1/2 -translate-y-[50%] lg:-translate-y-[45%] right-0 translate-x-[125%] items-center justify-center min-h-6 min-w-6 cursor-pointer rounded-md ${socio === 'sócio' ? 'bg-red-600' : 'bg-yellow-500'} scale-85 lg:scale-100`}>
                             <i className={`${socio === 'sócio' ? 'fa-brands fa-web-awesome' : 'fa-solid fa-trophy'} text-slate-100 text-[10px] -translate-x-[0.63px] translate-y-px text-shadow-[0px_2px_1px_#0000002a]`}></i>
                         </div>
                     </div>
@@ -639,8 +637,8 @@ export default function ClubeVsClube() {
         window.scrollTo({
             top: 0
         });
-
-        buscaTodosClubes()
+        
+        buscaTodosClubes(setLoadingFunction)
             .then((clubes) => {
                 setClubes(clubes.data);
                 const todosClubes = clubes.data;
@@ -665,8 +663,7 @@ export default function ClubeVsClube() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
-            <HeaderFixo/>
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
 
             <div className="grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
 
@@ -674,7 +671,7 @@ export default function ClubeVsClube() {
                     <AdsenseLeft />
                 }
 
-                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
+                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'} scale-90 lg:scale-100`}>
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>
@@ -817,7 +814,7 @@ export default function ClubeVsClube() {
 
                                 </div>
 
-                                <div className="space-y-6 overflow-y-auto max-h-80 pb-6 lg:pl-6 lg:pr-8">
+                                <div className="space-y-8 lg:space-y-6 overflow-y-auto max-h-80 pb-6 lg:pl-6 lg:pr-8">
                                 {financialData.map((section, index) => {
                                     const Icon = iconMap[section.icon];
                                     const maxValue = Math.max(...section.items.map(i => i.value));
@@ -907,7 +904,6 @@ export default function ClubeVsClube() {
 
             </div>
 
-            <FooterFixo />
         </div>
     )
 }

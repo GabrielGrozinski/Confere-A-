@@ -2,10 +2,12 @@ import CardClube from "../../components/card-clube";
 import { buscaClube, buscarRankings, buscarMedia } from "../../components/busca-clube";
 import { useEffect, useState } from "react";
 import type { Clube, rankings, Medias } from "../../components/busca-clube";
+import { allContext } from "../../context/all-context";
 
 
 export default function Santos() {
     const [clubeEscolhido, setClubeEscolhido] = useState<Clube | undefined>(undefined);
+    const {setLoadingFunction} = allContext();
     const [rank_do_clube, setRank_do_clube] = useState<rankings>({
         faturamento: 0,
         salario: 0,
@@ -31,20 +33,21 @@ export default function Santos() {
         divida_2024: 0,
         projetarFaturamento: 0,
         aumento_faturamento: 0,
+        valor_estimado: 0
     });
 
     const corFundo = 'linear-gradient(135deg, #f3f4f6, #f5f5f5)';
 
     useEffect(() => {
-        buscaClube('Santos')
+        buscaClube('Santos', setLoadingFunction)
         .then((clube) => setClubeEscolhido(clube.data))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarRankings('Santos')
+        buscarRankings('Santos', setLoadingFunction)
         .then((ranking) => setRank_do_clube(ranking.rankings))
         .catch((error) => console.error('Houve um erro', error));
 
-        buscarMedia()
+        buscarMedia(setLoadingFunction)
         .then((media) => setMedia(media.media))
         .catch((error) => console.error('Houve um erro', error));
     }, []);

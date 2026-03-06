@@ -2,14 +2,12 @@ import { buscaTodosClubes, CalcularMediaClube } from "../components/busca-clube"
 import { useEffect, useState, useRef } from "react";
 import type { Clube, Medias } from "../components/busca-clube";
 import '../styles/comparacao-geral.css';
-import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import GraficoComparativo from "../components/grafico-comparativo";
 import * as Popover from '@radix-ui/react-popover';
 import { ClipLoader } from "react-spinners";
 import AdsenseLeft from "../components/adsense-left";
 import AdsenseRight from "../components/adsense-right";
-import FooterFixo from "../components/footer-fixo";
 import CardsPremium from "../components/cards-premium";
 
 
@@ -63,7 +61,7 @@ export type DadosClube = {
 
 
 export default function ComparadorDeClubes() {
-    const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual} = allContext();
+    const {setTopicoAtivo, setAbaEntretenimento, largura, dark, assinanteAtual, setLoadingFunction} = allContext();
     const [clubes, setClubes] = useState<Clube[]>();
     const [loading, setLoading] = useState<boolean>(true);
     const [anoEscolhido, setAnoEscolhido] = useState<number>(1);
@@ -154,8 +152,8 @@ export default function ComparadorDeClubes() {
         window.scrollTo({
             top: 0
         });
-
-        buscaTodosClubes()
+        
+        buscaTodosClubes(setLoadingFunction)
             .then((clubes) => setClubes(clubes.data))
             .catch((error) => console.log('Houve um erro', error))
             .finally(() => setLoading(false));
@@ -171,9 +169,9 @@ export default function ComparadorDeClubes() {
             if ((assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') && clubesSelecionados.length === 5) {
                 return fazerScroll();
             }
-            const clubeNovo = await CalcularMediaClube(clubeEscolhido, anoEscolhido);
+            const clubeNovo = await CalcularMediaClube(clubeEscolhido, setLoadingFunction, anoEscolhido);
             setClubesSelecionados((prev) => [...prev, clubeNovo.clube]);
-            const clubeOriginal = await CalcularMediaClube(clubeEscolhido, 15);
+            const clubeOriginal = await CalcularMediaClube(clubeEscolhido, setLoadingFunction, 15);
             setClubesSelecionadosOriginal((prev) => [...prev, clubeOriginal.clube]);
         }
     }
@@ -294,25 +292,23 @@ export default function ComparadorDeClubes() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
 
-            <HeaderFixo/>
-
-            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-10 relative">
+            <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pb-10 relative">
 
                 {(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') &&
                     <AdsenseLeft />
                 }
 
-                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
+                <main className={`col-span-full lg:col-2 w-full flex flex-col relative pt-0 lg:pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'} `}>
 
-                    <div className="min-h-10 w-full flex justify-center">
-                        <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'max-w-120' : 'max-w-100'}`}>
+                    <div className="min-h-10 w-full flex justify-center translate-y-4 lg:translate-y-0">
+                        <div className={`mt-8 min-h-10 bg-slate-300 w-[70%] rounded-xl py-1 px-3 flex items-center ${(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') ? 'lg:max-w-120 w-[90%] min-h-24 lg:min-h-10 lg:flex-row flex-col' : 'lg:max-w-100 w-[90%]'}`}>
                         <Popover.Root open={popoverAberto} onOpenChange={setPopoverAberto}>
 
                             <Popover.Trigger asChild>
                                 <button className="text-stone-800 font-medium flex items-center w-full justify-center">
-                                    Comparar por: 
+                                    Comparar por:
                                         <strong>
                                             <span className="bg-slate-800 p-0.5 px-2.5 ml-2 flex rounded-md text-yellow-300 text-shadow-[1px_1px_1px_#0000002a] font-medium cursor-pointer items-center">{topico} 
                                                 <i className="fa-solid fa-angle-down ml-1 translate-y-[10%]">
@@ -325,7 +321,7 @@ export default function ComparadorDeClubes() {
 
                             {(topico === 'Projetar Faturamento' || topico === 'Chance de Quitar a Dívida') &&
                                 <button
-                                className="min-w-22 max-w-22 min-h-full max-h-full border border-slate-800/40 rounded-lg text-center flex items-center justify-center pl-1 my-1"
+                                className="lg:min-w-22 lg:max-w-22 lg:min-h-full lg:max-h-full min-h-12 w-full border border-slate-800/50 rounded-lg text-center flex items-center justify-center gap-1 lg:gap-0 pl-1 my-1"
                                 >
                                     <span>{2025 + anoEscolhido}</span>
                                     <span className="flex flex-col text-[12px] py-px ml-2 scale-90">
@@ -355,7 +351,7 @@ export default function ComparadorDeClubes() {
                             <Popover.Portal>
                                 <Popover.Content
                                 sideOffset={8}
-                                className="w-96 max-h-96 overflow-y-auto rounded-xl bg-slate-900 border border-gray-700/70 p-4 shadow-xl z-10"
+                                className="w-96 max-h-96 overflow-y-auto rounded-xl bg-slate-900 border border-gray-700/70 p-4 shadow-xl z-10 scale-90 lg:scale-100"
                                 >
                                 <div className="space-y-6">
                                     {Object.entries(agrupadosPorCategoria).map(
@@ -417,7 +413,7 @@ export default function ComparadorDeClubes() {
                         </div>
                     </div>
 
-                    <main id="main" className="grid grid-rows-[56px_400px_64px] relative mx-1 max-h-120 pt-2 mb-16">
+                    <main id="main" className="grid grid-rows-[56px_400px_64px] relative mx-1 max-h-120 pt-2 mb-16 scale-90 lg:scale-100">
                         <h1 className={`absolute top-0 right-0 translate-y-20 font-mono font-semibold -translate-x-[10%] z-1 text-xs ${dark ? 'text-neutral-400' : 'text-neutral-700'}`}>
                             {(topico === 'Chance de Quitar a Dívida' || topico === 'Faturamento/Dívida' || topico === 'Lucro/Faturamento') ? 'Valor em Porcentagem' : topico === 'Nota do Clube' ? 'Valor em unidades' : 'Valor em milhões de Reais'}
                         </h1>
@@ -493,7 +489,6 @@ export default function ComparadorDeClubes() {
 
             </div>
 
-            <FooterFixo />
         </div>
     )
 }

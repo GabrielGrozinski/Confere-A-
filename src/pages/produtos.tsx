@@ -1,8 +1,6 @@
-import HeaderFixo from "../components/header-fixo"
 import { useNavigate } from "react-router-dom";
 import { allContext } from "../context/all-context";
 import { useEffect } from "react";
-import FooterFixo from "../components/footer-fixo";
 import CardTodosClubes from "../components/card-todos-clubes";
 
 
@@ -111,47 +109,17 @@ export default function Produtos() {
     },
     ];
 
-    const stats = [
-    {
-        id: 1,
-        value: "20+",
-        title: "Clubes Analisados",
-        subtitle: "Série A",
-    },
-    {
-        id: 2,
-        value: "100+",
-        title: "Pontos de Dados",
-        subtitle: "Métricas financeiras",
-    },
-    {
-        id: 3,
-        value: "2025",
-        title: "Dados Atualizados",
-        subtitle: "Balanços recentes",
-    },
-    {
-        id: 4,
-        value: "Plano",
-        title: "Gratuito e Pago",
-        subtitle: "Preços justos",
-    },
-    ];
-
-
     useEffect(() => {
         setTopicoAtivo('Produto');
+        setAbaEntretenimento(false);
         window.scrollTo({
             top: 0
-        })
-        setAbaEntretenimento(false);
-
+        });
     }, []);
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen mt-15">
-            <HeaderFixo />
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen">
 
             <div className="max-w-400 pt-4 mx-auto px-6 pb-18">
                 <div className="opacity-100 transform-none">
@@ -165,14 +133,14 @@ export default function Produtos() {
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6 px-8">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 px-8">
                 {cards.map((card) => (
                     <div
                     key={card.id}
                     onClick={() => card.id === 3 ? setMostrarClubes(true) : navigate(card.navigate)}
                     className="opacity-100 cursor-pointer transform-none"
                     >
-                    <div className={`group border rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full ${dark ? 'hover:border-[#DAFF01] active:border-[#DAFF01] border-white/10 bg-[rgb(26,28,30)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]' : 'hover:border-[#B8D600] active:border-[#B8D600] border-black/20 bg-white hover:shadow-[0_20px_40px_ffffff] hover:outline hover:outline-[#DAFF01]'}`}>
+                    <div className={`group border flex flex-col items-center sm:items-start rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full ${dark ? 'hover:border-[#DAFF01] active:border-[#DAFF01] border-white/10 bg-[rgb(26,28,30)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]' : 'hover:border-[#B8D600] active:border-[#B8D600] border-black/20 bg-white hover:shadow-[0_20px_40px_ffffff] hover:outline hover:outline-[#DAFF01]'}`}>
                         <div className={`absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${dark ? 'bg-[#DAFF01]' : 'bg-[#ddff20]'}`}></div>
 
                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors ${dark ? 'group-hover:bg-[#DAFF01]/20 bg-[#DAFF01]/10' : 'group-hover:bg-[#DAFF01]/60 bg-[#DAFF01]/40'}`}>
@@ -193,11 +161,11 @@ export default function Produtos() {
                         </svg>
                         </div>
 
-                        <span className={`text-xs font-semibold uppercase tracking-wider ${dark ? 'text-[#DAFF01]' : 'text-[#95aa11]'}`}>
+                        <span className={`text-xs text-center sm:text-start font-semibold uppercase tracking-wider ${dark ? 'text-[#DAFF01]' : 'text-[#95aa11]'}`}>
                         {card.tag}
                         </span>
 
-                        <h3 className={`text-xl font-semibold mt-2 mb-3 ${dark ? 'text-white' : 'text-zinc-800'}`}>
+                        <h3 className={`text-xl text-center sm:text-start font-semibold mt-2 mb-3 ${dark ? 'text-white' : 'text-zinc-800'}`}>
                         {card.title}
                         </h3>
 
@@ -224,7 +192,6 @@ export default function Produtos() {
             </div>
             }
 
-            <FooterFixo />
         </div>
     )
 }

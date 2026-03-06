@@ -2,7 +2,6 @@ import { buscaTodosClubes } from "../components/busca-clube";
 import { useEffect, useState, useMemo } from "react";
 import type { Clube } from "../components/busca-clube";
 import '../styles/comparacao-unica.css';
-import HeaderFixo from "../components/header-fixo";
 import { allContext } from "../context/all-context";
 import {
   Clapperboard,
@@ -16,7 +15,6 @@ import {
   Ship
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
-import FooterFixo from "../components/footer-fixo";
 import AdsenseLeft from "../components/adsense-left";
 import AdsenseRight from "../components/adsense-right";
 import CardsPremium from "../components/cards-premium";
@@ -289,7 +287,7 @@ export default function ClubeVsMundo() {
         window.scrollTo({
             top: 0
         });
-
+        
         buscaTodosClubes()
             .then((clubes) => {
                 setClubes(clubes.data);
@@ -313,8 +311,7 @@ export default function ClubeVsMundo() {
 
 
     return (
-        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="mt-15">
-            <HeaderFixo/>
+        <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
 
             <div className="min-h-screen grid grid-cols-[auto_1fr_auto] lg:px-4 items-center pt-2 pb-4">
 
@@ -322,7 +319,7 @@ export default function ClubeVsMundo() {
                     <AdsenseLeft />
                 }
 
-                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] translate-x-[10vw]'}`}>
+                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'} scale-90 lg:scale-100`}>
                     <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Além do Futebol
                     </h2>
@@ -357,7 +354,7 @@ export default function ClubeVsMundo() {
                                         <Popover.Portal>
                                             <Popover.Content
                                             sideOffset={8}
-                                            className="w-96 max-h-96 overflow-y-auto rounded-xl bg-[rgb(38,40,42)] mt-2 border border-gray-200/70 p-4 shadow-xl z-10"
+                                            className="w-96 max-h-96 overflow-y-auto rounded-xl bg-[rgb(38,40,42)] mt-2 border border-gray-200/70 p-4 shadow-xl z-10 scale-90 lg:scale-100"
                                             >
                                             <div className="space-y-6">
                                                 {Object.entries(agrupadosPorCategoria).map(
@@ -552,7 +549,6 @@ export default function ClubeVsMundo() {
                 }
             </div>
 
-            <FooterFixo />
         </div>
     )
 }

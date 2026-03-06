@@ -1,5 +1,5 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
-
+import { HashRouter, Route, Routes, Outlet } from "react-router-dom";
+import RotaPadrao from "./pages/rota-padrao";
 import PaginaInicial from "./pages/pagina-inicial";
 import SaoPaulo from "./pages/site_dos_clubes/sao-paulo";
 import Palmeiras from "./pages/site_dos_clubes/palmeiras";
@@ -40,50 +40,54 @@ export default function Rotas() {
     return (
         <HashRouter>
             <Routes>
-                <Route path="" element={<PaginaInicial/>} />
-                <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
-                <Route path="comparador-de-clubes" element={<ComparadorDeClubes/>} />
 
-                <Route
-                path="preco"
-                element={<Preco />}
-                />
-                
-                <Route path="/login" element={<LoginLayout/>}>
-                    <Route index element={<TelaLogin/>} />
-                    <Route path="cadastro" element={<TelaCadastro/>} />
+                <Route element={<RotaPadrao><Outlet/></RotaPadrao>}>
+                    {/* Rotas Principais */}
+                    <Route path="" element={<PaginaInicial/>} />
+                    <Route path="produtos" element={<Produtos/>} />
+                    <Route path="preco" element={<Preco />} />
+
+                    {/* Produtos */}
+                    <Route path="comparador-de-coisas" element={<CompararCoisas/>} />
+                    <Route path="comparador-de-clubes" element={<ComparadorDeClubes/>} />
+                    <Route path="clube-vs-clube" element={<ClubeVsClube/>} />
+                    <Route path="clube-vs-mundo" element={<ClubeVsMundo/>} />
+
+                    {/* Login e Redefinir Senha */}
+                    <Route path="/login" element={<LoginLayout/>}>
+                        <Route index element={<TelaLogin/>} />
+                        <Route path="cadastro" element={<TelaCadastro/>} />
+                    </Route>
+                    <Route path="redefinir-senha" element={<RedefinirSenha/>} />
+
+                    {/* Clubes */}
+                    <Route path="sao-paulo" element={<SaoPaulo/>} />
+                    <Route path="palmeiras" element={<Palmeiras/>} />
+                    <Route path="santos" element={<Santos/>} />
+                    <Route path="corinthians" element={<Corinthians/>} />
+                    <Route path="mirassol" element={<Mirassol/>} />
+                    <Route path="bragantino" element={<Bragantino/>} />
+                    <Route path="fluminense" element={<Fluminense/>} />
+                    <Route path="flamengo" element={<Flamengo/>} />
+                    <Route path="vasco" element={<Vasco/>} />
+                    <Route path="botafogo" element={<Botafogo/>} />
+                    <Route path="gremio" element={<Gremio/>} />
+                    <Route path="internacional" element={<Internacional/>} />
+                    <Route path="cruzeiro" element={<Cruzeiro/>} />
+                    <Route path="atletico-mineiro" element={<AtleticoMineiro/>} />
+                    <Route path="juventude" element={<Juventude/>} />
+                    <Route path="fortaleza" element={<Fortaleza/>} />
+                    <Route path="ceara" element={<Ceara/>} />
+                    <Route path="vitoria" element={<Vitoria/>} />
+                    <Route path="sport" element={<Sport/>} />
+                    <Route path="bahia" element={<Bahia/>} />
+
+                    {/* Termos de Uso */}
+                    <Route path="termos-de-uso" element={<TermosDeUso/>} />
+                    <Route path="politica-de-privacidade" element={<PoliticaDePrivacidade/>} />
+                    <Route path="metodologia" element={<Metodologia/>} />
                 </Route>
 
-                <Route path="termos-de-uso" element={<TermosDeUso/>} />
-                <Route path="politica-de-privacidade" element={<PoliticaDePrivacidade/>} />
-                <Route path="metodologia" element={<Metodologia/>} />
-
-                <Route path="clube-vs-clube" element={<ClubeVsClube/>} />
-                <Route path="clube-vs-mundo" element={<ClubeVsMundo/>} />
-
-                <Route path="redefinir-senha" element={<RedefinirSenha/>} />
-
-                <Route path="produtos" element={<Produtos/>} />
-                <Route path="sao-paulo" element={<SaoPaulo/>} />
-                <Route path="palmeiras" element={<Palmeiras/>} />
-                <Route path="santos" element={<Santos/>} />
-                <Route path="corinthians" element={<Corinthians/>} />
-                <Route path="mirassol" element={<Mirassol/>} />
-                <Route path="bragantino" element={<Bragantino/>} />
-                <Route path="fluminense" element={<Fluminense/>} />
-                <Route path="flamengo" element={<Flamengo/>} />
-                <Route path="vasco" element={<Vasco/>} />
-                <Route path="botafogo" element={<Botafogo/>} />
-                <Route path="gremio" element={<Gremio/>} />
-                <Route path="internacional" element={<Internacional/>} />
-                <Route path="cruzeiro" element={<Cruzeiro/>} />
-                <Route path="atletico-mineiro" element={<AtleticoMineiro/>} />
-                <Route path="juventude" element={<Juventude/>} />
-                <Route path="fortaleza" element={<Fortaleza/>} />
-                <Route path="ceara" element={<Ceara/>} />
-                <Route path="vitoria" element={<Vitoria/>} />
-                <Route path="sport" element={<Sport/>} />
-                <Route path="bahia" element={<Bahia/>} />
             </Routes>
         </HashRouter>
     );

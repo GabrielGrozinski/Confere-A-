@@ -108,11 +108,15 @@ interface ReturnCalcularMediaClube {
 // Tipagem de Return
 
 
-export async function buscaCoisas(): Promise<ReturnbuscaCoisas> {
+export async function buscaCoisas(setLoadingFunction: (v: boolean) => void): Promise<ReturnbuscaCoisas> {
+    setLoadingFunction(true);
+
     const { data, error } = await supabase
         .from('coisas_do_mundo')
         .select('*');
 
+    setLoadingFunction(false);
+    
     if (error) {
         console.error('Houve um erro ao buscar os clubes', error);
         return { success: false, error };
@@ -120,11 +124,14 @@ export async function buscaCoisas(): Promise<ReturnbuscaCoisas> {
     return { success: true, data: data }
 }
 
-export async function buscaTodosClubes(): Promise<ReturnbuscaTodosClubes> {
+export async function buscaTodosClubes(setLoadingFunction: (v: boolean) => void): Promise<ReturnbuscaTodosClubes> {
+    setLoadingFunction(true);
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*');
 
+    setLoadingFunction(false);
+
     if (error) {
         console.error('Houve um erro ao buscar os clubes', error);
         return { success: false, error };
@@ -132,7 +139,9 @@ export async function buscaTodosClubes(): Promise<ReturnbuscaTodosClubes> {
     return { success: true, data: data }
 }
 
-export async function buscaClube(nomeClube: string): Promise<ReturnbuscaClube> {
+export async function buscaClube(nomeClube: string, setLoadingFunction: (v: boolean) => void): Promise<ReturnbuscaClube> {
+    setLoadingFunction(true);
+
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*')
@@ -140,12 +149,17 @@ export async function buscaClube(nomeClube: string): Promise<ReturnbuscaClube> {
 
     if (error) {
         console.error(`Houve um erro ao buscar o clube ${nomeClube}`, error);
+        setLoadingFunction(false);
         return { success: false, error };
     }
+
+    setLoadingFunction(false);
     return { success: true, data: data[0] }
 }
 
-export async function buscarRankings(nomeClube: string): Promise<ReturnRanking> {
+export async function buscarRankings(nomeClube: string, setLoadingFunction: (v: boolean) => void): Promise<ReturnRanking> {
+    setLoadingFunction(true);
+
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*');
@@ -182,8 +196,12 @@ export async function buscarRankings(nomeClube: string): Promise<ReturnRanking> 
             }
         });
 
+        setLoadingFunction(false);
+
         return { success: true, rankings };
     }
+
+    setLoadingFunction(false);
 
     if (error) {
         console.error('Houve um erro ao buscar os clubes', error);
@@ -207,8 +225,10 @@ export function calcularChanceTitulo(
   folhaSalarial: number,
   gastoContratacoes: number,
   pontos: number,
-  vitorias: number
+  vitorias: number,
+  setLoadingFunction: (v: boolean) => void
 ): number {
+    setLoadingFunction(true);
 
   // Médias base
   const MEDIA_FOLHA = 18.9
@@ -242,10 +262,13 @@ export function calcularChanceTitulo(
   const porcentagem = probabilidade * 99.9
 
   // Garantir limites
+  setLoadingFunction(false);
   return Math.max(0, Math.min(99.9, Number(porcentagem.toFixed(1))))
 }
 
-export async function buscarMedia(): Promise<ReturnbuscarMedia> {
+export async function buscarMedia(setLoadingFunction: (v: boolean) => void): Promise<ReturnbuscarMedia> {
+    setLoadingFunction(true);
+
     const { data, error } = await supabase
         .from('clubes_2025')
         .select('*');
@@ -343,9 +366,12 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
             valor_estimado: calcularMedia(mediaValorEstimado)
         }
 
+        setLoadingFunction(false);
         return { media, success: true };
 
     }
+
+    setLoadingFunction(false);
 
     if (error) {
         console.error('Houve um erro ao buscar os clubes', error);
@@ -356,7 +382,8 @@ export async function buscarMedia(): Promise<ReturnbuscarMedia> {
 
 }
 
-export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: number): Promise<ReturnCalcularMediaClube> {
+export async function CalcularMediaClube(clubeEscolhido: Clube, setLoadingFunction: (v: boolean) => void, anoEscolhido?: number): Promise<ReturnCalcularMediaClube> {
+    setLoadingFunction(true);
 
     let mediaClubeEscolhido: Medias = {
         nome: '',
@@ -523,10 +550,13 @@ export async function CalcularMediaClube(clubeEscolhido: Clube, anoEscolhido?: n
 
     } catch (error) {
         return {success: false, error: error, clube:mediaClubeEscolhido}   
+    } finally {
+        setLoadingFunction(false);
     }
 }
 
-export function relacaoClubes(nome: string) {
+export function relacaoClubes(nome: string, setLoadingFunction: (v: boolean) => void) {
+    setLoadingFunction(true);
     const nomeEscolhido = (
         nome === 'São Paulo' ? 'sao-paulo'
             :
@@ -568,24 +598,26 @@ export function relacaoClubes(nome: string) {
                                                                                     :
                                                                                     'internacional'
     );
+    setLoadingFunction(false);
     return nomeEscolhido;
 }
 
-export async function buscaAssinante(userId: string): Promise<'Sócio' | 'Torcedor' | ''> {
+export async function buscaAssinante(userId: string, setLoadingFunction: (v: boolean) => void): Promise<'Sócio' | 'Torcedor' | ''> {
     if (!userId) return '';
+    setLoadingFunction(true);
 
     const { data, error } = await
         supabase
             .from('planos')
             .select('plan_id')
             .eq('user_id', userId);
+
+    setLoadingFunction(false);
     
     if (error) {
         console.error('Houve um erro ao buscar assinante', error);
         return '';
     }
-
-    console.log('data', data);
 
     return data[0].plan_id;
 }

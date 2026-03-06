@@ -40,8 +40,12 @@ interface all_context_type {
     setTopicoAtivo: (value: TopicoAtivoType) => void;
     menuAberto: boolean;
     setMenuAberto: (value: boolean) => void;
-    loadingAuth: boolean;
-    setLoadingAuth: (value: boolean) => void;
+    loadingUser: boolean;
+    setLoadingUser: (value: boolean) => void;
+    loadingAssinante: boolean;
+    setLoadingSession: (value: boolean) => void;
+    loadingSession: boolean;
+    setLoadingAssinante: (value: boolean) => void;
     session: Session | undefined;
     setSession: (value: Session | undefined) => void;
     user: User | undefined;
@@ -55,6 +59,9 @@ interface all_context_type {
     setAbaEntretenimento: (value: boolean) => void;
     mostrarClubes: boolean;
     setMostrarClubes: (value: boolean) => void;
+    loadingFunction: boolean;
+    setLoadingFunction: (value: boolean) => void;
+
 }
 
 export const all_context = createContext<all_context_type>({} as all_context_type);
@@ -74,7 +81,10 @@ export function AllContext({children}: Props) {
     const [topicoAtivo, setTopicoAtivo] = useState<'Explorar Dados' | 'Produto' | 'Preço'>('Explorar Dados');
     const [abaEntretenimento, setAbaEntretenimento] = useState<boolean>(false);
     const [menuAberto, setMenuAberto] = useState<boolean>(false);
-    const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
+    const [loadingUser, setLoadingUser] = useState<boolean>(false);
+    const [loadingSession, setLoadingSession] = useState<boolean>(false);
+    const [loadingAssinante, setLoadingAssinante] = useState<boolean>(false);
+    const [loadingFunction, setLoadingFunction] = useState<boolean>(false);
     const [session, setSession] = useState<Session | undefined>(undefined)
     const [user, setUser] = useState<User | undefined>(undefined);
     const [mostrarCard, setMostrarCard] = useState<boolean>(false);
@@ -162,16 +172,18 @@ export function AllContext({children}: Props) {
     useEffect(() => {
         const ajustarLargura = () => setLargura(window.innerWidth);
         window.addEventListener("resize", ajustarLargura);
+        setLoadingSession(true);
+        setLoadingUser(true);
 
         supabase.auth.getSession()
         .then(( {data: { session } }) => setSession(session ?? undefined))
         .catch(( {error} ) => console.error("Houve um erro ao buscar a sessão", error))
-        .finally(() => setLoadingAuth(false));
+        .finally(() => setLoadingSession(false));
 
         supabase.auth.getUser()
         .then(( {data: { user } }) => setUser(user ?? undefined))
         .catch(( { error } ) => console.error("Houve um erro ao buscar o usuário", error))
-        .finally(() => setLoadingAuth(false));
+        .finally(() => setLoadingUser(false));
 
         const {data: {subscription}} = 
             supabase.auth.onAuthStateChange((_event, session) => {
@@ -193,10 +205,12 @@ export function AllContext({children}: Props) {
 
     useEffect(() => {
         if (!user) return console.error('Sem usuário');
+        setLoadingAssinante(true);
 
-        buscaAssinante(user.id)
+        buscaAssinante(user.id, setLoadingFunction)
             .then((assinanteAtivo) => setAssinanteAtual(assinanteAtivo))
-            .catch(() => console.log('Houve um erro ao buscar o assinante'));
+            .catch(() => console.log('Houve um erro ao buscar o assinante'))
+            .finally(() => setLoadingAssinante(false));
 
     }, [user]);
 
@@ -211,10 +225,16 @@ export function AllContext({children}: Props) {
                 loginUser,
                 loginGoogle,
                 deslogarUser,
-                loadingAuth,
+                loadingUser,
+                loadingAssinante,
+                loadingSession,
                 session,
                 user,
-                setLoadingAuth,
+                loadingFunction,
+                setLoadingFunction,
+                setLoadingUser,
+                setLoadingAssinante,
+                setLoadingSession,
                 setSession,
                 setUser,
                 largura,

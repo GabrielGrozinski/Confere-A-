@@ -1,5 +1,3 @@
-import HeaderFixo from "../components/header-fixo";
-import FooterFixo from "../components/footer-fixo";
 import { allContext } from "../context/all-context";
 import { useState } from "react";
 
@@ -111,9 +109,8 @@ export default function Metodologia() {
 
     return (
         <div style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
-            <HeaderFixo />
 
-            <main className="mt-16 min-h-screen pb-10 flex flex-col items-center pt-12">
+            <main className="mt-1 min-h-screen pb-10 flex flex-col items-center pt-12">
                 <h1 className={`font-medium text-4xl leading-tight mb-1.5 ${dark ? 'text-white' : 'text-zinc-900'}`}>
                     Perguntas Frequentes
                 </h1>
@@ -156,7 +153,6 @@ export default function Metodologia() {
                 </section>
             </main>
 
-            <FooterFixo />
         </div>
     )
 }

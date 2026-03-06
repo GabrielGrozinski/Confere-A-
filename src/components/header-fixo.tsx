@@ -10,7 +10,7 @@ import MenuAberto from "./menu-aberto";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
-    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes, assinanteAtual } = allContext();
+    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes, assinanteAtual, setLoadingFunction } = allContext();
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +44,9 @@ export default function HeaderFixo() {
     }
 
     function navegar(nomeClube: string) {
-        const nomeRota = relacaoClubes(nomeClube);
+        const nomeRota = relacaoClubes(nomeClube, setLoadingFunction);
+        setAtivarPesquisaMobile(false);
+        setMenuAberto(false);
         navigate(`/${nomeRota}`);
     }
 
@@ -108,7 +110,7 @@ export default function HeaderFixo() {
     }, [ativarPesquisaMobile]);
 
     return (
-        <>
+        <header className="mb-15">
                 <div style={{background: dark ? "linear-gradient(to right, #0d1015 40%, #080c14)" : "linear-gradient(to right, #f7fbff, #fdfeff)"}} 
                 className={`fixed top-0 w-full max-w-full left-0 z-999 flex pt-4 pb-2.5 xl:gap-4 max-h-16 min-h-16 lg:px-[2%] xl:px-[4%] box-border ${
                 menuAberto || mostrarBorder
@@ -165,7 +167,7 @@ export default function HeaderFixo() {
                                                 <i onClick={() => {
                                                     setMenuAberto(!menuAberto);
                                                     setBusca('');
-                                            }} className={`fa-solid fa-circle-user text-xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}>
+                                            }} className={`fa-solid fa-circle-user text-3xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-500'}`}>
 
                                                 </i>
                                     
@@ -192,7 +194,7 @@ export default function HeaderFixo() {
                                                 <i onClick={() => {
                                                     setMenuAberto(!menuAberto);
                                                     setBusca('');
-                                            }} className={`fa-solid fa-circle-user text-xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-600'}`}>
+                                            }} className={`fa-solid fa-circle-user text-3xl cursor-pointer ${dark ? 'text-neutral-200' : 'text-neutral-500'}`}>
 
                                                 </i>
                                     
@@ -497,6 +499,6 @@ export default function HeaderFixo() {
                         <div onClick={() => setAtivarPesquisaMobile(false)} className="flex-1" />
                     </div>
                 }
-        </>
+        </header>
     );
 }

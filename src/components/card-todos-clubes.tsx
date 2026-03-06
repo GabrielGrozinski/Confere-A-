@@ -7,20 +7,20 @@ import type { Clube } from "./busca-clube";
 
 
 export default function CardTodosClubes() {
-    const { dark, setMostrarClubes } = allContext();
+    const { dark, setMostrarClubes, setLoadingFunction } = allContext();
     const [loading, setLoading] = useState<boolean>(true);
     const [clubes, setClubes] = useState<Clube[] | undefined>(undefined);
     const navigate = useNavigate();
 
     function navegar(nomeClube: string) {
         setMostrarClubes(false);
-        const nomeRota = relacaoClubes(nomeClube);
+        const nomeRota = relacaoClubes(nomeClube, setLoadingFunction);
         navigate(`/${nomeRota}`);
     }
 
     useEffect(() => {
 
-        buscaTodosClubes()
+        buscaTodosClubes(setLoadingFunction)
             .then((clubes) => setClubes(clubes.data))
             .catch((error) => console.log('Houve um erro', error))
             .finally(() => setLoading(false));

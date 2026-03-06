@@ -5,8 +5,6 @@ import { ClipLoader } from "react-spinners";
 import { supabase } from "../auth/supabase-client";
 import { relacaoClubes, type Clube } from "../components/busca-clube";
 import { useNavigate } from "react-router-dom";
-import HeaderFixo from "../components/header-fixo";
-import FooterFixo from "../components/footer-fixo";
 import Cookies from "../components/cookies";
 
 
@@ -18,7 +16,7 @@ export default function PaginaInicial() {
     const [loading, setLoading] = useState<boolean>(false);
     const [mostrarTopicos, setMostrarTopicos] = useState<boolean>(false);
     const [mostrarTopicos2, setMostrarTopicos2] = useState<boolean>(false);
-    const { setTopicoAtivo, dark, setAbaEntretenimento } = allContext();
+    const { setTopicoAtivo, dark, setAbaEntretenimento, setLoadingFunction } = allContext();
     const [topicoEscolhido, setTopicoEscolhido] = useState<'faturamento' | 'dividas' | 'custo' | 'comparacao' | string>('faturamento')
     const sectionRef = useRef<HTMLDivElement | null>(null)
     const sectionRef2 = useRef<HTMLDivElement | null>(null)
@@ -183,11 +181,11 @@ export default function PaginaInicial() {
 
     useEffect(() => {
         setTopicoAtivo('Explorar Dados');
+        setAbaEntretenimento(false);
         window.scrollTo({
             top: 0
         });
-        setAbaEntretenimento(false);
-
+        
         const intervalo = setInterval(() => {
             setValorCuriosidade((prev) => (prev > 6 ? 0 : prev + 1));
         }, 5000);
@@ -250,7 +248,7 @@ export default function PaginaInicial() {
     }
 
     function navegar(nomeClube: string) {
-        const nomeRota = relacaoClubes(nomeClube);
+        const nomeRota = relacaoClubes(nomeClube, setLoadingFunction);
         navigate(`/${nomeRota}`);
     }
 
@@ -304,12 +302,9 @@ export default function PaginaInicial() {
     return (
         <div id="body" style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}}>
 
-            <header className="relative flex flex-col min-h-[120vh]">
+            <header className="relative flex flex-col min-h-236 sm:min-h-200 lg:min-h-210">
 
-                <HeaderFixo />
-
-
-                <div className='flex flex-col items-center px-12 mb-10 mt-20 text-center gap-2'>
+                <div className='flex flex-col items-center px-12 mb-10 mt-5 text-center gap-2'>
 
                     <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm ${dark ? 'bg-white/4 border border-white/6' : 'bg-black/4 border border-black/6'}`} x-file-name="HeroSection" x-line-number="73" x-component="div" x-id="HeroSection_73" x-dynamic="false">
                         <div className={`w-2 h-2 rounded-full animate-pulse ${dark ? 'bg-emerald-400' : 'bg-emerald-600'}`} x-file-name="HeroSection" x-line-number="74" x-component="div" x-id="HeroSection_74" x-dynamic="false">
@@ -841,7 +836,7 @@ export default function PaginaInicial() {
 
                     </div>
 
-                    <div className="mt-16 flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+                    <div className="mt-16 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-8 sm:gap-12">
 
                         <div className="text-center">
                             <p className={`text-sm font-medium ${dark ? 'text-white/40' : 'text-black/50'}`}>Dados públicos</p>
@@ -976,8 +971,6 @@ export default function PaginaInicial() {
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-999 animacao-entrada min-w-[80%]">
                 <Cookies />
             </div>
-
-            <FooterFixo />
 
         </div>
     )
