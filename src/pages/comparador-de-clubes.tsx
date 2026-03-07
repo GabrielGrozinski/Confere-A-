@@ -1,6 +1,6 @@
-import { buscaTodosClubes, CalcularMediaClube } from "../components/busca-clube";
+import { buscaTodosClubes, CalcularMediaClube } from "../functions/busca-clube";
 import { useEffect, useState, useRef } from "react";
-import type { Clube, Medias } from "../components/busca-clube";
+import type { Clube, Medias } from "../functions/busca-clube";
 import '../styles/comparacao-geral.css';
 import { allContext } from "../context/all-context";
 import GraficoComparativo from "../components/grafico-comparativo";

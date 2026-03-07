@@ -1,6 +1,6 @@
-import { buscaTodosClubes, buscaCoisas } from "../components/busca-clube";
+import { buscaTodosClubes, buscaCoisas } from "../functions/busca-clube";
 import { useEffect, useState, useRef } from "react";
-import type { Clube, Coisas } from "../components/busca-clube";
+import type { Clube, Coisas } from "../functions/busca-clube";
 import '../styles/comparacao-geral.css';;
 import { allContext } from "../context/all-context";
 import { ClipLoader } from "react-spinners";

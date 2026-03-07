@@ -1,15 +1,13 @@
-import type { Clube, rankings, Medias } from "./busca-clube";
+import type { Clube, rankings, Medias } from "../functions/busca-clube";
 import { useEffect, useRef, useState } from "react";
 import { AreaChart, Area } from "recharts";
 import { allContext } from "../context/all-context";
-import HeaderFixo from "./header-fixo";
-import CardProduto from "./card-produtos";
+import CardProduto from "../components/card-produtos";
 import { ClipLoader } from "react-spinners";
-import { calcularChanceTitulo } from "./busca-clube";
-import FooterFixo from "./footer-fixo";
+import { calcularChanceTitulo } from "../functions/busca-clube";
 import AdsenseLeft from "../components/adsense-left";
 import AdsenseRight from "../components/adsense-right";
-import CardsPremium from "./cards-premium";
+import CardsPremium from "../components/cards-premium";
 
 
 interface props {
@@ -767,9 +765,7 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
 
 
     return (
-        <>
-            <HeaderFixo />
-            
+        <>      
             <main style={{ background: dark ? "linear-gradient(to bottom right, #0d1015, #080c14)" : "linear-gradient(to bottom right, #f7fbff, #fdfeff)"}} className="min-h-screen mt-15 pb-4 grid grid-rows-[auto_1fr]">
                 <article style={{ background: corFundo }} className="col-span-full row-1 flex items-center justify-between sm:justify-around rounded-t-none mb-10 p-4 rounded-lg border-2 border-slate-800/20">
                     <div className="flex flex-col">
@@ -850,8 +846,6 @@ export default function CardClube({ clubeEscolhido, rank_do_clube, media, corFun
                     </div>
                 </div>
             }
-
-            <FooterFixo />
         </>
     )
 }

@@ -1,9 +1,9 @@
 import { allContext } from "../context/all-context";
 import { useNavigate } from "react-router-dom";
-import { relacaoClubes, buscaTodosClubes } from "./busca-clube";
+import { relacaoClubes, buscaTodosClubes } from "../functions/busca-clube";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
-import type { Clube } from "./busca-clube";
+import type { Clube } from "../functions/busca-clube";
 
 
 export default function CardTodosClubes() {

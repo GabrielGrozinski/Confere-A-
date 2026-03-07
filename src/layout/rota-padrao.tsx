@@ -1,6 +1,6 @@
 import { allContext } from "../context/all-context";
-import HeaderFixo from "../components/header-fixo";
-import FooterFixo from "../components/footer-fixo";
+import HeaderFixo from "./header-fixo";
+import FooterFixo from "./footer-fixo";
 import { useEffect, useState } from "react";
 
 

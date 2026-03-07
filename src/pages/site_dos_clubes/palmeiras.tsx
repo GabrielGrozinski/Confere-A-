@@ -1,7 +1,7 @@
-import CardClube from "../../components/card-clube";
-import { buscaClube, buscarRankings, buscarMedia } from "../../components/busca-clube";
+import CardClube from "../../layout/card-clube";
+import { buscaClube, buscarRankings, buscarMedia } from "../../functions/busca-clube";
 import { useEffect, useState } from "react";
-import type { Clube, rankings, Medias } from "../../components/busca-clube";
+import type { Clube, rankings, Medias } from "../../functions/busca-clube";
 import { allContext } from "../../context/all-context";
 
 

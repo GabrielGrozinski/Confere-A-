@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import { allContext } from "../context/all-context";
 import { ClipLoader } from "react-spinners";
 import { supabase } from "../auth/supabase-client";
-import { relacaoClubes, type Clube } from "../components/busca-clube";
+import { relacaoClubes, type Clube } from "../functions/busca-clube";
 import { useNavigate } from "react-router-dom";
 import Cookies from "../components/cookies";
 

@@ -1,5 +1,5 @@
 import "../styles/grafico-comparativo.css";
-import type { Medias } from "./busca-clube";
+import type { Medias } from "../functions/busca-clube";
 import { allContext } from "../context/all-context";
 import {
   BarChart,

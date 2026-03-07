@@ -1,6 +1,5 @@
-import { buscaTodosClubes } from "../components/busca-clube";
 import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import type { Clube } from "../components/busca-clube";
+import type { Clube } from "../functions/busca-clube";
 import '../styles/comparacao-unica.css';
 import { allContext } from "../context/all-context";
 import {
@@ -26,7 +25,7 @@ import {
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import CardsPremium from "../components/cards-premium";
-import { calcularChanceTitulo } from "../components/busca-clube";
+import { calcularChanceTitulo, buscaTodosClubes } from "../functions/busca-clube";
 import AdsenseLeft from "../components/adsense-left";
 import AdsenseRight from "../components/adsense-right";
 

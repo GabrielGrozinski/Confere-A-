@@ -1,6 +1,6 @@
-import { buscaTodosClubes } from "../components/busca-clube";
+import { buscaTodosClubes } from "../functions/busca-clube";
 import { useEffect, useState, useMemo } from "react";
-import type { Clube } from "../components/busca-clube";
+import type { Clube } from "../functions/busca-clube";
 import '../styles/comparacao-unica.css';
 import { allContext } from "../context/all-context";
 import {
