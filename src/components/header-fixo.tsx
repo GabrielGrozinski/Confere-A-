@@ -10,7 +10,7 @@ import MenuAberto from "./menu-aberto";
 
 export default function HeaderFixo() {
     const navigate = useNavigate();
-    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes, assinanteAtual, setLoadingFunction } = allContext();
+    const { largura, topicoAtivo, setTopicoAtivo, menuAberto, setMenuAberto, dark, session, user, deslogarUser, setSession, abaEntretenimento, setMostrarClubes, assinanteAtual } = allContext();
     const [busca, setBusca] = useState<string>('');
     const [clubes, setClubes] = useState<Clube[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +44,7 @@ export default function HeaderFixo() {
     }
 
     function navegar(nomeClube: string) {
-        const nomeRota = relacaoClubes(nomeClube, setLoadingFunction);
+        const nomeRota = relacaoClubes(nomeClube);
         setAtivarPesquisaMobile(false);
         setMenuAberto(false);
         navigate(`/${nomeRota}`);

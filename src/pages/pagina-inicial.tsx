@@ -306,7 +306,7 @@ export default function PaginaInicial() {
 
                 <div className='flex flex-col items-center px-12 mb-10 mt-5 text-center gap-2'>
 
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm ${dark ? 'bg-white/4 border border-white/6' : 'bg-black/4 border border-black/6'}`} x-file-name="HeroSection" x-line-number="73" x-component="div" x-id="HeroSection_73" x-dynamic="false">
+                    <div className={`inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-full backdrop-blur-sm ${dark ? 'bg-white/4 border border-white/6' : 'bg-black/4 border border-black/6'}`} x-file-name="HeroSection" x-line-number="73" x-component="div" x-id="HeroSection_73" x-dynamic="false">
                         <div className={`w-2 h-2 rounded-full animate-pulse ${dark ? 'bg-emerald-400' : 'bg-emerald-600'}`} x-file-name="HeroSection" x-line-number="74" x-component="div" x-id="HeroSection_74" x-dynamic="false">
                         </div>
                         <span className={`text-xs font-medium tracking-wide uppercase ${dark ? 'text-white/50' : 'text-black/60'}`} x-file-name="HeroSection" x-line-number="75" x-component="span" x-id="HeroSection_75" x-dynamic="false">
@@ -350,7 +350,7 @@ export default function PaginaInicial() {
                         <i className={`fa-brands fa-sistrix left-8 -translate-x-1/2 absolute text-2xl top-1/2 -translate-y-1/2 ${dark ? 'text-zinc-500' : 'text-zinc-700'}`}></i>
 
                         <input
-                            placeholder="Pesquise um clube... ex: Flamengo, Palmeiras"
+                            placeholder="Pesquise um clube..."
                             className={`w-full pl-14 pr-5 py-4 sm:py-5 border rounded-2xl focus:outline-none transition-all duration-300 text-base sm:text-lg ${dark ? 'bg-white/4 border-white/8 text-white placeholder:text-white/25 focus:border-amber-400/30 focus:bg-white/6' : 'bg-black/4 border-black/8 text-black placeholder:text-black/35 focus:border-amber-500/70 focus:bg-black/6'}`}
                             type="search"
                             value={busca}
@@ -359,12 +359,6 @@ export default function PaginaInicial() {
                                 buscaClube(e.currentTarget.value);
                             }}
                         />
-
-                        <span
-                            data-ve-dynamic="true"
-                            x-excluded="true"
-                            style={{ display: "contents" }}
-                        ></span>
 
                         <i onClick={() => {
                             setBusca('');
@@ -968,7 +962,7 @@ export default function PaginaInicial() {
                 </div>
             </section>
 
-            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-999 animacao-entrada min-w-[80%]">
+            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-900 animacao-entrada min-w-[80%]">
                 <Cookies />
             </div>
 

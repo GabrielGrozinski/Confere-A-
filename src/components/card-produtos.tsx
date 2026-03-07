@@ -80,7 +80,7 @@ export default function CardProduto() {
     }, []);
 
     return (
-        <div className={`absolute z-999 top-1/2 left-1/2 -translate-1/2 ${altura < 750 ? '-translate-y-[45%] scale-80 sm:scale-100 sm:-translate-y-1/2' : 'scale-100'} p-8 min-w-4/5 max-w-4/5 px-2 h-auto rounded-2xl sm:min-w-120 sm:max-w-120 lg:min-w-160 lg:max-w-160 overflow-y-auto ${dark ? 'bg-[#222222]' : 'bg-white'}`}>
+        <div className={`absolute z-900 top-1/2 left-1/2 -translate-1/2 ${altura < 750 ? '-translate-y-[45%] scale-80 sm:scale-100 sm:-translate-y-1/2' : 'scale-100'} p-8 min-w-4/5 max-w-4/5 px-2 h-auto rounded-2xl sm:min-w-120 sm:max-w-120 lg:min-w-160 lg:max-w-160 overflow-y-auto ${dark ? 'bg-[#222222]' : 'bg-white'}`}>
             <i onClick={() => setMostrarCard(false)} className={`fa-solid fa-xmark absolute top-0 right-0 translate-y-1/2 -translate-x-1/2 cursor-pointer ${dark ? 'text-slate-100' : 'text-slate-900'}`}></i>
             <h1 className={`text-center font-medium text-xl mb-1 ${dark ? 'text-zinc-100' : 'text-[#222222]'}`}>Confere Aê!</h1>
             <p className={`text-[15px] font-mono text-center tracking-tighter ${dark ? 'text-zinc-300' : 'text-zinc-600'}`}>Veja como seu clube se posiciona dentro e fora do futebol</p>

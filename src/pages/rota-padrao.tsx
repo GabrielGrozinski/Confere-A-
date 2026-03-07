@@ -34,7 +34,7 @@ export default function RotaPadrao({children}: Props) {
                 {children}
                 <FooterFixo />
 
-                <div onClick={() => setMenuAberto(false)} className="inset-0 fixed backdrop-blur-xs bg-black/60 min-h-screen">
+                <div onClick={() => setMenuAberto(false)} className="inset-0 fixed backdrop-blur-xs bg-black/60 min-h-screen z-998">
 
                 </div>
 

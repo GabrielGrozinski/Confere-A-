@@ -27,7 +27,7 @@ export default function CardTodosClubes() {
     }, []);
 
     return (
-        <div className={`z-999 relative p-8 min-h-[50vh] min-w-[90vw] max-h-[70vh] max-w-[90vw] rounded-2xl flex flex-col items-center ${dark ? 'bg-[#222222]' : 'bg-white'}`}>
+        <div className={`z-900 relative p-8 min-h-[50vh] min-w-[90vw] max-h-[70vh] max-w-[90vw] rounded-2xl flex flex-col items-center ${dark ? 'bg-[#222222]' : 'bg-white'}`}>
             <i onClick={() => setMostrarClubes(false)} className={`fa-solid fa-xmark absolute top-0 right-0 translate-y-1/2 -translate-x-1/2 cursor-pointer ${dark ? 'text-slate-50' : 'text-slate-900'}`}></i>
             
             <h1 className={`text-xl text-center font-bold leading-[1.1] tracking-tight mb-6 ${dark ? 'text-white' : 'text-[#222222]'}`}>
