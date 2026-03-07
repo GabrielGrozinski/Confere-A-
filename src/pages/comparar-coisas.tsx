@@ -166,9 +166,9 @@ export default function CompararCoisas() {
 
                 <main className={`col-span-full lg:col-2 w-full flex flex-col mt-24 relative pt-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'}`}>
 
-                    <div className="rounded-lg rounded-t-none min-h-115 max-h-115 grid grid-rows-[1fr_15%] scale-90 lg:scale-100">
+                    <div className="rounded-lg rounded-t-none min-h-115 max-h-115 grid grid-rows-[1fr_15%]">
 
-                        <main id="main" className={`grid grid-cols-[1fr_auto_1fr] relative mx-1 border max-h-100 ${dark ? 'bg-[#3e495e] border-slate-800/20' : 'border-slate-400/20 bg-slate-100'}`}>
+                        <main id="main" className={`grid grid-cols-[1fr_auto_1fr] relative mx-1 border max-h-100 scale-90 lg:scale-100 ${dark ? 'bg-[#3e495e] border-slate-800/20' : 'border-slate-400/20 bg-slate-100'}`}>
                             <div className="absolute min-h-14 top-0 -translate-y-full min-w-full flex justify-between gap-0">
                                 <div className="min-h-full min-w-1/2 bg-yellow-500 shadow-sm border border-slate-800/20 rounded-t-xl rounded-br-none -translate-x-px flex items-center justify-center">
                                     <h1 className="font-mono text-slate-50 text-shadow-[1px_1px_1px_#0000002a] text-lg">Clubes Brasileiros</h1>

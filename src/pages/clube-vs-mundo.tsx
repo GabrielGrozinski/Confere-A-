@@ -319,16 +319,16 @@ export default function ClubeVsMundo() {
                     <AdsenseLeft />
                 }
 
-                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'} scale-90 lg:scale-100`}>
-                    <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
+                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'}`}>
+                    <h2 className={`text-[32px] px-4 text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Além do Futebol
                     </h2>
-                    <p className={`text-base text-center mt-2 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
+                    <p className={`text-base text-center mt-2 px-4 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
                     A dívida do seu clube compra quantas Ferraris? Descubra comparações surpreendentes.
                     </p>
 
 
-                    <div className="w-full mx-auto flex items-center justify-center">
+                    <div className="w-full mx-auto flex items-center justify-center scale-90 lg:scale-100">
 
                         <div className="opacity-100 transform-none min-w-full mt-4 mb-20">
                             <div className={`border rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-slate-200 border-slate-800/20'}`}>

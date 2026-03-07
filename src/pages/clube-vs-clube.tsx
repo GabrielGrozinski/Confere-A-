@@ -678,16 +678,16 @@ export default function ClubeVsClube() {
                     <AdsenseLeft />
                 }
 
-                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'} scale-90 lg:scale-100`}>
-                    <h2 className={`text-[32px] text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
+                <main id="main-clube-vs-clube" className={`col-2 ${(assinanteAtual !== 'Sócio' && assinanteAtual !== 'Torcedor') ? 'lg:max-w-250 lg:min-w-250' : 'lg:min-w-[80%] lg:max-w-[80%] lg:translate-x-[10vw]'}`}>
+                    <h2 className={`text-[32px] px-4 text-center md:text-[40px] font-bold mt-2 tracking-[-0.015em] ${dark ? 'text-white' : 'text-[#222222]'}`}>
                     Compare Clubes
                     </h2>
-                    <p className={`text-base text-center mt-2 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
+                    <p className={`text-base text-center mt-2 px-4 ${dark ? 'text-[rgb(218,218,218)]' : 'text-zinc-700'}`}>
                     Selecione dois clubes e veja a batalha financeira lado a lado.
                     </p>
 
 
-                    <div className="w-full mx-auto flex items-center justify-center mb-12">
+                    <div className="w-full mx-auto flex items-center justify-center mb-12 scale-90 lg:scale-100">
 
                         <div className="opacity-100 transform-none mt-4 min-w-full">
                             <div className={`border rounded-2xl p-6 md:p-10 lg:pl-4 lg:pr-2 max-h-160 overflow-y-hidden ${dark ? 'bg-[rgb(26,28,30)] border-white/10' : 'bg-slate-200 border-slate-800/20'}`}>
@@ -699,58 +699,58 @@ export default function ClubeVsClube() {
                                             Clube A
                                         </label>
                                         <div className={`border-2 rounded-xl pl-1 pr-3 text-sm font-medium appearance-none max-h-13 min-h-13 focus:shadow-[0_0_0_4px_rgba(218,255,1,0.1)] transition-all flex items-center cursor-pointer ${dark ? 'bg-[rgb(38,40,42)] border-[rgb(63,63,63)]' : 'bg-white border-slate-700/30'}`}>
-                                        <Popover.Root open={popoverAberto1} onOpenChange={setPopoverAberto1}>
-                                        <Popover.Trigger asChild>
-                                            <button className="font-medium flex items-center w-full justify-between cursor-pointer pl-1 sm:pl-4.5 lg:pl-2.5 min-h-13 max-h-full">
-                                                <strong>
-                                                    <span className={`p-0.5 flex rounded-md font-medium cursor-pointer items-center ${dark ? 'text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a]' : 'text-zinc-800'}`}>{clubeANome}
-                                                    </span>
-                                                </strong>
-                                                <i className={`fa-solid fa-angle-down ml-1 translate-y-[10%] text-shadow-[1px_1px_1px_#0000002a] ${dark ? 'text-[#DAFF01]' : 'text-zinc-800'}`}></i>
-                                            </button>
-                                        </Popover.Trigger>
+                                            <Popover.Root open={popoverAberto1} onOpenChange={setPopoverAberto1}>
+                                                <Popover.Trigger asChild>
+                                                    <button className="font-medium flex items-center w-full justify-between cursor-pointer pl-1 sm:pl-4.5 lg:pl-2.5 min-h-13 max-h-full">
+                                                        <strong>
+                                                            <span className={`p-0.5 flex rounded-md font-medium cursor-pointer items-center ${dark ? 'text-[#DAFF01] text-shadow-[1px_1px_1px_#0000002a]' : 'text-zinc-800'}`}>{clubeANome}
+                                                            </span>
+                                                        </strong>
+                                                        <i className={`fa-solid fa-angle-down ml-1 translate-y-[10%] text-shadow-[1px_1px_1px_#0000002a] ${dark ? 'text-[#DAFF01]' : 'text-zinc-800'}`}></i>
+                                                    </button>
+                                                </Popover.Trigger>
 
-                                        <Popover.Portal>
-                                            <Popover.Content
-                                            sideOffset={8}
-                                            className="w-96 max-h-96 overflow-y-auto rounded-xl bg-[rgb(38,40,42)] mt-2 border border-gray-200/70 p-4 shadow-xl z-10"
-                                            >
-                                            <div className="space-y-6">
-                                                {Object.entries(agrupadosPorCategoria).map(
-                                                ([categoria, topicos]) => (
-                                                    <div key={categoria} className="space-y-2">
-                                                    <h4 className="text-xs font-semibold uppercase text-slate-400">
-                                                        {categoria}
-                                                    </h4>
+                                                <Popover.Portal>
+                                                    <Popover.Content
+                                                    sideOffset={8}
+                                                    className="sm:w-96 sm:max-w-96 max-w-50 max-h-96 overflow-y-auto rounded-xl bg-[rgb(38,40,42)] mt-2 border border-gray-200/70 p-4 shadow-xl z-10 scale-90 sm:scale-100"
+                                                    >
+                                                    <div className="space-y-6">
+                                                        {Object.entries(agrupadosPorCategoria).map(
+                                                        ([categoria, topicos]) => (
+                                                            <div key={categoria} className="space-y-2">
+                                                            <h4 className="text-xs font-semibold uppercase text-slate-400">
+                                                                {categoria}
+                                                            </h4>
 
-                                                    <div className="space-y-1">
-                                                        {topicos.map((item: TopicoComparacao) => (
-                                                        <button
-                                                            key={item.label}
-                                                            onClick={() => {
-                                                                setClubeANome(item.label);
-                                                                setPopoverAberto1(false);
-                                                            }}
-                                                            className={`
-                                                            w-full text-left px-3 py-2 rounded-md
-                                                            transition
-                                                            ${
-                                                                clubeANome === item.label
-                                                                ? 'bg-sky-500/20 text-sky-300'
-                                                                : 'hover:bg-slate-800 text-slate-200'
-                                                            }
-                                                            `}
-                                                        >
-                                                            {item.label}
-                                                        </button>
-                                                        ))}
+                                                            <div className="space-y-1">
+                                                                {topicos.map((item: TopicoComparacao) => (
+                                                                <button
+                                                                    key={item.label}
+                                                                    onClick={() => {
+                                                                        setClubeANome(item.label);
+                                                                        setPopoverAberto1(false);
+                                                                    }}
+                                                                    className={`
+                                                                    w-full text-left px-3 py-2 rounded-md
+                                                                    transition
+                                                                    ${
+                                                                        clubeANome === item.label
+                                                                        ? 'bg-sky-500/20 text-sky-300'
+                                                                        : 'hover:bg-slate-800 text-slate-200'
+                                                                    }
+                                                                    `}
+                                                                >
+                                                                    {item.label}
+                                                                </button>
+                                                                ))}
+                                                            </div>
+                                                            </div>
+                                                        )
+                                                        )}
                                                     </div>
-                                                    </div>
-                                                )
-                                                )}
-                                            </div>
-                                            </Popover.Content>
-                                        </Popover.Portal>
+                                                    </Popover.Content>
+                                                </Popover.Portal>
                                         </Popover.Root>
 
                                         </div>
@@ -775,7 +775,7 @@ export default function ClubeVsClube() {
                                         <Popover.Portal>
                                             <Popover.Content
                                             sideOffset={8}
-                                            className="w-96 max-h-96 overflow-y-auto rounded-xl bg-[rgb(38,40,42)] mt-2 border border-gray-200/70 p-4 shadow-xl z-10"
+                                            className="sm:w-96 sm:max-w-96 max-w-50 max-h-96 overflow-y-auto rounded-xl bg-[rgb(38,40,42)] mt-2 border border-gray-200/70 p-4 shadow-xl z-10 scale-90 sm:scale-100"
                                             >
                                             <div className="space-y-6">
                                                 {Object.entries(agrupadosPorCategoria).map(
